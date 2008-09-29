@@ -1,0 +1,38 @@
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{PAGINATION}</td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="120px">{L_DATE}</th>
+    <th align="center" width="20%">{L_NAME}</th>
+    <th align="center">{L_TEXT}</th>
+    <th align="center" width="5%"></th>
+  </tr>
+  <!-- BEGIN sb_row -->
+  <tr class="{sb_row.class}" onmouseout="this.className='{sb_row.class}';" onmouseover="this.className='rowHover';">
+    <td align="center">{sb_row.date}</td>
+    <td>{sb_row.name}</td>
+    <td>{sb_row.text}</td>
+    <td align="center">
+    <!-- IF sb_row.CAN_DELETE -->
+      <a href="{F_ARCHIVE}&amp;start={START}&amp;deleteid={sb_row.id}"><img src="{F_DELETE_IMG}" alt="{L_DELETE}"/></a>
+    <!-- ENDIF -->
+    </td>
+  </tr>
+  <!-- END sb_row -->
+  <tr>
+    <th colspan="4" class="footer">{FOOTCOUNT}</th>
+  </tr>
+</table>
+<br/>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{PAGINATION}</td>
+  </tr>
+</table>
+<br />

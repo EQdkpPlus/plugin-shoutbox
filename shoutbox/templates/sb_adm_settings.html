@@ -1,0 +1,25 @@
+
+{UPDCHECK_BOX}
+{UPDATE_BOX}
+
+<script>
+  {JS_SAVE_MSG}
+</script>
+
+<form name="settings" action="{F_CONFIG}" method="post">
+  <table border="0" width="100%" cellspacing="1" cellpadding="2">
+    <tr>
+      <th align="center" colspan="2">{L_GENERAL}</th>
+    </tr>
+    <tr>
+      <td width="55%" class="row2">{L_UPDATE_CHECK}</td>
+      <td width="45%" class="row1"><input type="checkbox" name="sb_updatecheck" value="1" {UPDATE_CHECK} /></td>
+    </tr>
+    <tr>
+      <th align="center" colspan="2">
+        <input type="submit" name="save" value="{L_SUBMIT}" class="mainoption" />
+      </th>
+    </tr>
+  </table>
+</form>
+<br />
