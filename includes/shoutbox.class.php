@@ -235,7 +235,6 @@ if (!class_exists("Shoutbox"))
       $count = count($element_array);
 
       // loop through all the elements
-      $text_size = 0;
       $wraped_text = '';
       foreach($element_array as $org_text)
       {
@@ -248,43 +247,26 @@ if (!class_exists("Shoutbox"))
           // get sriped size
           $striped_size = strlen($striped_text);
 
-          // fits?
-          if (($text_size + $striped_size) > $width)
+          // do not wrap image/urls/emails
+          $inner_cut = $cut;
+          if (preg_match('#\[img\](.*?)\[/img\]#si', $inner_org_text) ||
+              preg_match('#\[url=?"?(.*?)"?\](.*?)\[/url\]#si', $inner_org_text) ||
+              preg_match('#\[email\](.*?)\[/email\]#si', $inner_org_text))
           {
-            // is word itself longer?
-            if ($striped_size > $width)
-            {
-              // does not fit, wrap word and append
-              $new_text = wordwrap($striped_text, $width, $break, $cut);
+            $inner_cut = false;
+          }
 
-              print('<br/>Stripped: '.$striped_text);
-              print('<br/>Wrapped:  '.$new_text);
-
-              // replace in original text
-              $new_text = str_replace($striped_text, $new_text, $inner_org_text);
-
-              print('<br/>Takeover: '.$new_text);
-
-              $text_size += $striped_size - $width;
-            }
-            else
-            {
-              // fit, so just take original text an prepend \n
-              $new_text = "\n".$inner_org_text;
-
-              print('<br/>Takeover: '.$new_text);
-
-              $text_size = $striped_size;
-            }
+          // fits?
+          if ($striped_size > $width)
+          {
+            $new_text = wordwrap($striped_text, $width, $break, $inner_cut);
+            // replace in original text
+            $new_text = str_replace($striped_text, $new_text, $inner_org_text);
           }
           else
           {
             // fit, so just take original text
             $new_text = $inner_org_text;
-
-            print('<br/>Takeover: '.$new_text);
-
-            $text_size += $striped_size;
           }
 
           // append to output
@@ -293,8 +275,6 @@ if (!class_exists("Shoutbox"))
         // replace last char by space
         $wraped_text[strlen($wraped_text)-1]= ' ';
       }
-
-      print('<br/>Org Wrap:<br/>'.wordwrap($text, $width, $break, $cut).'<br/>');
 
       return $wraped_text;
     }
@@ -325,7 +305,7 @@ if (!class_exists("Shoutbox"))
     */
     function removeBr($s)
     {
-      return str_replace("<br />", "", $s[0]);
+      return preg_replace('/\<br[\s\/]*\>/ms', '', $s[0]);
     }
 
     /**
@@ -370,7 +350,8 @@ if (!class_exists("Shoutbox"))
                '/\[u\](.*?)\[\/u\]/ms',
                '/\[img\](.*?)\[\/img\]/ms',
                '/\[email\](.*?)\[\/email\]/ms',
-               '/\[url\="?(.*?)"?\](.*?)\[\/url\]/ms',
+               '/\[url\](.*?)\[\/url\]/ms',
+               '/\[url\="?(.+)"?\](.*?)\[\/url\]/ms',
                '/\[size\="?(.*?)"?\](.*?)\[\/size\]/ms',
                '/\[color\="?(.*?)"?\](.*?)\[\/color\]/ms',
                '/\[quote](.*?)\[\/quote\]/ms',
@@ -381,18 +362,19 @@ if (!class_exists("Shoutbox"))
 
       // And replace them by...
       $out = array(
-               '<strong>\1</strong>',
-               '<em>\1</em>',
-               '<u>\1</u>',
-               '',
-               '\1',
-               '\2',
-               '<span style="font-size:\1%">\2</span>',
-               '<span style="color:\1">\2</span>',
-               '\1',
-               '',
-               '',
-               '\1'
+               '<strong>\1</strong>',                     // [b]
+               '<em>\1</em>',                             // [i]
+               '<u>\1</u>',                               // [u]
+               '',                                        // [img]
+               '<a href="mailto:\1">\1</a>',              // [email]
+               '<a href="\1">\1</a>',                     // [url]
+               '<a href="\1">\2</a>',                     // [url=]
+               '<span style="font-size:\1%">\2</span>',   // [size]
+               '<span style="color:\1">\2</span>',        // [color]
+               '\1',                                      // [quote]
+               '',                                        // [list=]
+               '',                                        // [list]
+               '\1'                                       // [*]
       );
       $text = preg_replace($in, $out, $text);
 
@@ -750,7 +732,7 @@ if (!class_exists("Shoutbox"))
       );
       // replace array
       $replace = array(
-                 $root_path.'plugins/shoutbox/includes/wpfc/jquery/css/markitup/emoticons',
+                 $root_path.'pluskernel/include/jquery/img/editor/icons',
       );
 
       return str_replace($search, $replace, $text);

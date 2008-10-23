@@ -22,6 +22,7 @@ if (!defined('EQDKP_INC'))
 }
 
 $new_version = '0.0.2';
+$updateFunction = 'SB001to002Update';
 
 $updateDESC = array(
   '',
@@ -36,7 +37,7 @@ $updateSQL = array(
     )TYPE=InnoDB;',
 );
 
-function PerformMyUpdate()
+function SB001to002Update()
 {
   global $wpfcdb;
 

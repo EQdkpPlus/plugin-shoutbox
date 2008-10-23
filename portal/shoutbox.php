@@ -2,7 +2,7 @@
 /*
  * Project:     EQdkp Shoutbox
  * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		    http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2008
  * Date:        $Date:$
@@ -23,13 +23,13 @@ if (!defined('EQDKP_INC'))
 
 // -- Portal Module -----------------------------------------------------------
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
-			'name'			    => 'Shoutbox Module',                // The name to show
-			'path'			    => 'shoutbox',                       // Folder name again
-			'version'		    => '0.0.2',                          // Version
-			'author'        => 'Aderyn',                         // Author
-			'contact'		    => 'Aderyn@gmx.net',                 // email/internet adress
-			'description'   => 'Display a shoutbox',             // Detailed Description
-			'positions'     => array('left1', 'left2', 'right'), // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
+      'name'          => 'Shoutbox Module',                // The name to show
+      'path'          => 'shoutbox',                       // Folder name again
+      'version'       => '0.0.3',                          // Version
+      'author'        => 'Aderyn',                         // Author
+      'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
+      'description'   => 'Display a shoutbox',             // Detailed Description
+      'positions'     => array('left1', 'left2', 'right'), // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
       'signedin'      => '1',                              // 0 = all users, 1 = signed in only
       'install'       => array(
                            'autoenable'        => '0',
@@ -67,18 +67,18 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-  	global $pm, $eqdkp_root_path;
+    global $pm, $eqdkp_root_path;
 
-  	if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
-  	{
-  	  include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
-  	  $shoutbox = new Shoutbox();
+    if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
+    {
+      include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
+      $shoutbox = new Shoutbox();
 
-    	// return the output for module manager
-  		return $shoutbox->showShoutbox();
-  	}
+      // return the output for module manager
+      return $shoutbox->showShoutbox();
+    }
 
- 	  return;
+    return;
   }
 }
 ?>
