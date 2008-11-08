@@ -92,7 +92,7 @@ foreach ($shoutbox_entries as $entry)
 // -- Template ----------------------------------------------------------------
 $tpl->assign_vars(array (
   // form
-  'F_CONFIG'          => 'settings.php' . $SID,
+  'F_CONFIG'          => 'manage.php' . $SID,
   'F_MARK_CLASS'      =>  $eqdkp->switch_row_class(),
   'FOOTCOUNT'         => sprintf($user->lang['sb_footer'], $total_entries, SHOUTBOX_PAGE_LIMIT),
 
