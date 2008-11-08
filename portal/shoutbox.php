@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.0.3',                          // Version
+      'version'       => '0.0.4',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -71,11 +71,18 @@ if (!function_exists(shoutbox_module))
 
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
-      $shoutbox = new Shoutbox();
+      $shoutbox_file = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
+      if (file_exists($shoutbox_file))
+      {
+        if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
+        if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
+        
+        include($shoutbox_file);
+        $shoutbox = new Shoutbox();
 
-      // return the output for module manager
-      return $shoutbox->showShoutbox();
+        // return the output for module manager
+        return $shoutbox->showShoutbox();
+      }
     }
 
     return;

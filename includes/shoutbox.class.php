@@ -674,8 +674,10 @@ if (!class_exists("Shoutbox"))
       }
       else
       {
+        $no_entries = ($decode == true) ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries'];
+      
         $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
-                    <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$user->lang['sb_no_entries'].'</div></td></tr>
+                    <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$no_entries.'</div></td></tr>
                   </table>';
       }
 

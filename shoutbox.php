@@ -21,22 +21,33 @@ $eqdkp_root_path = './../../';
 include_once('includes/common.php');
 
 
-// -- Insert? ---------------------------------------------
-if (isset($_POST['sb_text']) && ($_POST['sb_text'] != '') &&
-    isset($_POST['sb_member_id']) && ($_POST['sb_member_id'] != ''))
+// Be sure plugin is installed
+if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  // insert
-  $shoutbox->insertShoutboxEntry($_POST['sb_member_id'], $_POST['sb_text']);
-}
-// -- Delete? ---------------------------------------------
-else if (isset($_GET['shoutbox_delete']))
-{
-  // delete
-  $shoutbox->deleteShoutboxEntry($_GET['shoutbox_delete']);
-}
+  // -- Insert? ---------------------------------------------
+  if (isset($_POST['sb_text']) && ($_POST['sb_text'] != '') &&
+      isset($_POST['sb_member_id']) && ($_POST['sb_member_id'] != ''))
+  {
+    // insert
+    $shoutbox->insertShoutboxEntry($_POST['sb_member_id'], $_POST['sb_text']);
+  }
+  // -- Delete? ---------------------------------------------
+  else if (isset($_GET['shoutbox_delete']))
+  {
+    // delete
+    $shoutbox->deleteShoutboxEntry($_GET['shoutbox_delete']);
+  }
 
 
-// -- Output ----------------------------------------------
-echo $shoutbox->getContent($_REQUEST['sb_root'], true);
+  // -- Output ----------------------------------------------
+  echo $shoutbox->getContent($_REQUEST['sb_root'], true);
+}
+else
+{
+  $error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
+              <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">Shoutbox Plugin not installed</div></td></tr>
+            </table>';
+  echo $error;
+}
 
 ?>
