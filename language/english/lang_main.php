@@ -48,6 +48,8 @@ $lang = array(
   // Portal Modules
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',
   'sb_show_archive'                 => 'Show Archive?',
+  'sb_input_box_below'              => 'Input box below entries?',
+  'sb_invisible_to_guests'          => '<u>Not</u> visible to guests?',
   'sb_submit_text'                  => 'Send',
   'sb_save_wait'                    => 'Saving, please wait...',
   'sb_no_entries'                   => 'No entries',

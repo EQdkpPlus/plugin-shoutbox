@@ -456,17 +456,35 @@ if (!class_exists("Shoutbox"))
     {
       global $user, $conf_plus;
 
-      $html  = $this->getShoutboxJCode();
-      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+      // only output if visible to guest
+      if ($user->data['user_id'] != ANONYMOUS || $conf_plus['sb_invisible_to_guests'] != 1)
       {
-        $html .= $this->getForm();
+        $html  = $this->getShoutboxJCode();
+        // is input above (and user logged in?)
+        if ($conf_plus['sb_input_box_below'] != 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getForm();
+        }
+        $html .= '<div id="htmlShoutboxTable">';
+        $html .= $this->getContent();
+        $html .= '</div>';
+        // archive link (and user logged in?)
+        if ($conf_plus['sb_show_archive'] &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getArchiveLink();
+        }
+        // is input below (and user logged in?)
+        if ($conf_plus['sb_input_box_below'] == 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getForm();
+        }
       }
-      $html .= '<div id="htmlShoutboxTable">';
-      $html .= $this->getContent();
-      $html .= '</div>';
-      if ($conf_plus['sb_show_archive'])
+      else
       {
-        $html .= $this->getArchiveLink();
+        $html = '';
       }
 
       return $html;
@@ -517,7 +535,7 @@ if (!class_exists("Shoutbox"))
     */
     function getForm($rpath='')
     {
-      global $user, $eqdkp, $eqdkp_root_path;
+      global $user, $eqdkp, $eqdkp_root_path, $conf_plus;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
@@ -527,8 +545,15 @@ if (!class_exists("Shoutbox"))
 
       // html
       $html = '<form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                 <table width="100%" border="0" cellspacing="1" cellpadding="2">
-                   <tr class="'.$class.'">
+                 <table width="100%" border="0" cellspacing="1" cellpadding="2">';
+      // input below?
+      if ($conf_plus['sb_input_box_below'] == 1 &&
+          $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+      {
+        $html .= '<tr><th>&nbsp;</th></tr>';
+      }
+        
+      $html .= '   <tr class="'.$class.'">
                      <td>
                        <div align="center">'
                        .$this->getFormMember().
@@ -622,7 +647,7 @@ if (!class_exists("Shoutbox"))
     */
     function getContent($rpath='', $decode=false)
     {
-      global $user, $eqdkp, $SID, $eqdkp_root_path;
+      global $user, $eqdkp, $SID, $eqdkp_root_path, $conf_plus;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
@@ -635,8 +660,14 @@ if (!class_exists("Shoutbox"))
       if ($count > 0)
       {
         // output table header
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                    <tr><th>&nbsp;</th></tr>';
+        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        // input above?
+        if ($conf_plus['sb_input_box_below'] != 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= '<tr><th>&nbsp;</th></tr>';
+        }
+        
         foreach ($shoutbox_entries as $entry)
         {
           // get class for row

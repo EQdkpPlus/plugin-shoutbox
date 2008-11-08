@@ -64,8 +64,8 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     );
 
     // -- Register our permissions ------------------------
-    $this->add_permission('1241', 'a_shoutbox_delete', 'N', $user->lang['delete']);
-    $this->add_permission('1242', 'u_shoutbox_add',    'Y', $user->lang['add']);
+    $this->add_permission('341', 'a_shoutbox_delete', 'N', $user->lang['delete']);
+    $this->add_permission('342', 'u_shoutbox_add',    'Y', $user->lang['add']);
 
     // -- Menu --------------------------------------------
     $this->add_menu('admin_menu', $this->gen_admin_menu());
@@ -91,7 +91,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
       }
 
       // insert the Permission of the installing Person
-      $perm_array = array('1241', '1242');
+      $perm_array = array('341', '342');
       $this->set_permissions($perm_array);
 
       // insert configuration

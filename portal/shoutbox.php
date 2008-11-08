@@ -30,7 +30,7 @@ $portal_module['shoutbox'] = array(                        // the same name as t
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
       'positions'     => array('left1', 'left2', 'right'), // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
-      'signedin'      => '1',                              // 0 = all users, 1 = signed in only
+      'signedin'      => '0',                              // 0 = all users, 1 = signed in only
       'install'       => array(
                            'autoenable'        => '0',
                            'defaultposition'   => 'left2',
@@ -57,6 +57,16 @@ $portal_settings['shoutbox'] = array(
   'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
+        'property'  => 'checkbox',
+      ),
+   'pk_shoutbox_input_box_location' => array(
+        'name'      => 'sb_input_box_below',
+        'language'  => 'sb_input_box_below',
+        'property'  => 'checkbox',
+      ),
+    'pk_shoutbox_invisible_to_guests' => array(
+        'name'      => 'sb_invisible_to_guests',
+        'language'  => 'sb_invisible_to_guests',
         'property'  => 'checkbox',
       ),
 );
