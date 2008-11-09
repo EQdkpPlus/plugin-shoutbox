@@ -27,7 +27,7 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
-  var $version    = '0.0.4';
+  var $version    = '0.0.5';
   var $copyright  = 'Aderyn';
   var $vstatus    = 'Beta';
   var $build      = '3025';
@@ -169,7 +169,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     */
   function set_permissions($perm_array, $perm_setting='Y')
   {
-    global $user;
+    global $user, $db;
 
     // do we have a logged in user?
     $userid = ($user->data['user_id'] != ANONYMOUS) ? $user->data['user_id'] : '';
@@ -177,11 +177,14 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     {
       foreach ($perm_array as $value)
       {
-        // add new data
-        $sql = 'INSERT INTO `__auth_users` VALUES('.$userid.', "'.$value.'", "'.$perm_setting.'");';
-        $this->add_sql(SQL_INSTALL, $sql);
-        $sql = 'UPDATE `__auth_users` SET auth_setting="'.$perm_setting.'" WHERE user_id='.$userid.' AND auth_id='.$value.';';
-        $this->add_sql(SQL_INSTALL, $sql);
+        $sql = 'UPDATE `__auth_users` SET auth_setting=\''.$perm_setting.'\' WHERE user_id='.$userid.' AND auth_id='.$value;
+        $db->query($sql);
+        if ($db->sql_affectedrows() == 0)
+        {
+          // add new data
+          $sql = 'INSERT INTO `__auth_users` VALUES('.$userid.', '.$value.', \''.$perm_setting.'\')';
+          $this->add_sql(SQL_INSTALL, $sql);
+        }
       }
     }
   }
