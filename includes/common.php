@@ -5,15 +5,15 @@
  * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2008
- * Date:        $Date:$
+ * Date:        $Date$
  * -----------------------------------------------------------------------
- * @author      $Author:$
+ * @author      $Author$
  * @copyright   2008 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
- * @version     $Rev:$
+ * @version     $Rev$
  *
- * $Id:$
+ * $Id$
  */
 
 if (!defined('EQDKP_INC'))
