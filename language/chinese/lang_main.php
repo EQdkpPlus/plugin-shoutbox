@@ -50,6 +50,7 @@ $lang = array(
   'sb_show_archive'                 => 'Show Archive?',
   'sb_input_box_below'              => 'Input box below entries?',
   'sb_invisible_to_guests'          => '<u>Not</u> visible to guests?',
+  'sb_no_character_assigned'        => 'No characters are connected yet. At least one character has to be connected to be able to post.',
   'sb_submit_text'                  => 'Send',
   'sb_save_wait'                    => 'Saving, please wait...',
   'sb_no_entries'                   => 'No entries',

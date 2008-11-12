@@ -50,6 +50,7 @@ $lang = array(
   'sb_show_archive'                 => 'Archiv anzeigen?',
   'sb_input_box_below'              => 'Eingabefeld unterhalb der Einträge?',
   'sb_invisible_to_guests'          => 'Für Gäste <u>nicht</u> sichtbar?',
+  'sb_no_character_assigned'        => 'Es wurde kein Charakter verknüpft. Es muss ein Charakter verknüpft sein bevor Einträge gemacht werden können.',
   'sb_submit_text'                  => 'Absenden',
   'sb_save_wait'                    => 'Speichern, bitte warten...',
   'sb_no_entries'                   => 'Keine Einträge',

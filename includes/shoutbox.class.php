@@ -94,7 +94,7 @@ if (!class_exists("Shoutbox"))
       while ($row = $db->fetch_record($result))
       {
         $shoutbox[] = array(
-          'name'      => ($decode == true) ? utf8_encode($row['member_name']) : $row['member_name'],
+          'name'      => htmlspecialchars(($decode == true) ? utf8_encode($row['member_name']) : $row['member_name']),
           'class_id'  => $row['member_class_id'],
           'member_id' => $row['member_id'],
           'date'      => $row['date'],
@@ -148,6 +148,32 @@ if (!class_exists("Shoutbox"))
       }
 
       return $members;
+    }
+    
+    /**
+    * getMemberCountForUser
+    * Get the number of member current user
+    *
+    * return  int
+    *
+    */
+    function getMemberCountForUser()
+    {
+      global $user, $db;
+
+      $count = 0;
+
+      if ($user->data['user_id'] != ANONYMOUS)
+      {
+        // get number of members for user
+        $sql = 'SELECT COUNT(members.member_id)
+                FROM `__member_user` AS member_user
+                LEFT JOIN `__members` AS members ON members.member_id = member_user.member_id
+                WHERE member_user.user_id='.$user->data['user_id'];
+        $count = $db->sql_query_first($sql);
+      }
+
+      return $count;
     }
 
     /**
@@ -410,12 +436,13 @@ if (!class_exists("Shoutbox"))
       if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
       {
         // clean input
-        $text_insert = $this->shoutbox_wordwrap($text, SHOUTBOX_WORDWRAP, "\n", true);
+        $text_insert = ($this->checkUTF8($text) == 1) ? utf8_decode($text) : $text;
+        $text_insert = htmlentities(strip_tags($text_insert), ENT_QUOTES); /*No html or javascript in comments*/
+        $text_insert = $this->shoutbox_wordwrap($text_insert, SHOUTBOX_WORDWRAP, "\n", true);
         $text_insert = $this->toHTML($text_insert);
-        $text_insert = ($this->checkUTF8($text_insert) == 1) ? utf8_decode($text_insert) : $text_insert;
 
         // insert
-        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`) VALUES ('.$member_id.', \''.$text_insert.'\')';
+        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`) VALUES ('.$member_id.', \''.$text_insert.'\', NOW())';
         $result = $db->query($sql);
         return ($result ? true : false);
       }
@@ -520,6 +547,10 @@ if (!class_exists("Shoutbox"))
                      document.Shoutbox.sb_text.disabled=true;
                      document.getElementById('shoutbox_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Save\"/>".$user->lang['sb_save_wait']."';
                    }
+                   
+                   function deleteShoutboxRequest(id) {
+                     document.getElementById('shoutbox_delete_button_'+id).innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Delete\"/>';
+                   }
                  </script>";
 
       return $jscode;
@@ -543,40 +574,44 @@ if (!class_exists("Shoutbox"))
       // get class
       $class = $eqdkp->switch_row_class();
 
-      // html
-      $html = '<form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                 <table width="100%" border="0" cellspacing="1" cellpadding="2">';
-      // input below?
-      if ($conf_plus['sb_input_box_below'] == 1 &&
-          $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+      // only display form if user has members assigned to
+      if ($this->getMemberCountForUser() > 0)
       {
-        $html .= '<tr><th>&nbsp;</th></tr>';
+        // html
+        $html = '<form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                   <table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        // input below?
+        if ($conf_plus['sb_input_box_below'] == 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= '<tr><th>&nbsp;</th></tr>';
+        }
+          
+        $html .= '   <tr class="'.$class.'">
+                       <td>
+                         <div align="center">'
+                         .$this->getFormMember().
+                        '</div>
+                       </td>
+                     </tr>
+                     <tr class="'.$class.'">
+                       <td><div align="center"><textarea class="input" name="sb_text" cols="20" rows="3"></textarea></div></td>
+                     </tr>
+                     <tr class="'.$class.'">
+                       <td>
+                         <div align="center">
+                           <input type="hidden" name="sb_root" value="'.$root_path.'"/>
+                           <span id="shoutbox_button"><input type="submit" class="input" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
+                         </div>
+                       </td>
+                     </tr>
+                   </table>
+                 </form>';
       }
-        
-      $html .= '   <tr class="'.$class.'">
-                     <td>
-                       <div align="center">'
-                       .$this->getFormMember().
-                      '</div>
-                     </td>
-                   </tr>
-                   <tr class="'.$class.'">
-                     <td><div align="center"><textarea class="input" name="sb_text" cols="20" rows="3"></textarea></div></td>
-                   </tr>
-                   <tr class="'.$class.'">
-                     <td>
-                       <div align="center">
-                         <input type="hidden" name="sb_root" value="'.$root_path.'"/>
-                         <span id="shoutbox_button"><input type="submit" class="input" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
-                       </div>
-                     </td>
-                   </tr>
-                 </table>
-               </form>';
-
-      // the delete form
-      $html .= '<form id="del_shoutbox" name="del_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                </form>';
+      else
+      {
+        $html .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
+      }
 
       return $html;
     }
@@ -605,7 +640,7 @@ if (!class_exists("Shoutbox"))
         }
         $html .= '</select>';
       }
-      else
+      else if ($membercount == 1)
       {
         // show name as text and member id as hidden value
         $html .= '<input type="hidden" name="sb_member_id" value="'.$members[0]['id'].'"/>'.
@@ -654,6 +689,13 @@ if (!class_exists("Shoutbox"))
 
       $html = '';
 
+      // the delete form
+      if ($user->data['user_id'] != ANONYMOUS)
+      {
+        $html .= '<form id="del_shoutbox" name="del_shoutbox" action="'.$eqdkp_root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                  </form>';
+      }
+
       // get shoutbox entries
       $shoutbox_entries = $this->getShoutboxEntries(0, false, $decode);
       $count = count($shoutbox_entries);
@@ -677,18 +719,26 @@ if (!class_exists("Shoutbox"))
           $html .= '<tr class="'.$class.'" onmouseout="this.className=\''.$class.'\';" onmouseover="this.className=\'rowHover\';">
                       <td>';
 
-          // if admin or own entry, ouput delete link
-          if ($user->data['user_id'] == $this->getUserIdFromMemberId($entry['member_id']) ||
-              $user->check_auth('a_shoutbox_delete', false))
+          // if logged in and (admin or own entry), ouput delete link
+          if (($user->data['user_id'] != ANONYMOUS) &&
+              ($user->data['user_id'] == $this->getUserIdFromMemberId($entry['member_id']) ||
+               $user->check_auth('a_shoutbox_delete', false)))
           {
             $img = $root_path.'images/global/delete.png';
+            $delete_text = ($decode == true) ? utf8_encode($user->lang['delete']) : $user->lang['delete'];
 
+            // Java Script for delete
             $html .= '<span class="small bold floatRight hand" onclick="$(\'#del_shoutbox\').ajaxSubmit(
                         {
                           target: \'#htmlShoutboxTable\',
                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&shoutbox_delete='.$entry['id'].'&sb_root='.$root_path.'\',
+                          beforeSubmit: function(formData, jqForm, options) {
+                            deleteShoutboxRequest('.$entry['id'].')
+                          }
                         }); ">
-                        <img src="'.$img.'" alt="'.$user->lang['delete'].'"/>
+                        <span id="shoutbox_delete_button_'.$entry['id'].'">
+                          <img src="'.$img.'" alt="'.$delete_text.'"/>
+                        </span>
                       </span>';
           }
 
