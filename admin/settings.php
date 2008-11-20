@@ -39,7 +39,7 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 // -- Init WPFC ---------------------------------------------------------------
 $wpfccore->InitAdmin();
 $wpfcdb = new AdditionalDB('shoutbox_config');
-$sbupdater = new PluginUpdater2('shoutbox','sb_','shoutbox_config','includes');
+$sbupdater = new PluginUpdater('shoutbox','sb_','shoutbox_config','includes');
 
 
 // -- reset the version? (to force an update) ---------------------------------

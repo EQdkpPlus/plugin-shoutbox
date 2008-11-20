@@ -28,9 +28,10 @@ if (!defined('EQDKP_INC'))
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
   var $version    = '0.0.7';
+  var $build      = '3197';
   var $copyright  = 'Aderyn';
   var $vstatus    = 'Stable';
-  var $build      = '3124';
+  var $fwversion  = '1.0.1';  // required framework Version
 
   /**
     * Constructor
@@ -60,7 +61,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
         'description'       => $user->lang['sb_short_desc'],
         'long_description'  => $user->lang['sb_long_desc'],
         'homepage'          => 'http://www.eqdkp-plus.com/',
-        'manuallink'        => '',
+        'manuallink'        => false,
     );
 
     // -- Register our permissions ------------------------
