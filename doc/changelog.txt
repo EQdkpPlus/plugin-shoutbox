@@ -4,15 +4,15 @@
  * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2008
- * Date:        $Date: 2008-11-13 11:21:51 +0100 (Do, 13 Nov 2008) $
+ * Date:        $Date$
  * -----------------------------------------------------------------------
- * @author      $Author: Dallandros $
+ * @author      $Author$
  * @copyright   2008 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
- * @version     $Rev: 3125 $
+ * @version     $Rev$
  *
- * $Id: shoutbox_plugin_class.php 3125 2008-11-13 10:21:51Z Dallandros $
+ * $Id$
  */
 
 Changelog
