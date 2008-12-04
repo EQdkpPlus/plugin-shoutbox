@@ -29,12 +29,16 @@ if (!class_exists("Shoutbox"))
 {
   class Shoutbox
   {
+    var $smiley_path;  /* The smiley path */
+
 
     /**
     * Constructor
     */
     function Shoutbox()
     {
+      // set smiley path
+      $this->smiley_path = 'libraries/jquery/images/editor/icons';
     }
 
     /**
@@ -87,7 +91,8 @@ if (!class_exists("Shoutbox"))
               ORDER BY shoutbox.date DESC
               LIMIT '.$start.' , '.$limit;
       $result = $db->query($sql);
-      if (!$result){
+      if (!$result)
+      {
         message_die('Could not obtain shoutbox information', '', __FILE__, __LINE__, $sql);
       }
 
@@ -132,7 +137,8 @@ if (!class_exists("Shoutbox"))
                 LEFT JOIN `__members` AS members ON members.member_id = member_user.member_id
                 WHERE member_user.user_id='.$user->data['user_id'];
         $result = $db->query($sql);
-        if (!$result){
+        if (!$result)
+        {
           message_die('Could not obtain shoutbox member information', '', __FILE__, __LINE__, $sql);
         }
 
@@ -149,7 +155,7 @@ if (!class_exists("Shoutbox"))
 
       return $members;
     }
-    
+
     /**
     * getMemberCountForUser
     * Get the number of member current user
@@ -547,7 +553,7 @@ if (!class_exists("Shoutbox"))
                      document.Shoutbox.sb_text.disabled=true;
                      document.getElementById('shoutbox_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Save\"/>".$user->lang['sb_save_wait']."';
                    }
-                   
+
                    function deleteShoutboxRequest(id) {
                      document.getElementById('shoutbox_delete_button_'+id).innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Delete\"/>';
                    }
@@ -586,7 +592,7 @@ if (!class_exists("Shoutbox"))
         {
           $html .= '<tr><th>&nbsp;</th></tr>';
         }
-          
+
         $html .= '   <tr class="'.$class.'">
                        <td>
                          <div align="center">'
@@ -709,7 +715,7 @@ if (!class_exists("Shoutbox"))
         {
           $html .= '<tr><th>&nbsp;</th></tr>';
         }
-        
+
         foreach ($shoutbox_entries as $entry)
         {
           // get class for row
@@ -742,8 +748,18 @@ if (!class_exists("Shoutbox"))
                       </span>';
           }
 
-          // output Date, User and text
-          $html .= date('H:i', $entry['date']).': '.$this->getColoredClassName($entry['name']).
+          // output Date,
+          if ($conf_plus['sb_show_date'])
+          {
+            $html .= date($user->lang['sb_date_format'], $entry['date']).': ';
+          }
+          else
+          {
+            $html .= date($user->lang['sb_time_format'], $entry['date']).': ';
+          }
+
+          // as well as User and text
+          $html .= $this->getColoredClassName($entry['name']).
                    '<br/>'.
                    $this->getCleanOutput($entry['text'], $root_path);
 
@@ -756,7 +772,7 @@ if (!class_exists("Shoutbox"))
       else
       {
         $no_entries = ($decode == true) ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries'];
-      
+
         $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
                     <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$no_entries.'</div></td></tr>
                   </table>';
@@ -815,7 +831,7 @@ if (!class_exists("Shoutbox"))
       );
       // replace array
       $replace = array(
-                 $root_path.'pluskernel/include/jquery/img/editor/icons',
+                 $root_path.$this->smiley_path,
       );
 
       return str_replace($search, $replace, $text);

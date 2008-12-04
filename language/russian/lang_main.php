@@ -33,7 +33,8 @@ $lang = array(
   'sb_manage'                       => 'Manage',
 
   // Admin -> Settings
-  'sb_date_format'                  => 'Y/m/d H:i:s',  // YYYY/MM/DD HH:mm:ss
+  'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
+  'sb_time_format'                  => 'H:i',        // HH:mm
   'sb_adm_date'                     => 'Date',
   'sb_adm_name'                     => 'Name',
   'sb_adm_text'                     => 'Message',
@@ -47,6 +48,7 @@ $lang = array(
 
   // Portal Modules
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',
+  'sb_show_date'                    => 'Show date also?',
   'sb_show_archive'                 => 'Show Archive?',
   'sb_input_box_below'              => 'Input box below entries?',
   'sb_invisible_to_guests'          => '<u>Not</u> visible to guests?',

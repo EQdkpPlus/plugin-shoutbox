@@ -17,6 +17,10 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
+0.0.8 [04/12/2008][Aderyn]
+  Fixed - [#1310] Smiley images are not displayed
+  Implemented - [#1311] Show Date
+
 0.0.7 [20/11/2008][Aderyn]
   Fixed - [#1257] Input Box ohne zugewiesenen Member
   Fixed - [#1258] Löschen Button für Gäste

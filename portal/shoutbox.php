@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.0.7',                          // Version
+      'version'       => '0.0.8',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -54,17 +54,22 @@ $portal_settings['shoutbox'] = array(
         'property'  => 'text',
         'size'      => '2',
       ),
+  'pk_shoutbox_show_date'           => array(
+        'name'      => 'sb_show_date',
+        'language'  => 'sb_show_date',
+        'property'  => 'checkbox',
+      ),
   'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
         'property'  => 'checkbox',
       ),
-   'pk_shoutbox_input_box_location' => array(
+  'pk_shoutbox_input_box_location'  => array(
         'name'      => 'sb_input_box_below',
         'language'  => 'sb_input_box_below',
         'property'  => 'checkbox',
       ),
-    'pk_shoutbox_invisible_to_guests' => array(
+  'pk_shoutbox_invisible_to_guests' => array(
         'name'      => 'sb_invisible_to_guests',
         'language'  => 'sb_invisible_to_guests',
         'property'  => 'checkbox',
@@ -86,7 +91,7 @@ if (!function_exists(shoutbox_module))
       {
         if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
         if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
-        
+
         include($shoutbox_file);
         $shoutbox = new Shoutbox();
 

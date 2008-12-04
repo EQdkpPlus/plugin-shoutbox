@@ -36,31 +36,11 @@ if (!defined('SHOUTBOX_PAGE_LIMIT'))    define('SHOUTBOX_PAGE_LIMIT',    50);
 
 
 // -- Framework include -------------------------------------------------------
-$phpversionnr  = (version_compare(phpversion(), "5.0.0", ">=")) ? '5' : '4';
-$myLibraryPath = $eqdkp_root_path.'libraries/libraries.php'.$phpversionnr.'.php';
-
-// The library Loader is not available
-if(!file_exists($myLibraryPath))
-{
-  $libnothere_txt = ($user->lang['libloader_notfound']) ? $user->lang['libloader_notfound'] : 'Library Loader not available! Check if the "eqdkp/libraries/" folder is uploaded correctly';
-  message_die($libnothere_txt);
-}
-require_once($myLibraryPath);
-$wpfccore = new pluginCore();
-CheckLibVersion('pluginCore', $wpfccore->version, $pm->plugins['shoutbox']->fwversion);
-$jquery = new jquery(); 
+include_once($eqdkp_root_path.'plugins/shoutbox/includes/libloader.inc.php');
 
 
 // -- Used Classes ------------------------------------------------------------
 include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 $shoutbox = new Shoutbox();
-
-
-// -- JQUERY Header -----------------------------------------------------------
-if (is_object($tpl))
-{
-  $tpl->assign_vars(array('JQUERY_INCLUDES' => $jquery->Header()));
-}
-
 
 ?>
