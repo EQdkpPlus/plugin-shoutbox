@@ -32,8 +32,11 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox') )
 
 // ----------------------------------------------------------------------------
 $tpl->assign_vars(array(
-    'L_VERSION'       => $pm->get_data('shoutbox', 'version'),
-    'L_WRITTEN_BY'    => $user->lang['sb_written_by'],
+    'L_VERSION'      => $pm->get_data('shoutbox', 'version'),
+    'L_BUILD'        => $pm->plugins['shoutbox']->build,
+    'L_STATUS'       => $pm->plugins['shoutbox']->vstatus,
+    'L_COPYRIGHT'    => $user->lang['sb_copyright'],
+    'L_YEARR'        => date('Y'),
 ));
 
 

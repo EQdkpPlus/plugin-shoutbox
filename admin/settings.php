@@ -107,7 +107,7 @@ $tpl->assign_vars(array (
   'JS_SAVE_MSG'       => ($_GET['save']) ? $jquery->HumanMsg($user->lang['sb_config_saved']) : '',
 
   // credits
-  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '200'),
+  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '230'),
   'SB_INFO_IMG'       => '../images/credits/info.png',
   'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
 ));

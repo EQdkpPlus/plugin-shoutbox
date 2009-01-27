@@ -69,7 +69,7 @@ foreach ($delete_array as $id)
 $total_entries = $shoutbox->getNumShoutboxEntries();
 $start = (isset($_GET['start'])) ? $_GET['start'] : 0;
 // pagination
-$pagination = generate_pagination('settings.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
+$pagination = generate_pagination('manage.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
 
 
 // -- display entries ---------------------------------------------------------
@@ -112,7 +112,7 @@ $tpl->assign_vars(array (
   'JS_MARK'           => '<script type="text/javascript" src="./../includes/javascripts/mark.js"></script>',
 
   // credits
-  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '200'),
+  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '230'),
   'SB_INFO_IMG'       => '../images/credits/info.png',
   'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
 ));

@@ -23,6 +23,7 @@ if (!defined('EQDKP_INC'))
 
 $new_version = '0.0.2';
 $updateFunction = 'SB001to002Update';
+$reloadSETT = 'settings.php';
 
 $updateDESC = array(
   '',
@@ -39,7 +40,7 @@ $updateSQL = array(
 
 function SB001to002Update()
 {
-  global $wpfcdb;
+  global $wpfcdb, $new_version;
 
   // Config Values
   $savearray = array(

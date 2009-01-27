@@ -64,7 +64,7 @@ $lang = array(
   'sb_about_header'                 => 'About Shoutbox',
   'sb_credits_part1'                => 'Shoutbox v',
   'sb_credits_part2'                => ' by Aderyn',
-  'sb_written_by'                   => 'Written by ',
+  'sb_copyright'                    => 'Copyright',
 );
 
 ?>

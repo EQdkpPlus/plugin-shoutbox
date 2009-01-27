@@ -23,6 +23,7 @@ if (!defined('EQDKP_INC'))
 
 $new_version = '0.0.7';
 $updateFunction = false;
+$reloadSETT = 'settings.php';
 
 $updateDESC = array(
   '',
