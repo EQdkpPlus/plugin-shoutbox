@@ -86,6 +86,14 @@ $sbvcheck = new PluginUpdCheck($versionthing, $cachedb);
 $sbvcheck->PerformUpdateCheck();
 
 
+// ----------------------------------------------------------------------------
+// Saved message
+if ($_GET['save'])
+{
+  System_Message($user->lang['sb_config_saved'], '', 'green');
+}
+
+
 // -- Template ----------------------------------------------------------------
 $tpl->assign_vars(array (
   // form
@@ -102,9 +110,6 @@ $tpl->assign_vars(array (
   // update box
   'UPDATE_BOX'        => $sbupdater->OutputHTML(),
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
-
-  // Javascript
-  'JS_SAVE_MSG'       => ($_GET['save']) ? $jquery->HumanMsg($user->lang['sb_config_saved']) : '',
 
   // credits
   'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '230'),
