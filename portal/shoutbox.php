@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.0.8',                          // Version
+      'version'       => '0.1.0',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -86,13 +86,15 @@ if (!function_exists(shoutbox_module))
 
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      $shoutbox_file = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
-      if (file_exists($shoutbox_file))
+      $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
+      $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
+      if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
       {
-        if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
-        if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
+        if (!defined('SHOUTBOX_DEFAULT_LIMIT'))   define('SHOUTBOX_DEFAULT_LIMIT',   10);
+        if (!defined('SHOUTBOX_WORDWRAP'))        define('SHOUTBOX_WORDWRAP',        20);
 
-        include($shoutbox_file);
+        include_once($feedcreator_file);
+        include_once($shoutbox_file);
         $shoutbox = new Shoutbox();
 
         // return the output for module manager

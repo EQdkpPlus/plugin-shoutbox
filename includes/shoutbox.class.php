@@ -30,6 +30,7 @@ if (!class_exists("Shoutbox"))
   class Shoutbox
   {
     var $smiley_path;  /* The smiley path */
+    var $rss;          /* RSS object      */
 
 
     /**
@@ -37,8 +38,16 @@ if (!class_exists("Shoutbox"))
     */
     function Shoutbox()
     {
+      global $eqdkp, $pcache;
+
       // set smiley path
       $this->smiley_path = 'libraries/jquery/images/editor/icons';
+
+      $this->rss = new UniversalFeedCreator();
+      $this->rss->title          = 'Shoutbox';
+      $this->rss->description    = $eqdkp->config['main_title'].' - Shoutbox';
+      $this->rss->link           = $pcache->BuildLink();
+      $this->rss->syndicationURL = $pcache->BuildLink().$_SERVER['PHP_SELF'];
     }
 
     /**
@@ -352,7 +361,7 @@ if (!class_exists("Shoutbox"))
     {
       $text = trim($text);
       $text = '<p>'.$text.'</p>';
-      $text = preg_replace_callback('/\[code\](.*?)\[\/code\]/ms', array($this,"escape"), $text);
+      $text = preg_replace_callback('/\[code\](.*?)\[\/code\]/msi', array($this,"escape"), $text);
 
       // Smileys to find...
       $in = array(
@@ -377,19 +386,19 @@ if (!class_exists("Shoutbox"))
 
       // BBCode to find...
       $in = array(
-               '/\[b\](.*?)\[\/b\]/ms',
-               '/\[i\](.*?)\[\/i\]/ms',
-               '/\[u\](.*?)\[\/u\]/ms',
-               '/\[img\](.*?)\[\/img\]/ms',
-               '/\[email\](.*?)\[\/email\]/ms',
-               '/\[url\](.*?)\[\/url\]/ms',
-               '/\[url\="?(.+)"?\](.*?)\[\/url\]/ms',
-               '/\[size\="?(.*?)"?\](.*?)\[\/size\]/ms',
-               '/\[color\="?(.*?)"?\](.*?)\[\/color\]/ms',
-               '/\[quote](.*?)\[\/quote\]/ms',
-               '/\[list\=(.*?)\](.*?)\[\/list\]/ms',
-               '/\[list\](.*?)\[\/list\]/ms',
-               '/\[\*\]\s?(.*?)\n/ms'
+               '/\[b\](.*?)\[\/b\]/msi',
+               '/\[i\](.*?)\[\/i\]/msi',
+               '/\[u\](.*?)\[\/u\]/msi',
+               '/\[img\](.*?)\[\/img\]/msi',
+               '/\[email\](.*?)\[\/email\]/msi',
+               '/\[url\](.*?)\[\/url\]/msi',
+               '/\[url\="?(.+)"?\](.*?)\[\/url\]/msi',
+               '/\[size\="?(.*?)"?\](.*?)\[\/size\]/msi',
+               '/\[color\="?(.*?)"?\](.*?)\[\/color\]/msi',
+               '/\[quote](.*?)\[\/quote\]/msi',
+               '/\[list\=(.*?)\](.*?)\[\/list\]/msi',
+               '/\[list\](.*?)\[\/list\]/msi',
+               '/\[\*\]\s?(.*?)\n/msi'
       );
 
       // And replace them by...
@@ -414,13 +423,40 @@ if (!class_exists("Shoutbox"))
       $text = str_replace("\r", "", $text);
       $text = nl2br($text);
 
-      $text = preg_replace_callback('/<pre>(.*?)<\/pre>/ms', array($this,"removeBr"), $text);
-      $text = preg_replace('/<p><pre>(.*?)<\/pre><\/p>/ms', "<pre>\\1</pre>", $text);
+      $text = preg_replace_callback('/<pre>(.*?)<\/pre>/msi', array($this,"removeBr"), $text);
+      $text = preg_replace('/<p><pre>(.*?)<\/pre><\/p>/msi', "<pre>\\1</pre>", $text);
 
-      $text = preg_replace_callback('/<ul>(.*?)<\/ul>/ms', array($this,"removeBr"), $text);
-      $text = preg_replace('/<p><ul>(.*?)<\/ul><\/p>/ms', "<ul>\\1</ul>", $text);
+      $text = preg_replace_callback('/<ul>(.*?)<\/ul>/msi', array($this,"removeBr"), $text);
+      $text = preg_replace('/<p><ul>(.*?)<\/ul><\/p>/msi', "<ul>\\1</ul>", $text);
 
       return $text;
+    }
+
+    /**
+     * getRSSItem
+     * Create a RSS item out of shoutbox entry
+     *
+     * @param  array  $shoutbox_entry   Shoutbox entry
+     *
+     * @return FeedItem object
+     */
+    function getRSSItem($shoutbox_entry)
+    {
+      // init
+      $rssitem = NULL;
+
+      if (is_array($shoutbox_entry))
+      {
+        $rssitem = new FeedItem();
+        $rssitem->title       = $shoutbox_entry['name'];
+        $rssitem->link        = $this->rss->link;
+        $rssitem->description = $shoutbox_entry['text'];
+        $rssitem->date        = $shoutbox_entry['date'];
+        $rssitem->source      = $this->rss->link;
+        $rssitem->author      = $shoutbox_entry['name'];
+      }
+
+      return $rssitem;
     }
 
     /**
@@ -688,7 +724,7 @@ if (!class_exists("Shoutbox"))
     */
     function getContent($rpath='', $decode=false)
     {
-      global $user, $eqdkp, $SID, $eqdkp_root_path, $conf_plus;
+      global $user, $eqdkp, $SID, $eqdkp_root_path, $conf_plus, $pcache;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
@@ -718,6 +754,9 @@ if (!class_exists("Shoutbox"))
 
         foreach ($shoutbox_entries as $entry)
         {
+          // cleanup text
+          $entry['text'] = $this->getCleanOutput($entry['text'], $root_path);
+
           // get class for row
           $class = $eqdkp->switch_row_class();
 
@@ -761,13 +800,28 @@ if (!class_exists("Shoutbox"))
           // as well as User and text
           $html .= $this->getColoredClassName($entry['name']).
                    '<br/>'.
-                   $this->getCleanOutput($entry['text'], $root_path);
+                   $entry['text'];
 
           $html .= '  </td>
                     </tr>';
+
+          // RSS feed item
+          $rssitem = $this->getRSSItem($entry);
+          if ($rssitem)
+          {
+            $this->rss->addItem($rssitem);
+          }
         }
+
         // output table footer
         $html .= '</table>';
+
+        // save RSS
+        $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
+        // add link to RSS
+        $html .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
+                  href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
+
       }
       else
       {
@@ -799,7 +853,7 @@ if (!class_exists("Shoutbox"))
       // get class by name
       $class = get_classNamebyMemberName($name_for_class);
 
-      if($eqdkp->config['default_game'] == 'WoW')
+      if(strtolower($eqdkp->config['default_game']) == 'wow')
       {
         return '<span class="'.get_classColorChecked($class).'">'.$name.'</span>';
       }
