@@ -479,8 +479,9 @@ if (!class_exists("Shoutbox"))
       {
         // clean input
         $text_insert = ($this->checkUTF8($text) == 1) ? utf8_decode($text) : $text;
-        $text_insert = htmlentities(strip_tags($text_insert), ENT_QUOTES); /*No html or javascript in comments*/
+        $text_insert = strip_tags($text_insert); /*No html or javascript in comments*/
         $text_insert = $this->shoutbox_wordwrap($text_insert, SHOUTBOX_WORDWRAP, "\n", true);
+        $text_insert = htmlentities($text_insert, ENT_QUOTES);
         $text_insert = $this->toHTML($text_insert);
 
         // insert
