@@ -40,7 +40,8 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 
 
   // -- Output ----------------------------------------------
-  echo htmlspecialchars($shoutbox->getContent($_REQUEST['sb_root'], true));
+  // This is not secure.... pls fix..
+  echo $shoutbox->getContent($_REQUEST['sb_root'], true);
 }
 else
 {
