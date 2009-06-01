@@ -32,16 +32,16 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 
 
 // -- delete? -----------------------------------------------------------------
-if ($_GET['deleteid'])
+if ($in->get('deleteid', 0) > 0)
 {
-  $shoutbox->deleteShoutboxEntry($_GET['deleteid']);
+  $shoutbox->deleteShoutboxEntry($in->get('deleteid', 0));
 }
 
 
 // -- pagination --------------------------------------------------------------
 // get total and start
 $total_entries = $shoutbox->getNumShoutboxEntries();
-$start = (isset($_GET['start'])) ? $_GET['start'] : 0;
+$start = $in->get('start', 0);
 // pagination
 $pagination = generate_pagination('archive.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
 
