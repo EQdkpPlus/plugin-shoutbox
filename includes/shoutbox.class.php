@@ -591,6 +591,14 @@ if (!class_exists("Shoutbox"))
                      document.getElementById('shoutbox_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Save\"/>".$user->lang['sb_save_wait']."';
                    }
 
+                   function reloadShoutboxRequest() {
+                     document.getElementById('shoutbox_reload_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Loading\"/>';
+                   }
+
+                   function reloadShoutboxFinished() {
+                     document.getElementById('shoutbox_reload_button').innerHTML='<img src=\"".$eqdkp_root_path."plugins/shoutbox/images/reload.png\" alt=\"Reload\"/>';
+                   }
+
                    function deleteShoutboxRequest(id) {
                      document.getElementById('shoutbox_delete_button_'+id).innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Delete\"/>';
                    }
@@ -609,7 +617,7 @@ if (!class_exists("Shoutbox"))
     */
     function getForm($rpath='')
     {
-      global $user, $eqdkp, $eqdkp_root_path, $conf_plus;
+      global $user, $eqdkp, $eqdkp_root_path, $conf_plus, $SID;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
@@ -621,7 +629,9 @@ if (!class_exists("Shoutbox"))
       if ($this->getMemberCountForUser() > 0)
       {
         // html
-        $html = '<form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
+        $html = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                 </form>
+                 <form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
                    <table width="100%" border="0" cellspacing="1" cellpadding="2">';
         // input below?
         if ($conf_plus['sb_input_box_below'] == 1 &&
@@ -645,6 +655,21 @@ if (!class_exists("Shoutbox"))
                          <div align="center">
                            <input type="hidden" name="sb_root" value="'.$root_path.'"/>
                            <span id="shoutbox_button"><input type="submit" class="input" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
+                           <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
+                             {
+                               target: \'#htmlShoutboxTable\',
+                               url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.$root_path.'\',
+                               beforeSubmit: function(formData, jqForm, options) {
+                                 reloadShoutboxRequest();
+                               },
+                               success: function() {
+                                 reloadShoutboxFinished();
+                               }
+                             });">
+                             <span id="shoutbox_reload_button">
+                               <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="Reload" title="Reload"/>
+                             </span>
+                           </span>
                          </div>
                        </td>
                      </tr>
@@ -742,7 +767,7 @@ if (!class_exists("Shoutbox"))
       // get shoutbox entries
       $shoutbox_entries = $this->getShoutboxEntries(0, false, $decode);
       $count = count($shoutbox_entries);
-      if ($count > 0)
+      if ($count > 0 && is_dir($root_path))
       {
         // output table header
         $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';

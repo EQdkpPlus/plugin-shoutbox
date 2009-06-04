@@ -32,7 +32,7 @@ $user->check_auth('a_shoutbox_delete');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die('The Shoutbox plugin is not installed.');
+  message_die($user->lang['sb_plugin_not_installed']);
 }
 
 
@@ -42,7 +42,7 @@ $wpfccore->InitAdmin();
 
 // -- checkall? ---------------------------------------------------------------
 $checkall = false;
-if ($_GET['checkall'])
+if ($in->get('checkall'))
 {
   $checkall = true;
 }
@@ -50,9 +50,9 @@ if ($_GET['checkall'])
 
 // -- delete array ------------------------------------------------------------
 $delete_array = array();
-if ($_POST['shoutbox_delete'])
+if ($in->get('shoutbox_delete'))
 {
-  $delete_array = $_POST['shoutbox_id'];
+  $delete_array = $in->getArray('shoutbox_id', 'int');
 }
 
 
@@ -67,7 +67,7 @@ foreach ($delete_array as $id)
 // -- pagination --------------------------------------------------------------
 // get total and start
 $total_entries = $shoutbox->getNumShoutboxEntries();
-$start = (isset($_GET['start'])) ? $_GET['start'] : 0;
+$start = $in->get('start', 0);
 // pagination
 $pagination = generate_pagination('manage.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
 

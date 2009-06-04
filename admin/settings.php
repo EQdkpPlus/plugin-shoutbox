@@ -32,7 +32,7 @@ $user->check_auth('a_shoutbox_');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die('The Shoutbox plugin is not installed.');
+  message_die($user->lang['sb_plugin_not_installed']);
 }
 
 
@@ -43,7 +43,7 @@ $sbupdater = new PluginUpdater('shoutbox','sb_','shoutbox_config','includes');
 
 
 // -- reset the version? (to force an update) ---------------------------------
-if ($_GET['version'] == 'reset')
+if ($in->get('version') == 'reset')
 {
   $sbupdater->DeleteVersionString();
   redirect('plugins/shoutbox/admin/settings.php'.$SID);
@@ -51,11 +51,11 @@ if ($_GET['version'] == 'reset')
 
 
 // -- save? -------------------------------------------------------------------
-if ($_POST['save'])
+if ($in->get('save_settings'))
 {
   // take over new values
   $savearray = array(
-      'sb_updatecheck'  =>  $_POST['sb_updatecheck'],
+      'sb_updatecheck'  =>  $in->get('sb_updatecheck', 0),
   );
 
   // update configuration
@@ -88,7 +88,7 @@ $sbvcheck->PerformUpdateCheck();
 
 // ----------------------------------------------------------------------------
 // Saved message
-if ($_GET['save'])
+if ($in->get('save'))
 {
   System_Message($user->lang['sb_config_saved'], '', 'green');
 }

@@ -17,6 +17,16 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
+0.1.3 [20/05/2009][Aderyn]
+  Fixed - Further XSS
+  Implemented - Reload Button
+
+0.1.2 [01/06/2009][wallenium]
+  Fixed - XSS
+
+0.1.1 [20/05/2009][Aderyn]
+  Fixed - Fehler beim Parsen des Inputs
+
 0.0.8 [04/12/2008][Aderyn]
   Fixed - [#1310] Smiley images are not displayed
   Implemented - [#1311] Show Date

@@ -29,6 +29,9 @@ $lang = array(
   'sb_short_desc'                   => 'Shoutbox',
   'sb_long_desc'                    => 'Shoutbox ist ein Plugin mit dem User kleine Mitteilungen austauschen können.',
 
+  // General
+  'sb_plugin_not_installed'         => 'Das Shoutbox Plugin ist nicht installiert',
+
   // Menu
   'sb_manage'                       => 'Verwalten',
 

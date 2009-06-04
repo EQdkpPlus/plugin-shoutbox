@@ -27,7 +27,7 @@ include_once('includes/common.php');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die('The Shoutbox plugin is not installed.');
+  message_die($user->lang['sb_plugin_not_installed']);
 }
 
 
@@ -59,7 +59,7 @@ foreach ($shoutbox_entries as $entry)
   {
     $can_delete = true;
   }
-  
+
   $tpl->assign_block_vars('sb_row', array (
     'class'       => $eqdkp->switch_row_class(),
     'id'          => $entry['id'],
@@ -77,7 +77,7 @@ $tpl->assign_vars(array (
   'F_ARCHIVE'         => 'archive.php'.$SID,
   'F_DELETE_IMG'      => $eqdkp_root_path.'images/global/delete.png',
   'FOOTCOUNT'         => sprintf($user->lang['sb_footer'], $total_entries, SHOUTBOX_PAGE_LIMIT),
-  
+
   // pagination
   'START'             => $start,
   'PAGINATION'        => $pagination,

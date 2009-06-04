@@ -24,29 +24,32 @@ include_once('includes/common.php');
 // Be sure plugin is installed
 if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
+  // get post/get values
+  $sb_text      = $in->get('sb_text');
+  $sb_member_id = $in->get('sb_member_id', ANONYMOUS);
+  $sb_delete    = $in->get('shoutbox_delete', 0);
+  $sb_root      = $in->get('sb_root');
+
   // -- Insert? ---------------------------------------------
-  if (isset($_POST['sb_text']) && ($_POST['sb_text'] != '') &&
-      isset($_POST['sb_member_id']) && ($_POST['sb_member_id'] != ''))
+  if ($sb_text && $sb_member_id != ANONYMOUS)
   {
-    // insert
-    $shoutbox->insertShoutboxEntry($_POST['sb_member_id'], $_POST['sb_text']);
+    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text);
   }
   // -- Delete? ---------------------------------------------
-  else if (isset($_GET['shoutbox_delete']))
+  else if ($sb_delete)
   {
-    // delete
-    $shoutbox->deleteShoutboxEntry($_GET['shoutbox_delete']);
+    $shoutbox->deleteShoutboxEntry($sb_delete);
   }
 
-
   // -- Output ----------------------------------------------
-  // This is not secure.... pls fix..
-  echo $shoutbox->getContent($_REQUEST['sb_root'], true);
+  echo $shoutbox->getContent($sb_root, true);
 }
 else
 {
   $error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
-              <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">Shoutbox Plugin not installed</div></td></tr>
+              <tr class="'.$eqdkp->switch_row_class().'">
+                <td><div align="center">'.$user->lang['sb_plugin_not_installed'].'</div></td>
+              </tr>
             </table>';
   echo $error;
 }
