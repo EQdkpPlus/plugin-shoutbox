@@ -33,6 +33,7 @@ include_once($eqdkp_root_path.'common.php');
 if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
 if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
 if (!defined('SHOUTBOX_PAGE_LIMIT'))    define('SHOUTBOX_PAGE_LIMIT',    50);
+if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',    10);
 
 
 // -- Framework include -------------------------------------------------------
@@ -42,5 +43,10 @@ include_once($eqdkp_root_path.'plugins/shoutbox/includes/libloader.inc.php');
 // -- Used Classes ------------------------------------------------------------
 include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 $shoutbox = new Shoutbox();
+
+
+// -- Check requirements ------------------------------------------------------
+include($eqdkp_root_path.'plugins/shoutbox/includes/version.inc.php');
+shoutbox_requirements_check();
 
 ?>

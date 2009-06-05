@@ -52,27 +52,39 @@ $portal_settings['shoutbox'] = array(
         'name'      => 'sb_output_count_limit',
         'language'  => 'sb_output_count_limit',
         'property'  => 'text',
-        'size'      => '2',
+        'size'      => '3',
+        'help'      => '',
       ),
   'pk_shoutbox_show_date'           => array(
         'name'      => 'sb_show_date',
         'language'  => 'sb_show_date',
         'property'  => 'checkbox',
+        'help'      => '',
       ),
   'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
         'property'  => 'checkbox',
+        'help'      => '',
       ),
   'pk_shoutbox_input_box_location'  => array(
         'name'      => 'sb_input_box_below',
         'language'  => 'sb_input_box_below',
         'property'  => 'checkbox',
+        'help'      => '',
+      ),
+  'pk_shoutbox_autoreload'          => array(
+        'name'      => 'sb_autoreload',
+        'language'  => 'sb_autoreload',
+        'property'  => 'text',
+        'size'      => '3',
+        'help'      => 'sb_autoreload_help',
       ),
   'pk_shoutbox_invisible_to_guests' => array(
         'name'      => 'sb_invisible_to_guests',
         'language'  => 'sb_invisible_to_guests',
         'property'  => 'checkbox',
+        'help'      => '',
       ),
 );
 
@@ -82,27 +94,54 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-    global $pm, $eqdkp_root_path;
+    global $pm, $eqdkp_root_path, $eqdkp, $user;
 
+    // initialize output
+    $output = '';
+
+    // check if shoutbox is installed
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
-      $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
-      if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
+      // do requirements check
+      include($eqdkp_root_path.'plugins/shoutbox/includes/version.inc.php');
+      $requirementscheck = shoutbox_portal_requirements_check();
+      if ($requirementscheck !== true)
       {
-        if (!defined('SHOUTBOX_DEFAULT_LIMIT'))   define('SHOUTBOX_DEFAULT_LIMIT',   10);
-        if (!defined('SHOUTBOX_WORDWRAP'))        define('SHOUTBOX_WORDWRAP',        20);
+        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
+                     <tr class="'.$eqdkp->switch_row_class().'">
+                       <td><div align="center">'.$requirementscheck.'</div></td>
+                     </tr>
+                   </table>';
+      }
+      else
+      {
+        $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
+        $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
+        if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
+        {
+          if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
+          if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
+          if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',    10);
 
-        include_once($feedcreator_file);
-        include_once($shoutbox_file);
-        $shoutbox = new Shoutbox();
+          include_once($feedcreator_file);
+          include_once($shoutbox_file);
+          $shoutbox = new Shoutbox();
 
-        // return the output for module manager
-        return $shoutbox->showShoutbox();
+          // return the output for module manager
+          $output = $shoutbox->showShoutbox();
+        }
       }
     }
+    else
+    {
+      $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
+                   <tr class="'.$eqdkp->switch_row_class().'">
+                     <td><div align="center">'.$user->lang['sb_plugin_not_installed'].'</div></td>
+                   </tr>
+                 </table>';
+    }
 
-    return;
+    return $output;
   }
 }
 ?>

@@ -568,41 +568,34 @@ if (!class_exists("Shoutbox"))
     */
     function getShoutboxJCode()
     {
-      global $user, $eqdkp_root_path;
+      global $user, $eqdkp_root_path, $conf_plus;
 
-      $jscode = "<script type='text/javascript'>
-                   // wait for the DOM to be loaded
-                   $(document).ready(function() {
+      // set autoreload
+      $autoreload = ($conf_plus['sb_autoreload'] != '') ? intval($conf_plus['sb_autoreload']) : SHOUTBOX_AUTORELOAD;
+      $autoreload = ($autoreload < 600 ? $autoreload : 0);
 
-                     $('#Shoutbox').ajaxForm({
-                       target: '#htmlShoutboxTable',
-                       beforeSubmit:  showShoutboxRequest,
-                       success: function() {
-                         // clear the input field:
-                         document.Shoutbox.sb_text.value = '';
-                         document.Shoutbox.sb_text.disabled=false;
-                         document.getElementById('shoutbox_button').innerHTML='<input type=\"submit\" class=\"input\" name=\"sb_submit\" value=\"".$user->lang['sb_submit_text']."\"/>';
-                       }
-                     });
-                   });
+      $jscode  = "<script type=\"text/javascript\" src=\"".$eqdkp_root_path."plugins/shoutbox/includes/javascripts/shoutbox.js\"></script>
+                  <script type='text/javascript'>
+                    // wait for the DOM to be loaded
+                    $(document).ready(function() {
 
-                   function showShoutboxRequest(formData, jqForm, options) {
-                     document.Shoutbox.sb_text.disabled=true;
-                     document.getElementById('shoutbox_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Save\"/>".$user->lang['sb_save_wait']."';
-                   }
-
-                   function reloadShoutboxRequest() {
-                     document.getElementById('shoutbox_reload_button').innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Loading\"/>';
-                   }
-
-                   function reloadShoutboxFinished() {
-                     document.getElementById('shoutbox_reload_button').innerHTML='<img src=\"".$eqdkp_root_path."plugins/shoutbox/images/reload.png\" alt=\"Reload\"/>';
-                   }
-
-                   function deleteShoutboxRequest(id) {
-                     document.getElementById('shoutbox_delete_button_'+id).innerHTML='<img src=\"".$eqdkp_root_path."images/global/loading.gif\" alt=\"Delete\"/>';
-                   }
-                 </script>";
+                      $('#Shoutbox').ajaxForm({
+                        target: '#htmlShoutboxTable',
+                        beforeSubmit:  function(formData, jqForm, options) {
+                          showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang['sb_save_wait']."');
+                        },
+                        success: function() {
+                          showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang['sb_submit_text']."', '".$user->lang['sb_reload']."');
+                        }
+                      });
+                 ";
+      if ($autoreload > 0)
+      {
+        $jscode .= "     setInterval(shoutboxAutoReload, ".($autoreload * 1000).", '".$eqdkp_root_path."', '".$user->lang['sb_reload']."');
+                   ";
+      }
+      $jscode .= "  });
+                  </script>";
 
       return $jscode;
     }
@@ -660,14 +653,14 @@ if (!class_exists("Shoutbox"))
                                target: \'#htmlShoutboxTable\',
                                url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.$root_path.'\',
                                beforeSubmit: function(formData, jqForm, options) {
-                                 reloadShoutboxRequest();
+                                 reloadShoutboxRequest(\''.$root_path.'\');
                                },
                                success: function() {
-                                 reloadShoutboxFinished();
+                                 reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang['sb_reload'].'\');
                                }
                              });">
                              <span id="shoutbox_reload_button">
-                               <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="Reload" title="Reload"/>
+                               <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang['sb_reload'].'" title="'.$user->lang['sb_reload'].'"/>
                              </span>
                            </span>
                          </div>
@@ -804,11 +797,11 @@ if (!class_exists("Shoutbox"))
                           target: \'#htmlShoutboxTable\',
                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&shoutbox_delete='.$entry['id'].'&sb_root='.$root_path.'\',
                           beforeSubmit: function(formData, jqForm, options) {
-                            deleteShoutboxRequest('.$entry['id'].')
+                            deleteShoutboxRequest(\''.$root_path.'\', '.$entry['id'].', \''.$delete_text.'\');
                           }
                         }); ">
                         <span id="shoutbox_delete_button_'.$entry['id'].'">
-                          <img src="'.$img.'" alt="'.$delete_text.'"/>
+                          <img src="'.$img.'" alt="'.$delete_text.'" title="'.$delete_text.'"/>
                         </span>
                       </span>';
           }

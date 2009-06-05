@@ -17,9 +17,10 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
-0.1.3 [20/05/2009][Aderyn]
+0.1.3 [05/06/2009][Aderyn]
   Fixed - Further XSS
   Implemented - Reload Button
+  Implemented - Autoreload, can be set by Portalsettings
 
 0.1.2 [01/06/2009][wallenium]
   Fixed - XSS

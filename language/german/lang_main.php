@@ -31,6 +31,8 @@ $lang = array(
 
   // General
   'sb_plugin_not_installed'         => 'Das Shoutbox Plugin ist nicht installiert',
+  'sb_php_version'                  => "Shoutbox benötigt PHP %1\$s oder höher. Dein Server läuft mit PHP %2\$s",
+  'sb_plus_version'                 => "Shoutbox benötigt EQDKP-PLUS %1\$s oder höher. Die installierte Version ist %2\$s",
 
   // Menu
   'sb_manage'                       => 'Verwalten',
@@ -54,10 +56,13 @@ $lang = array(
   'sb_show_date'                    => 'Zusätzlich das Datum anzeigen?',
   'sb_show_archive'                 => 'Archiv anzeigen?',
   'sb_input_box_below'              => 'Eingabefeld unterhalb der Einträge?',
+  'sb_autoreload'                   => 'Zeit in Sekunden nach der die Shoutbox automatisch neu geladen werden soll (Standard 10)',
+  'sb_autoreload_help'              => 'Wird 0 eingetragen so wird das automatische Neu Laden abgeschalten',
   'sb_invisible_to_guests'          => 'Für Gäste <u>nicht</u> sichtbar?',
   'sb_no_character_assigned'        => 'Es wurde kein Charakter verknüpft. Es muss ein Charakter verknüpft sein bevor Einträge gemacht werden können.',
   'sb_submit_text'                  => 'Absenden',
   'sb_save_wait'                    => 'Speichern, bitte warten...',
+  'sb_reload'                       => 'Neu laden',
   'sb_no_entries'                   => 'Keine Einträge',
   'sb_archive'                      => 'Archiv',
   'sb_shoutbox_archive'             => 'Shoutbox Archiv',
