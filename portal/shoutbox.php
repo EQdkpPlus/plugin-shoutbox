@@ -102,31 +102,30 @@ if (!function_exists(shoutbox_module))
     // check if shoutbox is installed
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      // do requirements check
-      include($eqdkp_root_path.'plugins/shoutbox/includes/version.inc.php');
-      $requirementscheck = shoutbox_portal_requirements_check();
-      if ($requirementscheck !== true)
+      $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
+      $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
+      if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
       {
-        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                     <tr class="'.$eqdkp->switch_row_class().'">
-                       <td><div align="center">'.$requirementscheck.'</div></td>
-                     </tr>
-                   </table>';
-      }
-      else
-      {
-        $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
-        $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
-        if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
+        if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
+        if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
+        if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',    10);
+
+        include_once($feedcreator_file);
+        include_once($shoutbox_file);
+        $shoutbox = new Shoutbox();
+
+        // do requirements check
+        $requirementscheck = $shoutbox->checkRequirements();
+        if ($requirementscheck !== true)
         {
-          if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
-          if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
-          if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',    10);
-
-          include_once($feedcreator_file);
-          include_once($shoutbox_file);
-          $shoutbox = new Shoutbox();
-
+          $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
+                       <tr class="'.$eqdkp->switch_row_class().'">
+                         <td><div align="center">'.$requirementscheck.'</div></td>
+                       </tr>
+                     </table>';
+        }
+        else
+        {
           // return the output for module manager
           $output = $shoutbox->showShoutbox();
         }

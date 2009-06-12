@@ -46,7 +46,13 @@ $shoutbox = new Shoutbox();
 
 
 // -- Check requirements ------------------------------------------------------
-include($eqdkp_root_path.'plugins/shoutbox/includes/version.inc.php');
-shoutbox_requirements_check();
+if (is_object($shoutbox))
+{
+  $sb_req_check = $shoutbox->checkRequirements();
+  if ($sb_req_check !== true)
+  {
+    message_die($sb_req_check);
+  }
+}
 
 ?>

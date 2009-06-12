@@ -31,7 +31,10 @@ if (!class_exists("Shoutbox"))
   {
     var $smiley_path;  /* The smiley path */
     var $rss;          /* RSS object      */
-
+    var $reqVersions = array( /* Required versions */
+        'php'   => '5.0.0',
+        'eqdkp' => '0.6.2.7'
+    );
 
     /**
     * Constructor
@@ -48,6 +51,33 @@ if (!class_exists("Shoutbox"))
       $this->rss->description    = $eqdkp->config['main_title'].' - Shoutbox';
       $this->rss->link           = $pcache->BuildLink();
       $this->rss->syndicationURL = $pcache->BuildLink().$_SERVER['PHP_SELF'];
+    }
+
+    /**
+    * checkRequirements
+    * Check the shoutbox requirements
+    *
+    * @returns true if success, otherwise error string
+    */
+    function checkRequirements()
+    {
+      global $user;
+
+      // set defult as OK
+      $result = true;
+
+      // compare
+      if (version_compare(phpversion(), $this->reqVersions['php'], "<"))
+      {
+        $result = sprintf($user->lang['sb_php_version'], $this->reqVersions['php'], phpversion());
+      }
+      else if (version_compare(EQDKPPLUS_VERSION, $this->reqVersions['eqdkp'], "<"))
+      {
+        $result = sprintf($user->lang['sb_plus_version'], $this->reqVersions['eqdkp'],
+                          ((EQDKPPLUS_VERSION > 0) ? EQDKPPLUS_VERSION : '[non-PLUS]'));
+      }
+
+      return $result;
     }
 
     /**
@@ -100,23 +130,21 @@ if (!class_exists("Shoutbox"))
               ORDER BY shoutbox.date DESC
               LIMIT '.$start.' , '.$limit;
       $result = $db->query($sql);
-      if (!$result)
+      if ($result)
       {
-        message_die('Could not obtain shoutbox information', '', __FILE__, __LINE__, $sql);
+        while ($row = $db->fetch_record($result))
+        {
+          $shoutbox[] = array(
+            'name'      => htmlspecialchars(($decode == true) ? utf8_encode($row['member_name']) : $row['member_name']),
+            'class_id'  => $row['member_class_id'],
+            'member_id' => $row['member_id'],
+            'date'      => $row['date'],
+            'text'      => ($decode == true) ? utf8_encode($row['text']) : $row['text'],
+            'id'        => $row['shoutbox_id'],
+          );
+        }
+        $db->sql_freeresult($result);
       }
-
-      while ($row = $db->fetch_record($result))
-      {
-        $shoutbox[] = array(
-          'name'      => htmlspecialchars(($decode == true) ? utf8_encode($row['member_name']) : $row['member_name']),
-          'class_id'  => $row['member_class_id'],
-          'member_id' => $row['member_id'],
-          'date'      => $row['date'],
-          'text'      => ($decode == true) ? utf8_encode($row['text']) : $row['text'],
-          'id'        => $row['shoutbox_id'],
-        );
-      }
-      $db->sql_freeresult($result);
 
       return $shoutbox;
     }
@@ -146,20 +174,18 @@ if (!class_exists("Shoutbox"))
                 LEFT JOIN `__members` AS members ON members.member_id = member_user.member_id
                 WHERE member_user.user_id='.$user->data['user_id'];
         $result = $db->query($sql);
-        if (!$result)
+        if ($result)
         {
-          message_die('Could not obtain shoutbox member information', '', __FILE__, __LINE__, $sql);
+          while ($row = $db->fetch_record($result))
+          {
+            $members[] = array(
+              'name'     => $row['member_name'],
+              'id'       => $row['member_id'],
+              'class_id' => $row['member_class_id'],
+            );
+          }
+          $db->sql_freeresult($result);
         }
-
-        while ($row = $db->fetch_record($result))
-        {
-          $members[] = array(
-            'name'     => $row['member_name'],
-            'id'       => $row['member_id'],
-            'class_id' => $row['member_class_id'],
-          );
-        }
-        $db->sql_freeresult($result);
       }
 
       return $members;
@@ -206,8 +232,11 @@ if (!class_exists("Shoutbox"))
 
       $user_id = ANONYMOUS;
 
-      $sql = 'SELECT user_id FROM `__member_user` WHERE member_id='.$member_id;
-      $user_id = $db->sql_query_first($sql);
+      if ($member_id > 0)
+      {
+        $sql = 'SELECT user_id FROM `__member_user` WHERE member_id='.$member_id;
+        $user_id = $db->sql_query_first($sql);
+      }
 
       return $user_id;
     }
@@ -591,7 +620,9 @@ if (!class_exists("Shoutbox"))
                  ";
       if ($autoreload > 0)
       {
-        $jscode .= "     setInterval(shoutboxAutoReload, ".($autoreload * 1000).", '".$eqdkp_root_path."', '".$user->lang['sb_reload']."');
+        $jscode .= "     setInterval(function() {
+                           shoutboxAutoReload('".$eqdkp_root_path."', '".$user->lang['sb_reload']."');
+                         }, ".($autoreload * 1000).");
                    ";
       }
       $jscode .= "  });
