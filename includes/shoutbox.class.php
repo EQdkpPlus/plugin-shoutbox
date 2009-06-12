@@ -597,7 +597,7 @@ if (!class_exists("Shoutbox"))
     */
     function getShoutboxJCode()
     {
-      global $user, $eqdkp_root_path, $conf_plus;
+      global $user, $eqdkp_root_path, $conf_plus, $SID;
 
       // set autoreload
       $autoreload = ($conf_plus['sb_autoreload'] != '') ? intval($conf_plus['sb_autoreload']) : SHOUTBOX_AUTORELOAD;
@@ -621,7 +621,7 @@ if (!class_exists("Shoutbox"))
       if ($autoreload > 0)
       {
         $jscode .= "     setInterval(function() {
-                           shoutboxAutoReload('".$eqdkp_root_path."', '".$user->lang['sb_reload']."');
+                           shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang['sb_reload']."');
                          }, ".($autoreload * 1000).");
                    ";
       }
