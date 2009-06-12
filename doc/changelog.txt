@@ -17,10 +17,12 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
-0.1.3 [12/06/2009][Aderyn]
-  Fixed - Further XSS
+0.1.4 [12/06/2009][Aderyn]
   Fixed - [#1453] SQL Fehlermeldung nach Löschen eines Member 
   Fixed - [#1597] Reload ist nicht IE8 kompatibel
+
+0.1.3 [05/06/2009][Aderyn]
+  Fixed - Further XSS
   Implemented - Reload Button
   Implemented - Autoreload, can be set by Portalsettings
 
