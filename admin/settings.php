@@ -37,7 +37,6 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 
 
 // -- Init WPFC ---------------------------------------------------------------
-$wpfccore->InitAdmin();
 $wpfcdb = new AdditionalDB('shoutbox_config');
 $sbupdater = new PluginUpdater('shoutbox','sb_','shoutbox_config','includes');
 
@@ -56,6 +55,8 @@ if ($in->get('save_settings'))
   // take over new values
   $savearray = array(
       'sb_updatecheck'  =>  $in->get('sb_updatecheck', 0),
+      'sb_timezone'     =>  $in->get('sb_timezone'),
+      'sb_dstcorrect'   =>  $in->get('sb_dstcorrect', 0),
   );
 
   // update configuration
@@ -94,6 +95,30 @@ if ($in->get('save'))
 }
 
 
+// -- Timezone ----------------------------------------------------------------
+// build timezone array
+$timezones = array();
+foreach ($user->lang as $index => $entry)
+{
+  if (preg_match("/^time_([\d\.\-]+)$/", $index, $match))
+  {
+    $timezones[$match[1]] = $entry;
+  }
+}
+
+// get timezone offset
+$temp = time()+Date('I')*3600;
+$dst = date('I', $temp);
+if ($dst == 1 && $sb_conf['sb_dstcorrect'] == 1)
+{
+  $cur_timezone = ($sb_conf['sb_timezone'] != '') ? $sb_conf['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
+}
+else
+{
+  $cur_timezone = ($sb_conf['sb_timezone'] != '') ? $sb_conf['sb_timezone'] : intval(date('Z', $temp)/3600);
+}
+
+
 // -- Template ----------------------------------------------------------------
 $tpl->assign_vars(array (
   // form
@@ -103,16 +128,20 @@ $tpl->assign_vars(array (
   'L_SUBMIT'          => $user->lang['submit'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
   'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
+  'L_TIMEZONE'	      => $user->lang['sb_timezone'],
+  'L_DSTCORRECT'      => $user->lang['sb_dstcorrect'],
 
   // Settings
   'UPDATE_CHECK'      => $wpfcdb->isChecked($sb_conf['sb_updatecheck']),
+  'DRDWN_TZONE'       => $khrml->DropDown('sb_timezone', $timezones, $cur_timezone),
+  'DST_CORRECT'       => $wpfcdb->isChecked($sb_conf['sb_dstcorrect']),
 
   // update box
   'UPDATE_BOX'        => $sbupdater->OutputHTML(),
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
 
   // credits
-  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '230'),
+  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '250'),
   'SB_INFO_IMG'       => '../images/credits/info.png',
   'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
 ));

@@ -50,13 +50,15 @@ $lang = array(
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',
   'sb_header_general'               => 'Allgemeine Shoutbox Einstellungen',
   'sb_updatecheck'                  => 'Benachrichtigung bei Plugin-Updates',
+  'sb_timezone'                     => 'Zeitzone des Servers',
+  'sb_dstcorrect'                   => 'Automatisch auf Sommerzeit umstellen?',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Maximale Anzahl an Shoutbox Einträgen.',
   'sb_show_date'                    => 'Zusätzlich das Datum anzeigen?',
   'sb_show_archive'                 => 'Archiv anzeigen?',
   'sb_input_box_below'              => 'Eingabefeld unterhalb der Einträge?',
-  'sb_autoreload'                   => 'Zeit in Sekunden nach der die Shoutbox automatisch neu geladen werden soll (Standard 10)',
+  'sb_autoreload'                   => 'Zeit in Sekunden nach der die Shoutbox automatisch neu geladen werden soll (Standard 0 = Aus)',
   'sb_autoreload_help'              => 'Wird 0 eingetragen so wird das automatische Neu Laden abgeschalten',
   'sb_invisible_to_guests'          => 'Für Gäste <u>nicht</u> sichtbar?',
   'sb_no_character_assigned'        => 'Es wurde kein Charakter verknüpft. Es muss ein Charakter verknüpft sein bevor Einträge gemacht werden können.',

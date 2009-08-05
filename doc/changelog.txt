@@ -17,6 +17,12 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
+0.1.5 [05/08/2009][Aderyn]
+  Fixed - Timezone problem
+  Implemented - Timezone select
+  Changed - Update to Libraries 2.x
+  Changed - Defaults to no autoreload
+  
 0.1.4 [12/06/2009][Aderyn]
   Fixed - [#1453] SQL Fehlermeldung nach Löschen eines Member 
   Fixed - [#1597] Reload ist nicht IE8 kompatibel

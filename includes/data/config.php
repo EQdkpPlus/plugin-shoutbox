@@ -25,6 +25,8 @@ if (!defined('EQDKP_INC'))
 $config_vars = array(
     'sb_inst_version'   => $this->version,      # Save the version for Autoupdate?
     'sb_updatecheck'    => '1',                 # Enable UpdateCheck?
+    'sb_timezone'       => '0',                 # Current Timezone
+    'sb_dstcorrect'     => '0',                 # Correct DST?
 );
 
 ?>

@@ -30,6 +30,10 @@ $up_updates   = array(
                       'file'  => '006_to_007.php',
                       'old'   => '0.0.6',
       ),
+      '0.1.5'   => array(
+                      'file'  => '014_to_015.php',
+                      'old'   => '0.1.4',
+      )
 );
 
 ?>

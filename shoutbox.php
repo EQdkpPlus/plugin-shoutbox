@@ -33,7 +33,7 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
   // -- Insert? ---------------------------------------------
   if ($sb_text && $sb_member_id != ANONYMOUS)
   {
-    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text);
+    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($sb_conf['sb_timezone'] ? $sb_conf['sb_timezone'] : 0));
   }
   // -- Delete? ---------------------------------------------
   else if ($sb_delete)

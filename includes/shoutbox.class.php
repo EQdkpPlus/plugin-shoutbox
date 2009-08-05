@@ -112,7 +112,7 @@ if (!class_exists("Shoutbox"))
     */
     function getShoutboxEntries($start = 0, $limit = false, $decode=false)
     {
-      global $conf_plus, $db;
+      global $conf_plus, $db, $sb_conf;
 
       // init array
       $shoutbox = array();
@@ -134,6 +134,11 @@ if (!class_exists("Shoutbox"))
       {
         while ($row = $db->fetch_record($result))
         {
+          if ($sb_conf['sb_dstcorrect'] == 1)
+          {
+            $row['date'] = $row['date']+date('I')*3600;
+          }
+
           $shoutbox[] = array(
             'name'      => htmlspecialchars(($decode == true) ? utf8_encode($row['member_name']) : $row['member_name']),
             'class_id'  => $row['member_class_id'],
@@ -494,14 +499,14 @@ if (!class_exists("Shoutbox"))
     *
     * @param    int    $member_id   member id
     * @param    string $text        text to insert
-    * @param    string $rpath       root path
+    * @param    int    $tz          timezone offset
     */
-    function insertShoutboxEntry($member_id, $text, $rpath='')
+    function insertShoutboxEntry($member_id, $text, $tz=0)
     {
-      global $user, $db, $eqdkp_root_path;
+      global $user, $db;
 
-      // get root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      // get timezone
+      $timezone= ($tz != '' && is_numeric($tz)) ? intval($tz) : 0;
 
       // is user allowed to add a shoutbox entry?
       if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
@@ -514,7 +519,8 @@ if (!class_exists("Shoutbox"))
         $text_insert = $this->toHTML($text_insert);
 
         // insert
-        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`) VALUES ('.$member_id.', \''.$text_insert.'\', NOW())';
+        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`)
+                VALUES ('.$member_id.', \''.$text_insert.'\', UTC_TIMESTAMP() + INTERVAL '.$timezone.' HOUR)';
         $result = $db->query($sql);
         return ($result ? true : false);
       }
@@ -540,7 +546,6 @@ if (!class_exists("Shoutbox"))
         $result = $db->query($sql);
         return ($result ? true : false);
       }
-
 
       return false;
     }

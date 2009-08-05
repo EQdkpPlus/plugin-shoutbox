@@ -36,10 +36,6 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 }
 
 
-// -- Init WPFC Admin ---------------------------------------------------------
-$wpfccore->InitAdmin();
-
-
 // -- checkall? ---------------------------------------------------------------
 $checkall = false;
 if ($in->get('checkall'))
@@ -112,7 +108,7 @@ $tpl->assign_vars(array (
   'JS_MARK'           => '<script type="text/javascript" src="./../includes/javascripts/mark.js"></script>',
 
   // credits
-  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '230'),
+  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '250'),
   'SB_INFO_IMG'       => '../images/credits/info.png',
   'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
 ));

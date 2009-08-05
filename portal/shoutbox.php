@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.1.4',                          // Version
+      'version'       => '0.1.5',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -108,7 +108,7 @@ if (!function_exists(shoutbox_module))
       {
         if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
         if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
-        if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',    10);
+        if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',     0);
 
         include_once($feedcreator_file);
         include_once($shoutbox_file);

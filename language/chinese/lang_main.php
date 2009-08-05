@@ -50,13 +50,15 @@ $lang = array(
   'sb_config_saved'                 => 'Settings saved successfully',
   'sb_header_general'               => 'General Shoutbox settings',
   'sb_updatecheck'                  => 'Enable check for new Plugin Versions',
+  'sb_timezone'                     => 'Timezone of the server',
+  'sb_dstcorrect'                   => 'Auto correct Daylight saving time?',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',
   'sb_show_date'                    => 'Show date also?',
   'sb_show_archive'                 => 'Show Archive?',
   'sb_input_box_below'              => 'Input box below entries?',
-  'sb_autoreload'                   => 'Time in seconds to wait for automatic reload of Shoutbox (Default 10)',
+  'sb_autoreload'                   => 'Time in seconds to wait for automatic reload of Shoutbox (Default 0 = Off)',
   'sb_autoreload_help'              => 'Set to 0 to disable automatic reload',
   'sb_invisible_to_guests'          => '<u>Not</u> visible to guests?',
   'sb_no_character_assigned'        => 'No characters are connected yet. At least one character has to be connected to be able to post.',

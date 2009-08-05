@@ -21,17 +21,18 @@ if (!defined('EQDKP_INC'))
   header('HTTP/1.0 404 Not Found');exit;
 }
 
-$new_version = '0.0.7';
+$new_version = '0.1.4';
 $updateFunction = false;
 $reloadSETT = 'settings.php';
 
 $updateDESC = array(
   '',
-  'Update Shoutbox Table',
+  'Insert Timezone settings',
 );
 
 $updateSQL = array(
-  'ALTER TABLE `__shoutbox` CHANGE `date` `date` TIMESTAMP NOT NULL DEFAULT 0',
+  'INSERT INTO `__shoutbox_config` (`config_name`, `config_value`)
+   VALUES (\'sb_timezone\', \'0\'), (\'sb_dstcorrect\', \'0\')',
 );
 
 ?>
