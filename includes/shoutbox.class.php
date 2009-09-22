@@ -33,13 +33,13 @@ if (!class_exists("Shoutbox"))
     var $rss;          /* RSS object      */
     var $reqVersions = array( /* Required versions */
         'php'   => '5.0.0',
-        'eqdkp' => '0.6.2.7'
+        'eqdkp' => '0.6.3.0'
     );
 
     /**
-    * Constructor
-    */
-    function Shoutbox()
+     * Constructor
+     */
+    public function __construct()
     {
       global $eqdkp, $pcache;
 
@@ -54,16 +54,16 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * checkRequirements
-    * Check the shoutbox requirements
-    *
-    * @returns true if success, otherwise error string
-    */
-    function checkRequirements()
+     * checkRequirements
+     * Check the shoutbox requirements
+     *
+     * @returns true if success, otherwise error string
+     */
+    public function checkRequirements()
     {
       global $user;
 
-      // set defult as OK
+      // set defult to OK
       $result = true;
 
       // compare
@@ -81,12 +81,35 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getNumShoutboxEntries
-    * Get the number of shoutbox entries in database
-    *
-    * @returns integer
-    */
-    function getNumShoutboxEntries()
+     * getUserIdFromMemberId
+     * Get the user id from a member id
+     *
+     * @param  int  $member_id  member id
+     *
+     * @return integer
+     */
+    public function getUserIdFromMemberId($member_id)
+    {
+      global $db;
+
+      $user_id = ANONYMOUS;
+
+      if ($member_id > 0)
+      {
+        $sql = 'SELECT user_id FROM `__member_user` WHERE member_id='.$member_id;
+        $user_id = $db->sql_query_first($sql);
+      }
+
+      return $user_id;
+    }
+
+    /**
+     * getNumShoutboxEntries
+     * Get the number of shoutbox entries in database
+     *
+     * @returns integer
+     */
+    public function getNumShoutboxEntries()
     {
       global $db;
 
@@ -97,20 +120,20 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getShoutboxEntries
-    * Get all shoutbox entries as array
-    *
-    * @return array(
-    *           'name',
-    *           'class_id',
-    *           'member_id',
-    *           'date',
-    *           'text',
-    *           'id'
-    *         )
-    *
-    */
-    function getShoutboxEntries($start = 0, $limit = false, $decode=false)
+     * getShoutboxEntries
+     * Get all shoutbox entries as array
+     *
+     * @return array(
+     *           'name',
+     *           'class_id',
+     *           'member_id',
+     *           'date',
+     *           'text',
+     *           'id'
+     *         )
+     *
+     */
+    public function getShoutboxEntries($start = 0, $limit = false, $decode=false)
     {
       global $conf_plus, $db, $sb_conf;
 
@@ -144,7 +167,7 @@ if (!class_exists("Shoutbox"))
             'class_id'  => $row['member_class_id'],
             'member_id' => $row['member_id'],
             'date'      => $row['date'],
-            'text'      => ($decode == true) ? utf8_encode($row['text']) : $row['text'],
+            'text'      => ($decode == true) ? utf8_encode(stripslashes($row['text'])) : stripslashes($row['text']),
             'id'        => $row['shoutbox_id'],
           );
         }
@@ -155,17 +178,275 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getMembersForUser
-    * Get all members of current user as array with array() = array('name', 'id', 'class_id')
-    *
-    * return  array(
-    *           'name',
-    *           'id',
-    *           'class_id'
-    *         )
-    *
-    */
-    function getMembersForUser()
+     * insertShoutboxEntry
+     * Insert a shoutbox entry for current member
+     *
+     * @param    int    $member_id   member id
+     * @param    string $text        text to insert
+     * @param    int    $tz          timezone offset
+     */
+    public function insertShoutboxEntry($member_id, $text, $tz=0)
+    {
+      global $user, $db;
+
+      // get timezone
+      $timezone = ($tz != '' && is_numeric($tz)) ? intval($tz) : 0;
+
+      // is user allowed to add a shoutbox entry?
+      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+      {
+        // clean input
+        $text_insert = strip_tags($text); // No html or javascript in comments
+        $text_insert = $this->shoutbox_wordwrap($text_insert, SHOUTBOX_WORDWRAP, "\n", true);
+        $text_insert = $this->utf8_htmlentities($text_insert);
+        $text_insert = $this->toHTML($text_insert);
+
+        // insert
+        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`)
+                VALUES ('.$member_id.', \''.$db->sql_escape($text_insert).'\', UTC_TIMESTAMP() + INTERVAL '.$timezone.' HOUR)';
+        $result = $db->query($sql);
+        return ($result ? true : false);
+      }
+
+      return false;
+    }
+
+    /**
+     * deleteShoutboxEntry
+     * delete a shoutbox entry
+     *
+     * @param  int  $shoutbox_id  shoutbox entry id
+     */
+    public function deleteShoutboxEntry($shoutbox_id)
+    {
+      global $user, $db;
+
+      // is user owner of the shoutbox entry or is admin?
+      if (($user->data['user_id'] != ANONYMOUS && $user->data['user_id'] == $this->getUserIdFromShoutboxId($shoutbox_id)) ||
+          ($user->check_auth('a_shoutbox_delete', false)))
+      {
+        $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$shoutbox_id;
+        $result = $db->query($sql);
+        return ($result ? true : false);
+      }
+
+      return false;
+    }
+
+    /**
+     * showShoutbox
+     * show the complete shoutbox
+     *
+     * @return  string
+     */
+    public function showShoutbox()
+    {
+      global $user, $conf_plus;
+
+      $html = '';
+
+      // only output if visible to guest
+      if ($user->data['user_id'] != ANONYMOUS || $conf_plus['sb_invisible_to_guests'] != 1)
+      {
+        // javascript code
+        $html .= $this->getShoutboxJCode();
+
+        // is input above (and user logged in?) append form
+        if ($conf_plus['sb_input_box_below'] != 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getForm();
+        }
+
+        // content table
+        $html .= '<div id="htmlShoutboxTable">';
+        $html .= $this->getContent();
+        $html .= '</div>';
+
+        // archive link (and user logged in?)
+        if ($conf_plus['sb_show_archive'] &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getArchiveLink();
+        }
+
+        // is input below (and user logged in?) append form
+        if ($conf_plus['sb_input_box_below'] == 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= $this->getForm();
+        }
+      }
+
+      return $html;
+    }
+
+    /**
+     * getContent
+     * get the content of the shoutbox
+     *
+     * @param  string   $rpath   root path
+     * @param  boolean  $decode  UTF8 decode?
+     *
+     * @return  string
+     */
+    public function getContent($rpath='', $decode=false)
+    {
+      global $user, $eqdkp, $SID, $eqdkp_root_path, $conf_plus, $pcache;
+
+      // root path
+      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+
+      $html = '';
+
+      // the delete form
+      if ($user->data['user_id'] != ANONYMOUS)
+      {
+        $html .= '<form id="del_shoutbox" name="del_shoutbox" action="'.$eqdkp_root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                  </form>';
+      }
+
+      // get shoutbox entries
+      $shoutbox_entries = $this->getShoutboxEntries(0, false, $decode);
+      $count = count($shoutbox_entries);
+      if ($count > 0 && is_dir($root_path))
+      {
+        // output table header
+        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        // input above?
+        if ($conf_plus['sb_input_box_below'] != 1 &&
+            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+        {
+          $html .= '<tr><th>&nbsp;</th></tr>';
+        }
+
+        foreach ($shoutbox_entries as $entry)
+        {
+          // cleanup text
+          $entry['text'] = $this->getCleanOutput($entry['text'], $root_path, $decode);
+
+          // get class for row
+          $class = $eqdkp->switch_row_class();
+
+
+          $html .= '<tr class="'.$class.'" onmouseout="this.className=\''.$class.'\';" onmouseover="this.className=\'rowHover\';">
+                      <td>';
+
+          // if logged in and (admin or own entry), ouput delete link
+          if (($user->data['user_id'] != ANONYMOUS) &&
+              ($user->data['user_id'] == $this->getUserIdFromMemberId($entry['member_id']) ||
+               $user->check_auth('a_shoutbox_delete', false)))
+          {
+            $img = $root_path.'images/global/delete.png';
+            $delete_text = ($decode == true) ? utf8_encode($user->lang['delete']) : $user->lang['delete'];
+
+            // Java Script for delete
+            $html .= '<span class="small bold floatRight hand" onclick="$(\'#del_shoutbox\').ajaxSubmit(
+                        {
+                          target: \'#htmlShoutboxTable\',
+                          url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&shoutbox_delete='.$entry['id'].'&sb_root='.$root_path.'\',
+                          beforeSubmit: function(formData, jqForm, options) {
+                            deleteShoutboxRequest(\''.$root_path.'\', '.$entry['id'].', \''.$delete_text.'\');
+                          }
+                        }); ">
+                        <span id="shoutbox_delete_button_'.$entry['id'].'">
+                          <img src="'.$img.'" alt="'.$delete_text.'" title="'.$delete_text.'"/>
+                        </span>
+                      </span>';
+          }
+
+          // output Date,
+          if ($conf_plus['sb_show_date'])
+          {
+            $html .= date($user->lang['sb_date_format'], $entry['date']).': ';
+          }
+          else
+          {
+            $html .= date($user->lang['sb_time_format'], $entry['date']).': ';
+          }
+
+          // as well as User and text
+          $html .= $this->getColoredClassName($entry['name']).
+                   '<br/>'.
+                   $entry['text'];
+
+          $html .= '  </td>
+                    </tr>';
+
+          // create RSS feed item
+          $rssitem = $this->getRSSItem($entry);
+          if ($rssitem)
+          {
+            $this->rss->addItem($rssitem);
+          }
+        }
+
+        // output table footer
+        $html .= '</table>';
+
+        // save RSS
+        $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
+        // add link to RSS
+        $html .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
+                   href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
+
+      }
+      else
+      {
+        $no_entries = ($decode == true) ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries'];
+
+        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
+                    <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$no_entries.'</div></td></tr>
+                  </table>';
+      }
+
+      return $html;
+    }
+
+    /**
+     * getCleanOutput
+     * get a clean output
+     *
+     * @param   string    $text   Text to replace with
+     * @param   string    $rpath  root path
+     * @param   boolean   $decode  UTF8 decode?
+     *
+     * @return  string
+     */
+    public function getCleanOutput($text, $rpath='', $decode=false)
+    {
+      global $eqdkp_root_path;
+
+      // root path
+      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+
+      // search array
+      $search = array(
+        '{SMILEY_PATH}',
+      );
+      // replace array
+      $replace = array(
+        $root_path.$this->smiley_path,
+      );
+
+      // cleanup
+      $clean_output = ($decode == true ? utf8_decode($text) : $text);
+      $clean_output = str_replace($search, $replace, $clean_output);
+
+      return $clean_output;
+    }
+
+    /**
+     * getMembersForUser
+     * Get all members of current user as array with array() = array('name', 'id', 'class_id')
+     *
+     * @return  array(
+     *            'name',
+     *            'id',
+     *            'class_id'
+     *          )
+     */
+    private function getMembersForUser()
     {
       global $user, $db;
 
@@ -197,13 +478,12 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getMemberCountForUser
-    * Get the number of member current user
-    *
-    * return  int
-    *
-    */
-    function getMemberCountForUser()
+     * getMemberCountForUser
+     * Get the number of member current user
+     *
+     * @return  integer
+     */
+    private function getMemberCountForUser()
     {
       global $user, $db;
 
@@ -223,39 +503,14 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getUserIdFromMemberId
-    * Get the user id from a member id
-    *
-    * @param    int    $member_id   member id
-    *
-    * @return integer
-    *
-    */
-    function getUserIdFromMemberId($member_id)
-    {
-      global $db;
-
-      $user_id = ANONYMOUS;
-
-      if ($member_id > 0)
-      {
-        $sql = 'SELECT user_id FROM `__member_user` WHERE member_id='.$member_id;
-        $user_id = $db->sql_query_first($sql);
-      }
-
-      return $user_id;
-    }
-
-    /**
-    * getUserIdFromShoutboxId
-    * Get the user id from a shoutbox id
-    *
-    * @param    int    $shoutbox_id   shoutbox id
-    *
-    * @return integer
-    *
-    */
-    function getUserIdFromShoutboxId($shoutbox_id)
+     * getUserIdFromShoutboxId
+     * Get the user id from a shoutbox id
+     *
+     * @param  int  $shoutbox_id  shoutbox id
+     *
+     * @return integer
+     */
+    private function getUserIdFromShoutboxId($shoutbox_id)
     {
       global $db;
 
@@ -272,38 +527,17 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * checkUTF8
-    * Check if UTF-8
-    *
-    * @param    string $string  text
-    *
-    * @return boolean
-    */
-    function checkUTF8($string)
-    {
-      if (is_array($string))
-      {
-        $enc = implode('', $string);
-        return @!((ord($enc[0]) != 239) && (ord($enc[1]) != 187) && (ord($enc[2]) != 191));
-      }
-      else
-      {
-        return (utf8_encode(utf8_decode($string)) == $string);
-      }
-    }
-
-    /**
-    * shoutbox_wordwrap
-    * Wrap words ignoring bb code
-    *
-    * @param   string   $text   Text to wrap
-    * @param   integer  $width  Max length of one line
-    * @param   string   $break  String to insert for line break, default '\n'
-    * @param   boolean  $cut    cut inside of words?
-    *
-    * @return  string
-    */
-    function shoutbox_wordwrap($text, $width, $break="\n", $cut=false)
+     * shoutbox_wordwrap
+     * Wrap words ignoring bb code
+     *
+     * @param   string   $text   Text to wrap
+     * @param   integer  $width  Max length of one line
+     * @param   string   $break  String to insert for line break, default '\n'
+     * @param   boolean  $cut    cut inside of words?
+     *
+     * @return  string
+     */
+    private function shoutbox_wordwrap($text, $width, $break="\n", $cut=false)
     {
       // explode by spaces
       $element_array = explode(' ', $text);
@@ -355,43 +589,44 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * escape
-    * Escape string
-    *
-    * @param   string  $s  string to escape
-    *
-    * @return  string
-    */
-    function escape($s)
+     * escape
+     * Escape string
+     *
+     * @param  array  $s  string to escape
+     *
+     * @return  string
+     */
+    private function escape($s)
     {
       global $text;
+
       $text = strip_tags($text);
       return '<pre><code>'.htmlspecialchars($s[1]).'</code></pre>';
     }
 
     /**
-    * removeBr
-    * Clean some tags to remain strict
-    * not very elegant, but it works. No time to do better ;)
-    *
-    * @param   string  $s  string to remove br
-    *
-    * @return  string
-    */
-    function removeBr($s)
+     * removeBr
+     * Clean some tags to remain strict
+     * not very elegant, but it works. No time to do better ;)
+     *
+     * @param  array  $s  string to remove br
+     *
+     * @return  string
+     */
+    private function removeBr($s)
     {
       return preg_replace('/\<br[\s\/]*\>/ms', '', $s[0]);
     }
 
     /**
-    * toHTML
-    * Convert input to HTML by cleaning up and decode BBCode
-    *
-    * @param   string  $text  Text to convert
-    *
-    * @return  string
-    */
-    function toHTML($text)
+     * toHTML
+     * Convert input to HTML by cleaning up and decode BBCode
+     *
+     * @param  string  $text  Text to convert
+     *
+     * @return  string
+     */
+    private function toHTML($text)
     {
       $text = trim($text);
       $text = '<p>'.$text.'</p>';
@@ -474,7 +709,7 @@ if (!class_exists("Shoutbox"))
      *
      * @return FeedItem object
      */
-    function getRSSItem($shoutbox_entry)
+    private function getRSSItem($shoutbox_entry)
     {
       // init
       $rssitem = NULL;
@@ -494,113 +729,12 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * insertShoutboxEntry
-    * Insert a shoutbox entry for current member
-    *
-    * @param    int    $member_id   member id
-    * @param    string $text        text to insert
-    * @param    int    $tz          timezone offset
-    */
-    function insertShoutboxEntry($member_id, $text, $tz=0)
-    {
-      global $user, $db;
-
-      // get timezone
-      $timezone= ($tz != '' && is_numeric($tz)) ? intval($tz) : 0;
-
-      // is user allowed to add a shoutbox entry?
-      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
-      {
-        // clean input
-        $text_insert = ($this->checkUTF8($text) == 1) ? utf8_decode($text) : $text;
-        $text_insert = strip_tags($text_insert); /*No html or javascript in comments*/
-        $text_insert = $this->shoutbox_wordwrap($text_insert, SHOUTBOX_WORDWRAP, "\n", true);
-        $text_insert = htmlentities($text_insert, ENT_QUOTES);
-        $text_insert = $this->toHTML($text_insert);
-
-        // insert
-        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`)
-                VALUES ('.$member_id.', \''.$text_insert.'\', UTC_TIMESTAMP() + INTERVAL '.$timezone.' HOUR)';
-        $result = $db->query($sql);
-        return ($result ? true : false);
-      }
-
-      return false;
-    }
-
-    /**
-    * deleteShoutboxEntry
-    * delete a shoutbox entry
-    *
-    * @param    int    $shoutbox_id   shoutbox entry id
-    */
-    function deleteShoutboxEntry($shoutbox_id)
-    {
-      global $user, $db;
-
-      // is user owner of the shoutbox entry or is admin?
-      if (($user->data['user_id'] != ANONYMOUS && $user->data['user_id'] == $this->getUserIdFromShoutboxId($shoutbox_id)) ||
-          ($user->check_auth('a_shoutbox_delete', false)))
-      {
-        $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$shoutbox_id;
-        $result = $db->query($sql);
-        return ($result ? true : false);
-      }
-
-      return false;
-    }
-
-    /**
-    * showShoutbox
-    * show the complete shoutbox
-    *
-    * @return  string
-    */
-    function showShoutbox()
-    {
-      global $user, $conf_plus;
-
-      // only output if visible to guest
-      if ($user->data['user_id'] != ANONYMOUS || $conf_plus['sb_invisible_to_guests'] != 1)
-      {
-        $html  = $this->getShoutboxJCode();
-        // is input above (and user logged in?)
-        if ($conf_plus['sb_input_box_below'] != 1 &&
-            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
-        {
-          $html .= $this->getForm();
-        }
-        $html .= '<div id="htmlShoutboxTable">';
-        $html .= $this->getContent();
-        $html .= '</div>';
-        // archive link (and user logged in?)
-        if ($conf_plus['sb_show_archive'] &&
-            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
-        {
-          $html .= $this->getArchiveLink();
-        }
-        // is input below (and user logged in?)
-        if ($conf_plus['sb_input_box_below'] == 1 &&
-            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
-        {
-          $html .= $this->getForm();
-        }
-      }
-      else
-      {
-        $html = '';
-      }
-
-      return $html;
-    }
-
-    /**
-    * getShoutboxJCode
-    * get the Java Code for the Shoutbox
-    *
-    * @return  string
-    */
-    function getShoutboxJCode()
+     * getShoutboxJCode
+     * get the Java Code for the Shoutbox
+     *
+     * @return  string
+     */
+    private function getShoutboxJCode()
     {
       global $user, $eqdkp_root_path, $conf_plus, $SID;
 
@@ -612,7 +746,6 @@ if (!class_exists("Shoutbox"))
                   <script type='text/javascript'>
                     // wait for the DOM to be loaded
                     $(document).ready(function() {
-
                       $('#Shoutbox').ajaxForm({
                         target: '#htmlShoutboxTable',
                         beforeSubmit:  function(formData, jqForm, options) {
@@ -637,21 +770,21 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getForm
-    * get the Shoutbox <form>
-    *
-    * @param   string  $rpath  root path
-    *
-    * @return  string
-    */
-    function getForm($rpath='')
+     * getForm
+     * get the Shoutbox <form>
+     *
+     * @param  string  $rpath  root path
+     *
+     * @return  string
+     */
+    private function getForm($rpath='')
     {
       global $user, $eqdkp, $eqdkp_root_path, $conf_plus, $SID;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
 
-      // get class
+      // get class for row
       $class = $eqdkp->switch_row_class();
 
       // only display form if user has members assigned to
@@ -714,12 +847,12 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getFormMember
-    * get the Shoutbox <form> Members
-    *
-    * @return  string
-    */
-    function getFormMember()
+     * getFormMember
+     * get the Shoutbox <form> Members
+     *
+     * @return  string
+     */
+    private function getFormMember()
     {
       // get members
       $members = $this->getMembersForUser();
@@ -748,12 +881,12 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getArchiveLink
-    * get the archive link text
-    *
-    * @return  string
-    */
-    function getArchiveLink()
+     * getArchiveLink
+     * get the archive link text
+     *
+     * @return  string
+     */
+    private function getArchiveLink()
     {
       global $user, $eqdkp, $SID, $eqdkp_root_path;
 
@@ -769,136 +902,14 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getContent
-    * get the content of the shoutbox
-    *
-    * @param   string    $rpath   root path
-    * @param   boolean   $decode  UTF8 decode?
-    *
-    * @return  string
-    */
-    function getContent($rpath='', $decode=false)
-    {
-      global $user, $eqdkp, $SID, $eqdkp_root_path, $conf_plus, $pcache;
-
-      // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
-
-      $html = '';
-
-      // the delete form
-      if ($user->data['user_id'] != ANONYMOUS)
-      {
-        $html .= '<form id="del_shoutbox" name="del_shoutbox" action="'.$eqdkp_root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                  </form>';
-      }
-
-      // get shoutbox entries
-      $shoutbox_entries = $this->getShoutboxEntries(0, false, $decode);
-      $count = count($shoutbox_entries);
-      if ($count > 0 && is_dir($root_path))
-      {
-        // output table header
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
-        // input above?
-        if ($conf_plus['sb_input_box_below'] != 1 &&
-            $user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
-        {
-          $html .= '<tr><th>&nbsp;</th></tr>';
-        }
-
-        foreach ($shoutbox_entries as $entry)
-        {
-          // cleanup text
-          $entry['text'] = $this->getCleanOutput($entry['text'], $root_path);
-
-          // get class for row
-          $class = $eqdkp->switch_row_class();
-
-
-          $html .= '<tr class="'.$class.'" onmouseout="this.className=\''.$class.'\';" onmouseover="this.className=\'rowHover\';">
-                      <td>';
-
-          // if logged in and (admin or own entry), ouput delete link
-          if (($user->data['user_id'] != ANONYMOUS) &&
-              ($user->data['user_id'] == $this->getUserIdFromMemberId($entry['member_id']) ||
-               $user->check_auth('a_shoutbox_delete', false)))
-          {
-            $img = $root_path.'images/global/delete.png';
-            $delete_text = ($decode == true) ? utf8_encode($user->lang['delete']) : $user->lang['delete'];
-
-            // Java Script for delete
-            $html .= '<span class="small bold floatRight hand" onclick="$(\'#del_shoutbox\').ajaxSubmit(
-                        {
-                          target: \'#htmlShoutboxTable\',
-                          url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&shoutbox_delete='.$entry['id'].'&sb_root='.$root_path.'\',
-                          beforeSubmit: function(formData, jqForm, options) {
-                            deleteShoutboxRequest(\''.$root_path.'\', '.$entry['id'].', \''.$delete_text.'\');
-                          }
-                        }); ">
-                        <span id="shoutbox_delete_button_'.$entry['id'].'">
-                          <img src="'.$img.'" alt="'.$delete_text.'" title="'.$delete_text.'"/>
-                        </span>
-                      </span>';
-          }
-
-          // output Date,
-          if ($conf_plus['sb_show_date'])
-          {
-            $html .= date($user->lang['sb_date_format'], $entry['date']).': ';
-          }
-          else
-          {
-            $html .= date($user->lang['sb_time_format'], $entry['date']).': ';
-          }
-
-          // as well as User and text
-          $html .= $this->getColoredClassName($entry['name']).
-                   '<br/>'.
-                   $entry['text'];
-
-          $html .= '  </td>
-                    </tr>';
-
-          // RSS feed item
-          $rssitem = $this->getRSSItem($entry);
-          if ($rssitem)
-          {
-            $this->rss->addItem($rssitem);
-          }
-        }
-
-        // output table footer
-        $html .= '</table>';
-
-        // save RSS
-        $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
-        // add link to RSS
-        $html .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
-                  href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
-
-      }
-      else
-      {
-        $no_entries = ($decode == true) ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries'];
-
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
-                    <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$no_entries.'</div></td></tr>
-                  </table>';
-      }
-
-      return $html;
-    }
-
-    /**
-    * getColoredClassName
-    * get the class name colored
-    *
-    * @param   string    $name   Member name
-    *
-    * @return  string
-    */
-    function getColoredClassName($name)
+     * getColoredClassName
+     * get the class name colored
+     *
+     * @param   string    $name   Member name
+     *
+     * @return  string
+     */
+    private function getColoredClassName($name)
     {
       global $eqdkp;
 
@@ -919,33 +930,111 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
-    * getCleanOutput
-    * get a clean output
-    *
-    * @param   string    $text   Text to replace with
-    * @param   string    $rpath  root path
-    *
-    * @return  string
-    */
-    function getCleanOutput($text, $rpath='')
+     * checkUTF8
+     * Check if UTF-8
+     *
+     * @param  string  $string  text
+     *
+     * @return boolean
+     */
+    private function checkUTF8($string)
     {
-       global $eqdkp_root_path;
-
-      // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
-
-      // search array
-      $search = array(
-                 '{SMILEY_PATH}',
-      );
-      // replace array
-      $replace = array(
-                 $root_path.$this->smiley_path,
-      );
-
-      return str_replace($search, $replace, $text);
+      if (is_array($string))
+      {
+        $enc = implode('', $string);
+        return @!((ord($enc[0]) != 239) && (ord($enc[1]) != 187) && (ord($enc[2]) != 191));
+      }
+      else
+      {
+        return (utf8_encode(utf8_decode($string)) == $string);
+      }
     }
 
+    /**
+     * utf8_htmlentities
+     * get html entities of UTF-8 string
+     *
+     * @param  string  $content  text to replace entities
+     *
+     * @return  string
+     */
+    private function utf8_htmlentities($content)
+    {
+      // convert to array, and convert each array element to entity if neccessary
+      $contents = $this->unicode_string_to_array($content);
+      $count = count($contents);
+
+      $swap = '';
+      for ($i = 0; $i < $count; $i++)
+      {
+        $contents[$i] = $this->unicode_entity_replace($contents[$i]);
+        $swap .= $contents[$i];
+      }
+
+      return mb_convert_encoding($swap, 'UTF-8');
+    }
+
+    /**
+     * unicode_string_to_array
+     * convert unicode string to array of unicode chars
+     *
+     * @param  string  $string  unicode string to make array of
+     *
+     * @return  array
+     */
+    private function unicode_string_to_array($string)
+    {
+      $strlen = mb_strlen($string);
+      while ($strlen)
+      {
+        $array[] = mb_substr($string, 0, 1, 'UTF-8');
+        $string = mb_substr($string, 1, $strlen, 'UTF-8');
+        $strlen = mb_strlen($string);
+      }
+
+      return $array;
+    }
+
+    /**
+     * unicode_entity_replace
+     * replace unicode char by html entity
+     *
+     * @param  char  $c  unicode character
+     *
+     * @return  array
+     */
+    private function unicode_entity_replace($c)
+    {
+      // get ornial of character, if less than 127, just return, else check for UTF8 and decode
+      $h = ord($c{0});
+      if ($h <= 0x7F)
+      {
+        return $c;
+      }
+      else if ($h < 0xC2)
+      {
+        return $c;
+      }
+
+      if ($h <= 0xDF)
+      {
+        $h = ($h & 0x1F) << 6 | (ord($c{1}) & 0x3F);
+        $h = '&#'.$h.';';
+        return $h;
+      }
+      else if ($h <= 0xEF)
+      {
+        $h = ($h & 0x0F) << 12 | (ord($c{1}) & 0x3F) << 6 | (ord($c{2}) & 0x3F);
+        $h = '&#'.$h.';';
+        return $h;
+      }
+      else if ($h <= 0xF4)
+      {
+        $h = ($h & 0x0F) << 18 | (ord($c{1}) & 0x3F) << 12 | (ord($c{2}) & 0x3F) << 6 | (ord($c{3}) & 0x3F);
+        $h = '&#'.$h.';';
+        return $h;
+      }
+    }
   }
 }
 
