@@ -33,7 +33,7 @@ if (!class_exists("Shoutbox"))
     var $rss;          /* RSS object      */
     var $reqVersions = array( /* Required versions */
         'php'   => '5.0.0',
-        'eqdkp' => '0.6.3.0'
+        'eqdkp' => '0.6.3.2'
     );
 
     /**

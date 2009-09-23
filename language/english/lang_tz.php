@@ -5,15 +5,15 @@
  * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2008
- * Date:        $Date: 2009-08-05 11:41:15 +0200 (Mi, 05 Aug 2009) $
+ * Date:        $Date$
  * -----------------------------------------------------------------------
- * @author      $Author: Dallandros $
+ * @author      $Author$
  * @copyright   2008 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
- * @version     $Rev: 5478 $
+ * @version     $Rev$
  *
- * $Id: lang_main.php 5478 2009-08-05 09:41:15Z Dallandros $
+ * $Id$
  */
 
 if (!defined('EQDKP_INC'))
