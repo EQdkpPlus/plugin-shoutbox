@@ -91,19 +91,22 @@ $sbvcheck->PerformUpdateCheck();
 // Saved message
 if ($in->get('save'))
 {
-  System_Message($user->lang['sb_config_saved'], '', 'green');
+  System_Message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
 }
 
 
 // -- Timezone ----------------------------------------------------------------
-// build timezone array
-$timezones = array();
-foreach ($user->lang as $index => $entry)
+// load timezone array
+$sb_timezones = array();
+$timezone_file = $eqdkp_root_path.'plugins/shoutbox/language/'.$user->lang_name.'/lang_tz.php';
+// check for file exist, if not try fallback to english
+if (!file_exists($timezone_file))
 {
-  if (preg_match("/^time_([\d\.\-]+)$/", $index, $match))
-  {
-    $timezones[$match[1]] = $entry;
-  }
+  $timezone_file = $eqdkp_root_path.'plugins/shoutbox/language/english/lang_tz.php';
+}
+if (file_exists($timezone_file))
+{
+  include_once($timezone_file);
 }
 
 // get timezone offset
@@ -128,12 +131,12 @@ $tpl->assign_vars(array (
   'L_SUBMIT'          => $user->lang['submit'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
   'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
-  'L_TIMEZONE'	      => $user->lang['sb_timezone'],
+  'L_TIMEZONE'        => $user->lang['sb_timezone'],
   'L_DSTCORRECT'      => $user->lang['sb_dstcorrect'],
 
   // Settings
   'UPDATE_CHECK'      => $wpfcdb->isChecked($sb_conf['sb_updatecheck']),
-  'DRDWN_TZONE'       => $khrml->DropDown('sb_timezone', $timezones, $cur_timezone),
+  'DRDWN_TZONE'       => $khrml->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
   'DST_CORRECT'       => $wpfcdb->isChecked($sb_conf['sb_dstcorrect']),
 
   // update box
