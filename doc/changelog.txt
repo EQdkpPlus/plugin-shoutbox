@@ -17,6 +17,9 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
+0.1.7 [24/10/2009][Aderyn]
+  Fixed problem with UTC_TIMESTAMP
+
 0.1.6 [08/10/2009][Aderyn]
   Fixed - [#1658] Error with international letters
   Implemented - Spanish language

@@ -202,8 +202,9 @@ if (!class_exists("Shoutbox"))
         $text_insert = $this->toHTML($text_insert);
 
         // insert
+        $cur_timestamp = gmdate('Y-m-d H:i:s', time()+$timezone*3600);
         $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`)
-                VALUES ('.$member_id.', \''.$db->sql_escape($text_insert).'\', UTC_TIMESTAMP() + INTERVAL '.$timezone.' HOUR)';
+                VALUES ('.$member_id.', \''.$db->sql_escape($text_insert).'\', \''.$cur_timestamp.'\')';
         $result = $db->query($sql);
         return ($result ? true : false);
       }

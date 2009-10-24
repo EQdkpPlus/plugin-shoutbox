@@ -27,8 +27,8 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
-  var $version    = '0.1.6';
-  var $build      = '6015';
+  var $version    = '0.1.7';
+  var $build      = '6217';
   var $copyright  = 'Aderyn';
   var $vstatus    = 'Stable';
   var $fwversion  = '2.0.0';  // required framework Version
