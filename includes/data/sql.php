@@ -32,8 +32,8 @@ $shoutboxSQL = array(
     '1'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox` (
                   `shoutbox_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
                   `member_id` smallint(5) default \'-1\',
-                  `date` TIMESTAMP NOT NULL DEFAULT 0,
-                  `text` text default NULL,
+                  `shoutbox_date` INT(11) UNSIGNED NOT NULL default \'0\',
+                  `shoutbox_text` text default NULL,
                   PRIMARY KEY (`shoutbox_id`)
                 )TYPE=InnoDB;',
     '2'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox_config` (

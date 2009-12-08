@@ -27,8 +27,8 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
-  var $version    = '0.1.7';
-  var $build      = '6217';
+  var $version    = '0.1.8';
+  var $build      = '6629';
   var $copyright  = 'Aderyn';
   var $vstatus    = 'Stable';
   var $fwversion  = '2.0.0';  // required framework Version
@@ -136,7 +136,8 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
             'link'  => $url_prefix.'plugins/shoutbox/admin/manage.php'.$SID,
             'text'  => $user->lang['sb_manage'],
             'check' => 'a_shoutbox_delete'
-          )
+          ),
+          99 => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
         )
       );
 

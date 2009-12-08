@@ -33,7 +33,7 @@ if (!class_exists("Shoutbox"))
     var $rss;          /* RSS object      */
     var $reqVersions = array( /* Required versions */
         'php'   => '5.0.0',
-        'eqdkp' => '0.6.3.2'
+        'eqdkp' => '0.6.3.5'
     );
 
     /**
@@ -147,10 +147,11 @@ if (!class_exists("Shoutbox"))
       }
 
       // get last $(limit) entries
-      $sql = 'SELECT members.member_name, members.member_class_id, members.member_id, UNIX_TIMESTAMP(shoutbox.date) AS date, shoutbox.text, shoutbox.shoutbox_id
+      $sql = 'SELECT members.member_name, members.member_class_id, members.member_id, 
+                     shoutbox.shoutbox_date, shoutbox.shoutbox_text, shoutbox.shoutbox_id
               FROM `__shoutbox` AS shoutbox
               LEFT JOIN `__members` AS members ON members.member_id = shoutbox.member_id
-              ORDER BY shoutbox.date DESC
+              ORDER BY shoutbox.shoutbox_date DESC
               LIMIT '.$start.' , '.$limit;
       $result = $db->query($sql);
       if ($result)
@@ -159,15 +160,15 @@ if (!class_exists("Shoutbox"))
         {
           if ($sb_conf['sb_dstcorrect'] == 1)
           {
-            $row['date'] = $row['date']+date('I')*3600;
+            $row['shoutbox_date'] = $row['shoutbox_date']+date('I')*3600;
           }
 
           $shoutbox[] = array(
             'name'      => htmlspecialchars(($decode == true) ? utf8_encode($row['member_name']) : $row['member_name']),
             'class_id'  => $row['member_class_id'],
             'member_id' => $row['member_id'],
-            'date'      => $row['date'],
-            'text'      => ($decode == true) ? utf8_encode(stripslashes($row['text'])) : stripslashes($row['text']),
+            'date'      => $row['shoutbox_date'],
+            'text'      => ($decode == true) ? utf8_encode(stripslashes($row['shoutbox_text'])) : stripslashes($row['shoutbox_text']),
             'id'        => $row['shoutbox_id'],
           );
         }
@@ -201,10 +202,13 @@ if (!class_exists("Shoutbox"))
         $text_insert = $this->utf8_htmlentities($text_insert);
         $text_insert = $this->toHTML($text_insert);
 
+        // get current timestamp
+        $cur_time = time() + ($timezone*3600);
+        $cur_timestamp = mktime(gmdate('H', $cur_time), gmdate('i', $cur_time), gmdate('s', $cur_time),
+                                gmdate('n', $cur_time), gmdate('j', $cur_time), gmdate('Y', $cur_time));
         // insert
-        $cur_timestamp = gmdate('Y-m-d H:i:s', time()+$timezone*3600);
-        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `text`, `date`)
-                VALUES ('.$member_id.', \''.$db->sql_escape($text_insert).'\', \''.$cur_timestamp.'\')';
+        $sql = 'INSERT INTO `__shoutbox` (`member_id`, `shoutbox_text`, `shoutbox_date`)
+                VALUES ('.$member_id.', \''.$db->sql_escape($text_insert).'\', '.$cur_timestamp.')';
         $result = $db->query($sql);
         return ($result ? true : false);
       }
