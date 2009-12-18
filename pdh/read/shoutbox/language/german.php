@@ -18,26 +18,19 @@
 
 if (!defined('EQDKP_INC'))
 {
-  header('HTTP/1.0 404 Not Found');exit;
+  header('HTTP/1.0 404 Not Found'); exit;
 }
 
-$up_updates   = array(
-      '0.0.2'   => array(
-                      'file'  => '001_to_002.php',
-                      'old'   => '0.0.1',
-      ),
-      '0.0.7'   => array(
-                      'file'  => '006_to_007.php',
-                      'old'   => '0.0.6',
-      ),
-      '0.1.5'   => array(
-                      'file'  => '014_to_015.php',
-                      'old'   => '0.1.4',
-      ),
-      '0.1.8'   => array(
-                      'file'  => '017_to_018.php',
-                      'old'   => '0.1.7',
-      )
+$module_lang = array(
+  'date'       => 'Datum',
+  'membername' => 'Name',
+  'text'       => 'Text'
+);
+
+$preset_lang = array(
+  'sbdate' => 'Datum',
+  'sbname' => 'Name',
+  'sbtext' => 'Text'
 );
 
 ?>

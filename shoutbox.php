@@ -24,16 +24,19 @@ include_once('includes/common.php');
 // Be sure plugin is installed
 if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
+  // skip Lightbox usage
+  if (!defined('SKIP_LIGHTBOX')) define('SKIP_LIGHTBOX', 1);
+
   // get post/get values
   $sb_text      = $in->get('sb_text');
-  $sb_member_id = $in->get('sb_member_id', ANONYMOUS);
-  $sb_delete    = $in->get('shoutbox_delete', 0);
+  $sb_member_id = $in->get('sb_member_id', -1);
+  $sb_delete    = $in->get('sb_delete', 0);
   $sb_root      = $in->get('sb_root');
 
   // -- Insert? ---------------------------------------------
-  if ($sb_text && $sb_member_id != ANONYMOUS)
+  if ($sb_text && $sb_member_id != -1)
   {
-    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($sb_conf['sb_timezone'] ? $sb_conf['sb_timezone'] : 0));
+    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($eqdkp->config['sb_timezone'] ? $eqdkp->config['sb_timezone'] : 0));
   }
   // -- Delete? ---------------------------------------------
   else if ($sb_delete)

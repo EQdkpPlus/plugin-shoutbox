@@ -22,6 +22,8 @@ define('PLUGIN', 'shoutbox');
 
 $eqdkp_root_path = './../../';
 include_once('includes/common.php');
+require_once($eqdkp_root_path.'core/html_pdh_tag_table.class.php');
+require_once('includes/systems/shoutbox.esys.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
@@ -31,61 +33,37 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 }
 
 
-// -- delete? -----------------------------------------------------------------
-if ($in->get('deleteid', 0) > 0)
-{
-  $shoutbox->deleteShoutboxEntry($in->get('deleteid', 0));
-}
-
-
 // -- pagination --------------------------------------------------------------
 // get total and start
-$total_entries = $shoutbox->getNumShoutboxEntries();
 $start = $in->get('start', 0);
+$total_entries = $pdh->get('shoutbox', 'count', array());
+$limit = 50;
+$end = min($start + $limit, $total_entries);
 // pagination
-$pagination = generate_pagination('archive.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
+$pagination = generate_pagination('archive.php'.$SID, $total_entries, $limit, $start);
 
 
 // -- display entries ---------------------------------------------------------
-// get all shoutbox entries
-$shoutbox_entries = $shoutbox->getShoutboxEntries($start, SHOUTBOX_PAGE_LIMIT);
-// output each entry in one line
-foreach ($shoutbox_entries as $entry)
-{
-  // can delete if owner or admin
-  $can_delete = false;
-  if (($user->data['user_id'] != ANONYMOUS && $user->data['user_id'] == $shoutbox->getUserIdFromMemberId($entry['member_id'])) ||
-      $user->check_auth('a_shoutbox_delete', false))
-  {
-    $can_delete = true;
-  }
-
-  $tpl->assign_block_vars('sb_row', array (
-    'class'       => $eqdkp->switch_row_class(),
-    'id'          => $entry['id'],
-    'date'        => date($user->lang['sb_date_format'], $entry['date']),
-    'name'        => get_coloredLinkedName($entry['name']),
-    'text'        => $shoutbox->getCleanOutput($entry['text']),
-    'CAN_DELETE'  => ($can_delete ? 'true' : ''),
-  ));
-}
+$hptt_sort       = $in->get('sort');
+$hptt_url_suffix = ($start > 0 ? '&amp;start='.$start : '');
+$shoutbox_ids    = $pdh->get('shoutbox', 'id_list', array());
+$hptt = new html_pdh_tag_table($systems_shoutbox['pages']['archive'], $shoutbox_ids, $shoutbox_ids);
 
 
 // -- Template ----------------------------------------------------------------
+$tpl->add_js('$(document).ready(function() { Init_RowClick(); });');
 $tpl->assign_vars(array (
   // Form
-  'F_ARCHIVE'         => 'archive.php'.$SID,
-  'F_DELETE_IMG'      => $eqdkp_root_path.'images/global/delete.png',
-  'FOOTCOUNT'         => sprintf($user->lang['sb_footer'], $total_entries, SHOUTBOX_PAGE_LIMIT),
+  'F_MANAGE'          => 'admin/manage.php'.$SID,
+  'CAN_DELETE'        => $user->check_auth('a_shoutbox_delete', false),
+  'SB_TABLE'          => $hptt->get_html_table($hptt_sort, $hptt_url_suffix, $start, $end),
+  'COLSPAN'           => $user->check_auth('a_shoutbox_delete', false) ? 5 : 4,
 
   // pagination
   'START'             => $start,
   'PAGINATION'        => $pagination,
 
   // language
-  'L_DATE'            => $user->lang['sb_adm_date'],
-  'L_NAME'            => $user->lang['sb_adm_name'],
-  'L_TEXT'            => $user->lang['sb_adm_text'],
   'L_DELETE'          => $user->lang['delete'],
 ));
 

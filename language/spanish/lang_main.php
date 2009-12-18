@@ -37,14 +37,10 @@ $lang = array(
   // Menu
   'sb_manage'                       => 'Administrar',
 
-  // Admin -> Settings
+  // Admin
   'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
-  'sb_adm_date'                     => 'Fecha',
-  'sb_adm_name'                     => 'Nombre',
-  'sb_adm_text'                     => 'Mensaje',
-  'sb_adm_select_all'               => 'Seleccionar todos',
-  'sb_adm_select_none'              => 'No seleccionar nada',
+  'sb_delete_success'               => 'Successfully deleted entries',
 
   // Configuration
   'sb_config_saved'                 => 'Los ajustes se han almacenado correctamente',
@@ -60,7 +56,6 @@ $lang = array(
   'sb_input_box_below'              => '¿Caja de texto debajo de las entradas?',
   'sb_autoreload'                   => 'Cantidad de segundos a esperar para que recargue automaticamente el Shoutbox (Por defecto 0 = Off)',
   'sb_autoreload_help'              => 'Seleccionar 0 para desactivar la recarga automática',
-  'sb_invisible_to_guests'          => '<u>Invisible</u> para los invitados?',
   'sb_no_character_assigned'        => 'Aún no hay usuarios conectados. Al menos un usuario tiene que estar conectado para poder enviar una entrada.',
   'sb_submit_text'                  => 'Envíar',
   'sb_save_wait'                    => 'Almacenando, por favor espere...',
@@ -68,7 +63,6 @@ $lang = array(
   'sb_no_entries'                   => 'No hay entradas',
   'sb_archive'                      => 'Archivo',
   'sb_shoutbox_archive'             => 'Archivo Shoutbox',
-  'sb_footer'                       => "... %1\$d encontrado / %2\$d por páginas",
 
   // About/Credits
   'sb_about_header'                 => 'Acerca de Shoutbox',

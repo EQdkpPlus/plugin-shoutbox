@@ -1,38 +1,25 @@
 
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-  <tr>
-    <td align="center" class="menu">{PAGINATION}</td>
-  </tr>
-</table>
-
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-    <th align="center" width="120px">{L_DATE}</th>
-    <th align="center" width="20%">{L_NAME}</th>
-    <th align="center">{L_TEXT}</th>
-    <th align="center" width="5%"></th>
-  </tr>
-  <!-- BEGIN sb_row -->
-  <tr class="{sb_row.class}" onmouseout="this.className='{sb_row.class}';" onmouseover="this.className='rowHover';">
-    <td align="center">{sb_row.date}</td>
-    <td>{sb_row.name}</td>
-    <td>{sb_row.text}</td>
-    <td align="center">
-    <!-- IF sb_row.CAN_DELETE -->
-      <a href="{F_ARCHIVE}&amp;start={START}&amp;deleteid={sb_row.id}"><img src="{F_DELETE_IMG}" alt="{L_DELETE}"/></a>
-    <!-- ENDIF -->
-    </td>
-  </tr>
-  <!-- END sb_row -->
-  <tr>
-    <th colspan="4" class="footer">{FOOTCOUNT}</th>
-  </tr>
-</table>
+<form method="post" action="{F_MANAGE}">
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <!-- IF PAGINATION -->
+    <tr class="row2">
+      <td align="center" colspan="{COLSPAN}">{PAGINATION}</td>
+    </tr>
+    <!-- ENDIF PAGINATION -->
+    {SB_TABLE}
+    <tr>
+      <th colspan="{COLSPAN}">
+        <input name="start" type="hidden" value="{START}" />
+        <!-- IF CAN_DELETE -->
+        <input type="submit" name="sb_delete" value="{L_DELETE}" class="liteoption" />
+        <!-- ENDIF CAN_DELETE -->
+      </th>
+    </tr>
+    <!-- IF PAGINATION -->
+    <tr class="row2">
+      <td align="center" colspan="{COLSPAN}">{PAGINATION}</td>
+    </tr>
+    <!-- ENDIF PAGINATION -->
+  </table>
+</form>
 <br/>
-
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-  <tr>
-    <td align="center" class="menu">{PAGINATION}</td>
-  </tr>
-</table>
-<br />

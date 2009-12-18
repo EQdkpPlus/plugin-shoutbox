@@ -62,6 +62,13 @@ if ($in->get('save_settings'))
   // update configuration
   if ($wpfcdb->UpdateConfig($savearray, $wpfcdb->CheckDBFields('config_name')))
   {
+    // clear cache if dst correction has changed
+    if ($savearray['sb_dstcorrect'] != $eqdkp->config['sb_dstcorrect'])
+    {
+      $pdc->del('pdh_shoutbox_table');
+    }
+
+    // redirect
     redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
   }
 }
@@ -91,7 +98,7 @@ $sbvcheck->PerformUpdateCheck();
 // Saved message
 if ($in->get('save'))
 {
-  System_Message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
+  $eqdkp->message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
 }
 
 
@@ -136,7 +143,7 @@ $tpl->assign_vars(array (
 
   // Settings
   'UPDATE_CHECK'      => $wpfcdb->isChecked($sb_conf['sb_updatecheck']),
-  'DRDWN_TZONE'       => $khrml->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
+  'DRDWN_TZONE'       => $html->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
   'DST_CORRECT'       => $wpfcdb->isChecked($sb_conf['sb_dstcorrect']),
 
   // update box

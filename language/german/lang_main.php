@@ -37,14 +37,10 @@ $lang = array(
   // Menu
   'sb_manage'                       => 'Verwalten',
 
-  // Admin -> Settings
+  // Admin
   'sb_date_format'                  => 'd.m.Y H:i',  // DD.MM.YYYY HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
-  'sb_adm_date'                     => 'Datum',
-  'sb_adm_name'                     => 'Name',
-  'sb_adm_text'                     => 'Text',
-  'sb_adm_select_all'               => 'Alle ausw&auml;hlen',
-  'sb_adm_select_none'              => 'Auswahl entfernen',
+  'sb_delete_success'               => 'Einträge erfolgreich gelöscht',
 
   // Configuration
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',
@@ -60,7 +56,6 @@ $lang = array(
   'sb_input_box_below'              => 'Eingabefeld unterhalb der Einträge?',
   'sb_autoreload'                   => 'Zeit in Sekunden nach der die Shoutbox automatisch neu geladen werden soll (Standard 0 = Aus)',
   'sb_autoreload_help'              => 'Wird 0 eingetragen so wird das automatische Neu Laden abgeschalten',
-  'sb_invisible_to_guests'          => 'Für Gäste <u>nicht</u> sichtbar?',
   'sb_no_character_assigned'        => 'Es wurde kein Charakter verknüpft. Es muss ein Charakter verknüpft sein bevor Einträge gemacht werden können.',
   'sb_submit_text'                  => 'Absenden',
   'sb_save_wait'                    => 'Speichern, bitte warten...',
@@ -68,7 +63,6 @@ $lang = array(
   'sb_no_entries'                   => 'Keine Einträge',
   'sb_archive'                      => 'Archiv',
   'sb_shoutbox_archive'             => 'Shoutbox Archiv',
-  'sb_footer'                       => "... %1\$d gefunden / %2\$d pro Seite",
 
   // About/Credits
   'sb_about_header'                 => 'Über Shoutbox',

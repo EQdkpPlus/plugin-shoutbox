@@ -29,29 +29,6 @@ if (!isset($eqdkp_root_path))
 include_once($eqdkp_root_path.'common.php');
 
 
-// -- Defines -----------------------------------------------------------------
-if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
-if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
-if (!defined('SHOUTBOX_PAGE_LIMIT'))    define('SHOUTBOX_PAGE_LIMIT',    50);
-if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',     0);
-
-
-// -- Framework include -------------------------------------------------------
-include_once($eqdkp_root_path.'plugins/shoutbox/includes/libloader.inc.php');
-
-
-// -- read config values ------------------------------------------------------
-$sql = 'SELECT * FROM `__shoutbox_config`';
-if (($config_result = $db->query($sql)))
-{
-  while(($rowc = $db->fetch_record($config_result)))
-  {
-    $sb_conf[$rowc['config_name']] = $rowc['config_value'];
-  }
-  $db->free_result($config_result);
-}
-
-
 // -- Used Classes ------------------------------------------------------------
 include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 $shoutbox = new Shoutbox();

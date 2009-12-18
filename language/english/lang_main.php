@@ -37,14 +37,10 @@ $lang = array(
   // Menu
   'sb_manage'                       => 'Manage',
 
-  // Admin -> Settings
+  // Admin
   'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
-  'sb_adm_date'                     => 'Date',
-  'sb_adm_name'                     => 'Name',
-  'sb_adm_text'                     => 'Message',
-  'sb_adm_select_all'               => 'Select all',
-  'sb_adm_select_none'              => 'Select none',
+  'sb_delete_success'               => 'Successfully deleted entries',
 
   // Configuration
   'sb_config_saved'                 => 'Settings saved successfully',
@@ -60,7 +56,6 @@ $lang = array(
   'sb_input_box_below'              => 'Input box below entries?',
   'sb_autoreload'                   => 'Time in seconds to wait for automatic reload of Shoutbox (Default 0 = Off)',
   'sb_autoreload_help'              => 'Set to 0 to disable automatic reload',
-  'sb_invisible_to_guests'          => '<u>Not</u> visible to guests?',
   'sb_no_character_assigned'        => 'No characters are connected yet. At least one character has to be connected to be able to post.',
   'sb_submit_text'                  => 'Send',
   'sb_save_wait'                    => 'Saving, please wait...',
@@ -68,7 +63,6 @@ $lang = array(
   'sb_no_entries'                   => 'No entries',
   'sb_archive'                      => 'Archive',
   'sb_shoutbox_archive'             => 'Shoutbox Archive',
-  'sb_footer'                       => "... %1\$d found / %2\$d per page",
 
   // About/Credits
   'sb_about_header'                 => 'About Shoutbox',

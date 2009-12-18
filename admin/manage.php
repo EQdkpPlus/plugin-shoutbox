@@ -23,6 +23,8 @@ define('PLUGIN', 'shoutbox');
 
 $eqdkp_root_path = './../../../';
 include_once('./../includes/common.php');
+require_once($eqdkp_root_path.'core/html_pdh_tag_table.class.php');
+require_once('./../includes/systems/shoutbox.esys.php');
 
 
 // -- Check user permission ---------------------------------------------------
@@ -36,76 +38,49 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 }
 
 
-// -- checkall? ---------------------------------------------------------------
-$checkall = false;
-if ($in->get('checkall'))
+// -- delete? -----------------------------------------------------------------
+$delete_ids = $in->getArray('selected_ids', 'int');
+if (is_array($delete_ids) && count($delete_ids) > 0)
 {
-  $checkall = true;
-}
+  foreach ($delete_ids as $delete_id)
+  {
+    $shoutbox->deleteShoutboxEntry($delete_id);
+  }
 
-
-// -- delete array ------------------------------------------------------------
-$delete_array = array();
-if ($in->get('shoutbox_delete'))
-{
-  $delete_array = $in->getArray('shoutbox_id', 'int');
-}
-
-
-// -- delete all shoutbox entries in array ------------------------------------
-foreach ($delete_array as $id)
-{
-  // delete
-  $shoutbox->deleteShoutboxEntry($id);
+  $eqdkp->message($user->lang['sb_delete_success'], $user->lang['shoutbox'], 'green');
 }
 
 
 // -- pagination --------------------------------------------------------------
 // get total and start
-$total_entries = $shoutbox->getNumShoutboxEntries();
 $start = $in->get('start', 0);
+$total_entries = $pdh->get('shoutbox', 'count', array());
+$limit = 50;
+$end = min($start + $limit, $total_entries);
 // pagination
-$pagination = generate_pagination('manage.php'.$SID, $total_entries, SHOUTBOX_PAGE_LIMIT, $start);
+$pagination = generate_pagination('manage.php'.$SID, $total_entries, $limit, $start);
 
 
 // -- display entries ---------------------------------------------------------
-// get all shoutbox entries
-$shoutbox_entries = $shoutbox->getShoutboxEntries($start, SHOUTBOX_PAGE_LIMIT);
-// output each entry in one line
-foreach ($shoutbox_entries as $entry)
-{
-  $tpl->assign_block_vars('sb_row', array (
-    'class'    => $eqdkp->switch_row_class(),
-    'id'       => $entry['id'],
-    'date'     => date($user->lang['sb_date_format'], $entry['date']),
-    'name'     => get_coloredLinkedName($entry['name']),
-    'text'     => $shoutbox->getCleanOutput($entry['text']),
-    'selected' => ($checkall == true ? (' checked="checked"') : '')
-  ));
-}
+$hptt_sort       = $in->get('sort');
+$hptt_url_suffix = ($start > 0 ? '&amp;start='.$start : '');
+$shoutbox_ids    = $pdh->get('shoutbox', 'id_list', array());
+$hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_ids, $shoutbox_ids);
 
 
 // -- Template ----------------------------------------------------------------
+$tpl->add_js('$(document).ready(function() { Init_RowClick(); });');
 $tpl->assign_vars(array (
-  // form
-  'F_CONFIG'          => 'manage.php' . $SID,
-  'F_MARK_CLASS'      =>  $eqdkp->switch_row_class(),
-  'FOOTCOUNT'         => sprintf($user->lang['sb_footer'], $total_entries, SHOUTBOX_PAGE_LIMIT),
+  // Form
+  'F_MANAGE'          => 'manage.php'.$SID,
+  'SB_TABLE'          => $hptt->get_html_table($hptt_sort, $hptt_url_suffix, $start, $end),
 
   // pagination
   'START'             => $start,
   'PAGINATION'        => $pagination,
 
   // language
-  'L_DATE'            => $user->lang['sb_adm_date'],
-  'L_NAME'            => $user->lang['sb_adm_name'],
-  'L_TEXT'            => $user->lang['sb_adm_text'],
-  'L_SELECT_ALL'      => $user->lang['sb_adm_select_all'],
-  'L_SELECT_NONE'     => $user->lang['sb_adm_select_none'],
   'L_DELETE'          => $user->lang['delete'],
-
-  // javascript
-  'JS_MARK'           => '<script type="text/javascript" src="./../includes/javascripts/mark.js"></script>',
 
   // credits
   'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '250'),

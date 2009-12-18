@@ -27,11 +27,10 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
-  var $version    = '0.1.7';
-  var $build      = '6217';
-  var $copyright  = 'Aderyn';
-  var $vstatus    = 'Stable';
-  var $fwversion  = '2.0.0';  // required framework Version
+  public $version    = '0.2.0';
+  public $build      = '6217';
+  public $copyright  = 'Aderyn';
+  public $vstatus    = 'Alpha';
 
   /**
     * Constructor
@@ -39,7 +38,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     *
     * @param    EQdkp_Plugin_Manager    $pm   Plugin Manager
     */
-  function shoutbox_plugin_class($pm)
+  public function __construct($pm)
   {
     global $eqdkp_root_path, $user;
 
@@ -47,29 +46,42 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     $this->pm->get_language_pack('shoutbox');
 
     $this->add_data(array (
-      'name'          => 'Shoutbox',
-      'code'          => 'shoutbox',
-      'path'          => 'shoutbox',
-      'contact'       => 'Aderyn@gmx.net',
-      'template_path' => 'plugins/shoutbox/templates/',
-      'version'       => $this->version,
+      'name'              => 'Shoutbox',
+      'code'              => 'shoutbox',
+      'path'              => 'shoutbox',
+      'contact'           => 'Aderyn@gmx.net',
+      'template_path'     => 'plugins/shoutbox/templates/',
+      'version'           => $this->version,
+      'author'            => $this->copyright,
+      'description'       => $user->lang['sb_short_desc'],
+      'long_description'  => $user->lang['sb_long_desc'],
+      'homepage'          => 'http://www.eqdkp-plus.com/',
+      'manuallink'        => false,
+      'plus_version'      => '0.7',
+      'build'             => $this->build,
     ));
 
-    // Addition Information for eqdkpPLUS
-    $this->additional_data = array(
-        'author'            => 'Aderyn',
-        'description'       => $user->lang['sb_short_desc'],
-        'long_description'  => $user->lang['sb_long_desc'],
-        'homepage'          => 'http://www.eqdkp-plus.com/',
-        'manuallink'        => false,
-    );
+    $this->add_dependency(array(
+      'plus_version'      => '0.7',
+      'lib_version'       => '2.0.0',
+    ));
 
     // -- Register our permissions ------------------------
-    $this->add_permission('341', 'a_shoutbox_delete', 'N', $user->lang['delete']);
-    $this->add_permission('342', 'u_shoutbox_add',    'Y', $user->lang['add']);
+    // 2 = Super-Admin, 3 = Admin, 4 = Member
+    $this->add_permission('a_shoutbox_delete', 'N', $user->lang['delete'], array(2,3));
+    $this->add_permission('u_shoutbox_add',    'Y', $user->lang['add'],    array(2,3,4));
 
     // -- Menu --------------------------------------------
     $this->add_menu('admin_menu', $this->gen_admin_menu());
+
+    // -- Portal Module -----------------------------------
+    $this->add_portal_module('shoutbox');
+
+    // -- PDH Modules -------------------------------------
+    $this->add_pdh_read_module('shoutbox');
+    $this->add_pdh_write_module('shoutbox');
+    $this->add_pdh_read_module('sb_member_user');
+
 
     // -- SQL Data ----------------------------------------
     include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
@@ -90,10 +102,6 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
         }
         $this->add_sql(SQL_INSTALL, $shoutboxSQL['install'][$i]);
       }
-
-      // insert the Permission of the installing Person
-      $perm_array = array('341', '342');
-      $this->set_permissions($perm_array);
 
       // insert configuration
       if (is_array($config_vars))
@@ -116,26 +124,27 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     * gen_admin_menu
     * Generate the Admin Menu
     */
-  function gen_admin_menu()
+  private function gen_admin_menu()
   {
-    if ($this->pm->check(PLUGIN_INSTALLED, 'shoutbox'))
+    global $user, $SID;
+
+    if ($this->pm->check(PLUGIN_INSTALLED, 'shoutbox') && $user->check_auth('a_shoutbox_', false))
     {
-      global $user, $SID, $eqdkp_root_path;
-
-      $url_prefix = (EQDKP_VERSION < '1.3.2') ? $eqdkp_root_path : '';
-
       $admin_menu = array (
         'shoutbox' => array (
-          0 => $user->lang['shoutbox'],
+          'name' => $user->lang['shoutbox'],
+          'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
           1 => array (
-            'link'  => $url_prefix.'plugins/shoutbox/admin/settings.php'.$SID,
+            'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
             'text'  => $user->lang['settings'],
-            'check' => 'a_shoutbox_'
+            'check' => 'a_shoutbox_',
+            'icon'  => 'settings.png'
           ),
           2 => array (
-            'link'  => $url_prefix.'plugins/shoutbox/admin/manage.php'.$SID,
+            'link'  => 'plugins/shoutbox/admin/manage.php'.$SID,
             'text'  => $user->lang['sb_manage'],
-            'check' => 'a_shoutbox_delete'
+            'check' => 'a_shoutbox_delete',
+            'icon'  => './../../plugins/shoutbox/images/adminmenu/manage.png'
           )
         )
       );
@@ -152,41 +161,12 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     *
     * @param    array    $config_vars   Array with all default configuration values
     */
-  function insert_configuration($config_vars)
+  private function insert_configuration($config_vars)
   {
     foreach ($config_vars as $config_name => $config_value)
     {
       $sql = 'INSERT INTO `__shoutbox_config` VALUES(\''.$config_name.'\', \''.$config_value.'\');';
       $this->add_sql(SQL_INSTALL, $sql);
-    }
-  }
-
-  /**
-    * set_permissions
-    * Set default permission for current user installing the plugin
-    *
-    * @param    array    $perm_array    Array with all permission id's for user
-    * @param    char     $perm_setting  Default to 'Y' = Yes or 'N' = No?
-    */
-  function set_permissions($perm_array, $perm_setting='Y')
-  {
-    global $user, $db;
-
-    // do we have a logged in user?
-    $userid = ($user->data['user_id'] != ANONYMOUS) ? $user->data['user_id'] : '';
-    if($userid)
-    {
-      foreach ($perm_array as $value)
-      {
-        $sql = 'UPDATE `__auth_users` SET auth_setting=\''.$perm_setting.'\' WHERE user_id='.$userid.' AND auth_id='.$value;
-        $db->query($sql);
-        if ($db->sql_affectedrows() == 0)
-        {
-          // add new data
-          $sql = 'INSERT INTO `__auth_users` VALUES('.$userid.', '.$value.', \''.$perm_setting.'\')';
-          $this->add_sql(SQL_INSTALL, $sql);
-        }
-      }
     }
   }
 

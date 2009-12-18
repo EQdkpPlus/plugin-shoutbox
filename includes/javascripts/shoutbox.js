@@ -81,6 +81,7 @@ function reloadShoutboxFinished(root, textReload) {
 function deleteShoutboxRequest(root, id, textDelete) {
   $('#shoutbox_delete_button_'+id).html('<img src="'+root+'images/global/loading.gif" alt="'+textDelete+'"/>');
 }
+
 /**
   * shoutboxAutoReload
   * auto reload the shoutbox

@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.1.7',                          // Version
+      'version'       => '0.2.0',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -80,12 +80,6 @@ $portal_settings['shoutbox'] = array(
         'size'      => '3',
         'help'      => 'sb_autoreload_help',
       ),
-  'pk_shoutbox_invisible_to_guests' => array(
-        'name'      => 'sb_invisible_to_guests',
-        'language'  => 'sb_invisible_to_guests',
-        'property'  => 'checkbox',
-        'help'      => '',
-      ),
 );
 
 
@@ -102,33 +96,29 @@ if (!function_exists(shoutbox_module))
     // check if shoutbox is installed
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      $shoutbox_file    = $eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php';
-      $feedcreator_file = $eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php';
-      if (file_exists($shoutbox_file) && file_exists($feedcreator_file))
+      include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
+      include_once($eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php');
+
+      // skip Lightbox usage
+      if (!defined('SKIP_LIGHTBOX')) define('SKIP_LIGHTBOX', 1);
+
+      // create shoutbox
+      $shoutbox = new Shoutbox();
+
+      // do requirements check
+      $requirementscheck = $shoutbox->checkRequirements();
+      if ($requirementscheck !== true)
       {
-        if (!defined('SHOUTBOX_DEFAULT_LIMIT')) define('SHOUTBOX_DEFAULT_LIMIT', 10);
-        if (!defined('SHOUTBOX_WORDWRAP'))      define('SHOUTBOX_WORDWRAP',      20);
-        if (!defined('SHOUTBOX_AUTORELOAD'))    define('SHOUTBOX_AUTORELOAD',     0);
-
-        include_once($feedcreator_file);
-        include_once($shoutbox_file);
-        $shoutbox = new Shoutbox();
-
-        // do requirements check
-        $requirementscheck = $shoutbox->checkRequirements();
-        if ($requirementscheck !== true)
-        {
-          $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                       <tr class="'.$eqdkp->switch_row_class().'">
-                         <td><div align="center">'.$requirementscheck.'</div></td>
-                       </tr>
-                     </table>';
-        }
-        else
-        {
-          // return the output for module manager
-          $output = $shoutbox->showShoutbox();
-        }
+        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
+                     <tr class="'.$eqdkp->switch_row_class().'">
+                       <td><div align="center">'.$requirementscheck.'</div></td>
+                     </tr>
+                   </table>';
+      }
+      else
+      {
+        // return the output for module manager
+        $output = $shoutbox->showShoutbox();
       }
     }
     else
