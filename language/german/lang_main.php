@@ -41,6 +41,7 @@ $lang = array(
   'sb_date_format'                  => 'd.m.Y H:i',  // DD.MM.YYYY HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
   'sb_delete_success'               => 'Einträge erfolgreich gelöscht',
+  'sb_settings_info'                => 'Weitere Einstellungen für die Shoutbox findet Ihr unter den <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodul Einstellungen</a>',
 
   // Configuration
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',

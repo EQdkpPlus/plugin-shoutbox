@@ -91,7 +91,7 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $eqdkp->set_vars(array (
-  'page_title'    => sprintf($user->lang['admin_title_prefix'], $eqdkp->config['guildtag'], $eqdkp->config['dkp_name']).': '.$user->lang['shoutbox'],
+  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['manage'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/manage.html',
   'display'       => true

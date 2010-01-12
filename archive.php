@@ -70,7 +70,7 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $eqdkp->set_vars(array (
-  'page_title'    => sprintf($user->lang['title_prefix'], $eqdkp->config['guildtag'], $eqdkp->config['dkp_name']).': '.$user->lang['sb_shoutbox_archive'],
+  'page_title'    => $user->lang['sb_shoutbox_archive'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'archive.html',
   'display'       => true

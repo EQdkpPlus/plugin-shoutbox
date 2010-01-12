@@ -30,7 +30,7 @@ $portal_module['shoutbox'] = array(                        // the same name as t
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
       'positions'     => array('left1', 'left2', 'right'), // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
-      'signedin'      => '0',                              // 0 = all users, 1 = signed in only
+      'settings'      => '1',
       'install'       => array(
                            'autoenable'        => '0',
                            'defaultposition'   => 'left2',

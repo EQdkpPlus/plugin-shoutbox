@@ -36,17 +36,8 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 }
 
 
-// -- Init WPFC ---------------------------------------------------------------
+// -- Init config database ----------------------------------------------------
 $wpfcdb = new AdditionalDB('shoutbox_config');
-$sbupdater = new PluginUpdater('shoutbox','sb_','shoutbox_config','includes');
-
-
-// -- reset the version? (to force an update) ---------------------------------
-if ($in->get('version') == 'reset')
-{
-  $sbupdater->DeleteVersionString();
-  redirect('plugins/shoutbox/admin/settings.php'.$SID);
-}
 
 
 // -- save? -------------------------------------------------------------------
@@ -74,23 +65,16 @@ if ($in->get('save_settings'))
 }
 
 
-// -- read config values ------------------------------------------------------
-$sql = 'SELECT * FROM `__shoutbox_config`';
-if ($config_result = $db->query($sql))
-{
-  while($rowc = $db->fetch_record($config_result))
-  {
-    $sb_conf[$rowc['config_name']] = $rowc['config_value'];
-  }
-  $db->free_result($config_result);
-}
-
-
 // -- update check ------------------------------------------------------------
-$updchk_enbled = ($sb_conf['sb_updatecheck'] == 1) ? true : false;
-$cachedb       = array('table' => 'shoutbox_config', 'data' => $sb_conf['vc_data'], 'f_data' => 'vc_data', 'lastcheck' => $sb_conf['vc_lastcheck'], 'f_lastcheck' => 'vc_lastcheck');
-$versionthing  = array('name' => 'shoutbox', 'inclpath' => 'includes', 'version' => $pm->get_data('shoutbox', 'version'), 'build' => $pm->plugins['shoutbox']->build, 'enabled' => $updchk_enbled);
-$sbvcheck = new PluginUpdCheck($versionthing, $cachedb);
+$updchk_enabled = ($eqdkp->config['sb_updatecheck'] == 1) ? true : false;
+$versionthing = array(
+  'name'     => 'shoutbox',
+  'version'  => $pm->get_data('shoutbox', 'version'),
+  'build'    => $pm->get_data('shoutbox', 'build'),
+  'enabled'  => $updchk_enabled,
+  'vstatus'  => $pm->plugins['shoutbox']->vstatus,
+);
+$sbvcheck = new PluginUpdCheck($versionthing);
 $sbvcheck->PerformUpdateCheck();
 
 
@@ -119,13 +103,13 @@ if (file_exists($timezone_file))
 // get timezone offset
 $temp = time()+Date('I')*3600;
 $dst = date('I', $temp);
-if ($dst == 1 && $sb_conf['sb_dstcorrect'] == 1)
+if ($dst == 1 && $eqdkp->config['sb_dstcorrect'] == 1)
 {
-  $cur_timezone = ($sb_conf['sb_timezone'] != '') ? $sb_conf['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
+  $cur_timezone = ($eqdkp->config['sb_timezone'] != '') ? $eqdkp->config['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
 }
 else
 {
-  $cur_timezone = ($sb_conf['sb_timezone'] != '') ? $sb_conf['sb_timezone'] : intval(date('Z', $temp)/3600);
+  $cur_timezone = ($eqdkp->config['sb_timezone'] != '') ? $eqdkp->config['sb_timezone'] : intval(date('Z', $temp)/3600);
 }
 
 
@@ -135,6 +119,7 @@ $tpl->assign_vars(array (
   'F_CONFIG'          => 'settings.php'.$SID,
 
   // Language
+  'L_SETTINGS_INFO'   => $user->lang['sb_settings_info'],
   'L_SUBMIT'          => $user->lang['submit'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
   'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
@@ -142,12 +127,11 @@ $tpl->assign_vars(array (
   'L_DSTCORRECT'      => $user->lang['sb_dstcorrect'],
 
   // Settings
-  'UPDATE_CHECK'      => $wpfcdb->isChecked($sb_conf['sb_updatecheck']),
+  'UPDATE_CHECK'      => $wpfcdb->isChecked($eqdkp->config['sb_updatecheck']),
   'DRDWN_TZONE'       => $html->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
-  'DST_CORRECT'       => $wpfcdb->isChecked($sb_conf['sb_dstcorrect']),
+  'DST_CORRECT'       => $wpfcdb->isChecked($eqdkp->config['sb_dstcorrect']),
 
   // update box
-  'UPDATE_BOX'        => $sbupdater->OutputHTML(),
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
 
   // credits
@@ -159,7 +143,7 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $eqdkp->set_vars(array (
-  'page_title'    => sprintf($user->lang['admin_title_prefix'], $eqdkp->config['guildtag'], $eqdkp->config['dkp_name']).': '.$user->lang['shoutbox'],
+  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['settings'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/settings.html',
   'display'       => true
