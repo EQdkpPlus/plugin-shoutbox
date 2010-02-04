@@ -81,6 +81,7 @@ $tpl->assign_vars(array (
 
   // language
   'L_DELETE'          => $user->lang['delete'],
+  'L_RESET'           => $user->lang['reset'],
 
   // credits
   'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '250'),

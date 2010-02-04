@@ -351,7 +351,7 @@ if (!class_exists("Shoutbox"))
      */
     private function getForm($rpath='')
     {
-      global $user, $eqdkp, $eqdkp_root_path, $SID, $pdh;
+      global $user, $eqdkp, $eqdkp_root_path, $SID, $pdh, $html;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
@@ -364,59 +364,59 @@ if (!class_exists("Shoutbox"))
       if (is_array($member_ids) && count($member_ids) > 0)
       {
         // html
-        $html = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                 </form>
-                 <form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                   <table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                </form>
+                <form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
+                  <table width="100%" border="0" cellspacing="1" cellpadding="2">';
 
         // input below? If true insert space row
         if ($eqdkp->config['sb_input_box_below'] == 1 && $user->check_auth('u_shoutbox_add', false))
         {
-          $html .= '<tr><th>&nbsp;</th></tr>';
+          $out .= '<tr><th>&nbsp;</th></tr>';
         }
 
-        $html .= '<tr class="'.$class.'">
-                    <td>
-                      <div align="center">'
-                      .$this->getFormMember().
-                     '</div>
-                    </td>
-                  </tr>
-                  <tr class="'.$class.'">
-                    <td><div align="center"><textarea class="input" name="sb_text" cols="20" rows="3"></textarea></div></td>
-                  </tr>
-                  <tr class="'.$class.'">
-                    <td>
-                      <div align="center">
-                        <input type="hidden" name="sb_root" value="'.$root_path.'"/>
-                        <span id="shoutbox_button"><input type="submit" class="input" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
-                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
-                          {
-                            target: \'#htmlShoutboxTable\',
-                            url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.$root_path.'\',
-                            beforeSubmit: function(formData, jqForm, options) {
-                              reloadShoutboxRequest(\''.$root_path.'\');
-                            },
-                            success: function() {
-                              reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang['sb_reload'].'\');
-                            }
-                          });">
-                          <span id="shoutbox_reload_button">
-                            <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang['sb_reload'].'" title="'.$user->lang['sb_reload'].'"/>
-                          </span>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </form>';
+        $out .= '<tr class="'.$class.'">
+                   <td>
+                     <div align="center">'
+                     .$this->getFormMember().
+                    '</div>
+                   </td>
+                 </tr>
+                 <tr class="'.$class.'">
+                   <td><div align="center"><textarea class="input" name="sb_text" cols="20" rows="3"></textarea></div></td>
+                 </tr>
+                 <tr class="'.$class.'">
+                   <td>
+                     <div align="center">
+                       <input type="hidden" name="sb_root" value="'.$root_path.'"/>
+                       <span id="shoutbox_button"><input type="submit" class="liteoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
+                       <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
+                         {
+                           target: \'#htmlShoutboxTable\',
+                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.$root_path.'\',
+                           beforeSubmit: function(formData, jqForm, options) {
+                             reloadShoutboxRequest(\''.$root_path.'\');
+                           },
+                           success: function() {
+                             reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang['sb_reload'].'\');
+                           }
+                         });">
+                         <span id="shoutbox_reload_button">
+                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang['sb_reload'].'" title="'.$user->lang['sb_reload'].'"/>
+                         </span>
+                       </span>
+                     </div>
+                   </td>
+                 </tr>
+               </table>
+             </form>';
       }
       else
       {
-        $html .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
+        $out .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
       }
 
-      return $html;
+      return $out;
     }
 
     /**
@@ -427,10 +427,10 @@ if (!class_exists("Shoutbox"))
      */
     private function getFormMember()
     {
-      global $user, $pdh;
+      global $user, $pdh, $html;
 
       // for anonymous user, just return empty string
-      $html = '';
+      $outHtml = '';
 
 
       $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
@@ -441,24 +441,23 @@ if (!class_exists("Shoutbox"))
         // if more than 1 member, show dropdown box
         if ($membercount > 1)
         {
-          // show dropdown box
-          $html .= '<select name="sb_member_id" size="1">';
-          foreach($member_ids as $member_id)
+          foreach ($member_ids as $member_id)
           {
-            $html .= '<option value="'.$member_id.'">'.$pdh->get('member', 'name', array($member_id, false, false)).'</option>';
+            $members[$member_id] = $pdh->get('member', 'name', array($member_id, false, false));
           }
-          $html .= '</select>';
+          // show dropdown box
+          $outHtml .= $html->DropDown('sb_member_id', $members, '');
         }
         // if only one member, show just member
         else if ($membercount == 1)
         {
           // show name as text and member id as hidden value
-          $html .= '<input type="hidden" name="sb_member_id" value="'.$member_ids[0].'"/>'.
-                   $pdh->get('member', 'name', array($member_ids[0], false, false));
+          $outHtml .= '<input type="hidden" name="sb_member_id" value="'.$member_ids[0].'"/>'.
+                      $pdh->get('member', 'name', array($member_ids[0], false, false));
         }
       }
 
-      return $html;
+      return $outHtml;
     }
 
     /**

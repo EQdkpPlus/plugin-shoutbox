@@ -120,7 +120,8 @@ $tpl->assign_vars(array (
 
   // Language
   'L_SETTINGS_INFO'   => $user->lang['sb_settings_info'],
-  'L_SUBMIT'          => $user->lang['submit'],
+  'L_SAVE'            => $user->lang['save'],
+  'L_RESET'           => $user->lang['reset'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
   'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
   'L_TIMEZONE'        => $user->lang['sb_timezone'],
