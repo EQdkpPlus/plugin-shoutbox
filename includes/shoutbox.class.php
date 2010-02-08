@@ -389,7 +389,7 @@ if (!class_exists("Shoutbox"))
                    <td>
                      <div align="center">
                        <input type="hidden" name="sb_root" value="'.$root_path.'"/>
-                       <span id="shoutbox_button"><input type="submit" class="liteoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
+                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
                          {
                            target: \'#htmlShoutboxTable\',
@@ -473,7 +473,9 @@ if (!class_exists("Shoutbox"))
       $html = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                  <tr class="'.$eqdkp->switch_row_class().'">
                    <td>
-                     <div align="center"><a href="'.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'">'.$user->lang['sb_archive'].'</a></div>
+                     <div align="center">
+                       <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onClick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
+                     </div>
                    </td>
                  </tr>
                </table>';

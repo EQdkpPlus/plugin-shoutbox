@@ -92,7 +92,7 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $eqdkp->set_vars(array (
-  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['manage'],
+  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['sb_manage_archive'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/manage.html',
   'display'       => true

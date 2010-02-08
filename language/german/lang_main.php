@@ -35,7 +35,7 @@ $lang = array(
   'sb_plus_version'                 => "Shoutbox benötigt EQDKP-PLUS %1\$s oder höher. Die installierte Version ist %2\$s",
 
   // Menu
-  'sb_manage'                       => 'Verwalten',
+  'sb_manage_archive'               => 'Archiv Verwalten',
 
   // Admin
   'sb_date_format'                  => 'd.m.Y H:i',  // DD.MM.YYYY HH:mm

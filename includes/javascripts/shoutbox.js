@@ -26,7 +26,7 @@ function showShoutboxRequest(root, text) {
   // disable input field, hide reload icon and display "Saving..." text
   $('textarea[name=sb_text]').attr('disabled', 'disabled');
   $('#shoutbox_reload_button').html('');
-  $('#shoutbox_button').html('<img src="'+root+'plugins/shoutbox/images/reload.gif" alt="Save"/>'+text);
+  $('#shoutbox_button').html('<img src="'+root+'images/global/loading.gif" alt="Save"/>'+text);
 }
 
 /**
@@ -54,7 +54,7 @@ function showShoutboxFinished(root, textSubmit, textReload) {
 function reloadShoutboxRequest(root) {
   // disable submit button and set loading image
   $('input[name=sb_submit]').attr('disabled', 'disabled');
-  $('#shoutbox_reload_button').html('<img src="'+root+'plugins/shoutbox/images/reload.gif" alt="Load"/>');
+  $('#shoutbox_reload_button').html('<img src="'+root+'images/global/loading.gif" alt="Load"/>');
 }
 
 /**
@@ -79,7 +79,7 @@ function reloadShoutboxFinished(root, textReload) {
   * @param  textDelete  string  text to display als alt of delete image
   */
 function deleteShoutboxRequest(root, id, textDelete) {
-  $('#shoutbox_delete_button_'+id).html('<img src="'+root+'plugins/shoutbox/images/reload.gif" alt="'+textDelete+'"/>');
+  $('#shoutbox_delete_button_'+id).html('<img src="'+root+'images/global/loading.gif" alt="'+textDelete+'"/>');
 }
 
 /**

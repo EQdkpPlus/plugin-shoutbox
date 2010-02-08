@@ -28,7 +28,7 @@ if (!defined('EQDKP_INC'))
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
   public $version    = '0.2.0';
-  public $build      = '7165';
+  public $build      = '7185';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 
@@ -142,9 +142,9 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
           ),
           2 => array (
             'link'  => 'plugins/shoutbox/admin/manage.php'.$SID,
-            'text'  => $user->lang['sb_manage'],
+            'text'  => $user->lang['sb_manage_archive'],
             'check' => 'a_shoutbox_delete',
-            'icon'  => './../../plugins/shoutbox/images/adminmenu/manage.png'
+            'icon'  => './../glyphs/archive.png'
           )
         )
       );
