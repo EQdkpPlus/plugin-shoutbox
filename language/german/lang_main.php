@@ -37,6 +37,10 @@ $lang = array(
   // Menu
   'sb_manage_archive'               => 'Archiv Verwalten',
 
+  // Archive
+  'sb_written_by'                   => 'geschrieben von',
+  'sb_written_at'                   => 'um',
+
   // Admin
   'sb_date_format'                  => 'd.m.Y H:i',  // DD.MM.YYYY HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
