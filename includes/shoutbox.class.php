@@ -43,7 +43,7 @@ if (!class_exists("Shoutbox"))
     );
 
     /**
-     * Required versions
+     * Output limit (number of entries to display)
      */
     private $output_limit;
 
@@ -158,118 +158,124 @@ if (!class_exists("Shoutbox"))
      */
     public function showShoutbox()
     {
-      global $user, $eqdkp;
+      global $wherevalue, $eqdkp_root_path, $pcache;
 
-      $html = '';
+      $htmlOut = '';
 
-      // javascript code
-      $this->shoutboxJCode();
+      // get ids
+      $shoutbox_ids = $this->getShoutboxOutEntries();
 
-      // is input above (and user can add entries) append form
-      if ($eqdkp->config['sb_input_box_below'] != 1 && $user->check_auth('u_shoutbox_add', false))
+      // output depending on position
+      switch ($wherevalue)
       {
-        $html .= $this->getForm();
+      case 'left1':
+      case 'left2':
+      case 'right':
+        include_once($eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_vertical.class.php');
+        $shoutbox_style = new sb_vertical($shoutbox_ids);
+        break;
+      case 'middle':
+      case 'bottom':
+        include_once($eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_horizontal.class.php');
+        $shoutbox_style = new sb_horizontal($shoutbox_ids);
+        break;
       }
 
-      // content table
-      $html .= '<div id="htmlShoutboxTable">';
-      $html .= $this->getContent();
-      $html .= '</div>';
+      // show shoutbox
+      if ($shoutbox_style)
+        $htmlOut .= $shoutbox_style->showShoutbox();
 
-      // archive link? (User must be logged in to see archive link)
-      if ($eqdkp->config['sb_show_archive'] && $user->data['user_id'] != ANONYMOUS)
-      {
-        $html .= $this->getArchiveLink();
-      }
+      // create RSS feed
+      $this->createRSS($shoutbox_ids);
 
-      // is input below (and user can add entries) append form
-      if ($eqdkp->config['sb_input_box_below'] == 1 && $user->check_auth('u_shoutbox_add', false))
-      {
-        $html .= $this->getForm();
-      }
+      // add link to RSS
+      $htmlOut .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
+                    href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
 
-      return $html;
+      return $htmlOut;
     }
 
     /**
      * getContent
      * get the content of the shoutbox
      *
-     * @param  string   $rpath   root path
-     * @param  boolean  $decode  UTF8 decode?
+     * @param  string   $orientation  orientation vertical/horizontal
+     * @param  string   $rpath        root path
+     * @param  boolean  $decode       UTF8 decode?
      *
      * @return  string
      */
-    public function getContent($rpath='', $decode=false)
+    public function getContent($orientation, $rpath='', $decode=false)
     {
-      global $user, $eqdkp, $SID, $eqdkp_root_path, $pcache, $pdh;
+      global $eqdkp_root_path, $pcache, $pdh;
 
-      // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      // get shoutbox ids to display
+      $shoutbox_ids = $this->getShoutboxOutEntries();
 
-      $html = '';
+      // empty output
+      $htmlOut = '';
 
-      // the delete form
-      $html .= '<form id="del_shoutbox" name="del_shoutbox" action="'.$eqdkp_root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                </form>';
-
-      // get shoutbox id's
-      $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
-      if (is_array($shoutbox_ids) && count($shoutbox_ids) > 0 && is_dir($root_path))
+      // get the layout
+      $layout_file = $eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
+      if (file_exists($layout_file))
       {
-        // output table header
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        include_once($layout_file);
+        $class_name = 'sb_'.$orientation;
+        $shoutbox_style = new $class_name($shoutbox_ids);
+      }
 
-        // input above? If true, insert a space row
-        if ($eqdkp->config['sb_input_box_below'] != 1 && $user->check_auth('u_shoutbox_add', false))
-        {
-          $html .= '<tr><th>&nbsp;</th></tr>';
-        }
+      // get content
+      if ($shoutbox_style)
+        $htmlOut .= $shoutbox_style->getContent($rpath, $decode);
 
-        // output at most number of requested items
-        $output_count = min($this->output_limit, count($shoutbox_ids));
+      // create RSS feed
+      $this->createRSS($shoutbox_ids);
+
+      return $htmlOut;
+    }
+
+    /**
+     * getShoutboxOutEntries
+     * get the id list to display
+     *
+     * @return  array(ids)
+     */
+    private function getShoutboxOutEntries()
+    {
+      global $pdh;
+
+      $shoutbox_out = array();
+
+       // get all shoutbox id's
+      $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+      if (is_array($shoutbox_ids))
+      {
+        $shoutbox_count = count($shoutbox_ids);
+        $output_count = min($this->output_limit, $shoutbox_count);
+
+        // copy the last n elements to the output entry
         for ($i = 0; $i < $output_count; $i++)
+          $shoutbox_out[] = $shoutbox_ids[$i];
+      }
+
+      return $shoutbox_out;
+    }
+
+    /**
+     * createRSS
+     * create RSS feed
+     *
+     * @param  array  $shoutbox_ids  Array of shoutbox ids to create RSS from
+     */
+    private function createRSS($shoutbox_ids)
+    {
+      global $pcache, $pdh;
+
+      // create RSS feed item
+      if (is_array($shoutbox_ids))
+      {
+        foreach ($shoutbox_ids as $shoutbox_id)
         {
-          $shoutbox_id = $shoutbox_ids[$i];
-
-          // get class for row
-          $class = $eqdkp->switch_row_class();
-
-          $html .= '<tr class="'.$class.'" onmouseout="this.className=\''.$class.'\';" onmouseover="this.className=\'rowHover\';">
-                      <td>';
-
-          // if admin or own entry, ouput delete link
-          if ($user->data['user_id'] == $pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
-              $user->check_auth('a_shoutbox_delete', false))
-          {
-            $img = $root_path.'images/global/delete.png';
-            $delete_text = ($decode ? utf8_encode($user->lang['delete']) : $user->lang['delete']);
-
-            // Java Script for delete
-            $html .= '<span class="small bold floatRight hand" onclick="$(\'#del_shoutbox\').ajaxSubmit(
-                        {
-                          target: \'#htmlShoutboxTable\',
-                          url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_delete='.$shoutbox_id.'&sb_root='.$root_path.'\',
-                          beforeSubmit: function(formData, jqForm, options) {
-                            deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$delete_text.'\');
-                          }
-                        }); ">
-                        <span id="shoutbox_delete_button_'.$shoutbox_id.'">
-                          <img src="'.$img.'" alt="'.$delete_text.'" title="'.$delete_text.'"/>
-                        </span>
-                      </span>';
-          }
-
-          // output date as well as User and text
-          $html .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $eqdkp->config['sb_show_date'])).': '.
-                   $pdh->geth('shoutbox', 'membername', array($shoutbox_id, $decode)).
-                   '<br/>'.
-                   $pdh->geth('shoutbox', 'text', array($shoutbox_id, $rpath));
-
-          $html .= '  </td>
-                    </tr>';
-
-          // create RSS feed item
           $rssitem = new FeedItem();
           $rssitem->title       = $pdh->get('shoutbox', 'membername', array($shoutbox_id, $decode));
           $rssitem->link        = $this->rss->link;
@@ -280,207 +286,10 @@ if (!class_exists("Shoutbox"))
           $rssitem->guid        = $shoutbox_id;
           $this->rss->addItem($rssitem);
         }
-
-        // output table footer
-        $html .= '</table>';
-
-        // save RSS
-        $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
-        // add link to RSS
-        $html .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
-                   href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
-      }
-      else
-      {
-        $no_entries = ($decode ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries']);
-
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
-                    <tr class="'.$eqdkp->switch_row_class().'">
-                      <td><div align="center">'.$no_entries.'</div></td>
-                    </tr>
-                  </table>';
       }
 
-      return $html;
-    }
-
-    /**
-     * shoutboxJCode
-     * output the Java Code for the Shoutbox
-     */
-    private function shoutboxJCode()
-    {
-      global $user, $eqdkp_root_path, $eqdkp, $SID, $tpl;
-
-      // set autoreload (0 = disable)
-      $autoreload = ($eqdkp->config['sb_autoreload'] != '') ? intval($eqdkp->config['sb_autoreload']) : 0;
-      $autoreload = ($autoreload < 600 ? $autoreload : 0);
-      $autoreload = $autoreload * 1000; // to ms
-
-      $jscode  = "// wait for the DOM to be loaded
-                  $(document).ready(function() {
-                    $('#Shoutbox').ajaxForm({
-                      target: '#htmlShoutboxTable',
-                      beforeSubmit:  function(formData, jqForm, options) {
-                        showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang['sb_save_wait']."');
-                      },
-                      success: function() {
-                        showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang['sb_submit_text']."', '".$user->lang['sb_reload']."');
-                      }
-                    });
-                 ";
-      if ($autoreload > 0)
-      {
-        $jscode .= "setInterval(function() {
-                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang['sb_reload']."');
-                    }, ".$autoreload.");";
-      }
-      $jscode .= '});';
-
-      $tpl->js_file($eqdkp_root_path.'plugins/shoutbox/includes/javascripts/shoutbox.js');
-      $tpl->add_js($jscode);
-    }
-
-    /**
-     * getForm
-     * get the Shoutbox <form>
-     *
-     * @param  string  $rpath  root path
-     *
-     * @return  string
-     */
-    private function getForm($rpath='')
-    {
-      global $user, $eqdkp, $eqdkp_root_path, $SID, $pdh, $html;
-
-      // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
-
-      // get class for row
-      $class = $eqdkp->switch_row_class();
-
-      // only display form if user has members assigned to
-      $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
-      if (is_array($member_ids) && count($member_ids) > 0)
-      {
-        // html
-        $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                </form>
-                <form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                  <table width="100%" border="0" cellspacing="1" cellpadding="2">';
-
-        // input below? If true insert space row
-        if ($eqdkp->config['sb_input_box_below'] == 1 && $user->check_auth('u_shoutbox_add', false))
-        {
-          $out .= '<tr><th>&nbsp;</th></tr>';
-        }
-
-        $out .= '<tr class="'.$class.'">
-                   <td>
-                     <div align="center">'
-                     .$this->getFormMember().
-                    '</div>
-                   </td>
-                 </tr>
-                 <tr class="'.$class.'">
-                   <td><div align="center"><textarea class="input" name="sb_text" cols="20" rows="3"></textarea></div></td>
-                 </tr>
-                 <tr class="'.$class.'">
-                   <td>
-                     <div align="center">
-                       <input type="hidden" name="sb_root" value="'.$root_path.'"/>
-                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
-                       <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
-                         {
-                           target: \'#htmlShoutboxTable\',
-                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.$root_path.'\',
-                           beforeSubmit: function(formData, jqForm, options) {
-                             reloadShoutboxRequest(\''.$root_path.'\');
-                           },
-                           success: function() {
-                             reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang['sb_reload'].'\');
-                           }
-                         });">
-                         <span id="shoutbox_reload_button">
-                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang['sb_reload'].'" title="'.$user->lang['sb_reload'].'"/>
-                         </span>
-                       </span>
-                     </div>
-                   </td>
-                 </tr>
-               </table>
-             </form>';
-      }
-      else
-      {
-        $out .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
-      }
-
-      return $out;
-    }
-
-    /**
-     * getFormMember
-     * get the Shoutbox <form> Members
-     *
-     * @return  string
-     */
-    private function getFormMember()
-    {
-      global $user, $pdh, $html;
-
-      // for anonymous user, just return empty string
-      $outHtml = '';
-
-
-      $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
-      if (is_array($member_ids))
-      {
-        $membercount = count($member_ids);
-
-        // if more than 1 member, show dropdown box
-        if ($membercount > 1)
-        {
-          foreach ($member_ids as $member_id)
-          {
-            $members[$member_id] = $pdh->get('member', 'name', array($member_id, false, false));
-          }
-          // show dropdown box
-          $outHtml .= $html->DropDown('sb_member_id', $members, '');
-        }
-        // if only one member, show just member
-        else if ($membercount == 1)
-        {
-          // show name as text and member id as hidden value
-          $outHtml .= '<input type="hidden" name="sb_member_id" value="'.$member_ids[0].'"/>'.
-                      $pdh->get('member', 'name', array($member_ids[0], false, false));
-        }
-      }
-
-      return $outHtml;
-    }
-
-    /**
-     * getArchiveLink
-     * get the archive link text
-     *
-     * @return  string
-     */
-    private function getArchiveLink()
-    {
-      global $user, $eqdkp, $SID, $eqdkp_root_path;
-
-      $html = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                 <tr class="'.$eqdkp->switch_row_class().'">
-                   <td>
-                     <div align="center">
-                       <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onClick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
-                     </div>
-                   </td>
-                 </tr>
-               </table>';
-
-      return $html;
+      // save RSS
+      $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
     }
 
     /**

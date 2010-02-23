@@ -22,14 +22,16 @@ if (!defined('EQDKP_INC'))
 }
 
 // -- Portal Module -----------------------------------------------------------
-$portal_module['shoutbox'] = array(                        // the same name as the folder!
-      'name'          => 'Shoutbox Module',                // The name to show
-      'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.2.0',                          // Version
-      'author'        => 'Aderyn',                         // Author
-      'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
-      'description'   => 'Display a shoutbox',             // Detailed Description
-      'positions'     => array('left1', 'left2', 'right'), // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
+$portal_module['shoutbox'] = array(               // the same name as the folder!
+      'name'          => 'Shoutbox Module',       // The name to show
+      'path'          => 'shoutbox',              // Folder name again
+      'version'       => '0.2.0',                 // Version
+      'author'        => 'Aderyn',                // Author
+      'contact'       => 'Aderyn@gmx.net',        // email/internet adress
+      'description'   => 'Display a shoutbox',    // Detailed Description
+      'positions'     => array('left1', 'left2',  // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
+                               'right',
+                               'middle', 'bottom'),
       'settings'      => '1',
       'install'       => array(
                            'autoenable'        => '0',
@@ -53,25 +55,25 @@ $portal_settings['shoutbox'] = array(
         'language'  => 'sb_output_count_limit',
         'property'  => 'text',
         'size'      => '3',
-        'help'      => '',
       ),
   'pk_shoutbox_show_date'           => array(
         'name'      => 'sb_show_date',
         'language'  => 'sb_show_date',
         'property'  => 'checkbox',
-        'help'      => '',
       ),
   'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
         'property'  => 'checkbox',
-        'help'      => '',
       ),
   'pk_shoutbox_input_box_location'  => array(
-        'name'      => 'sb_input_box_below',
-        'language'  => 'sb_input_box_below',
-        'property'  => 'checkbox',
-        'help'      => '',
+        'name'      => 'sb_input_box_location',
+        'language'  => 'sb_input_box_location',
+        'property'  => 'dropdown',
+        'options'   => array(
+              'top'    => 'sb_location_top',
+              'bottom' => 'sb_location_bottom'
+        ),
       ),
   'pk_shoutbox_autoreload'          => array(
         'name'      => 'sb_autoreload',

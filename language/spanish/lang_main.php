@@ -37,6 +37,10 @@ $lang = array(
   // Menu
   'sb_manage_archive'               => 'Administrar Archivo',
 
+  // Archive
+  'sb_written_by'                   => 'written by',
+  'sb_written_at'                   => 'at',
+
   // Admin
   'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
@@ -54,7 +58,9 @@ $lang = array(
   'sb_output_count_limit'           => 'Limitar entradas del shoutbox.',
   'sb_show_date'                    => '¿Mostrar las fechas?',
   'sb_show_archive'                 => 'Mostrar Archivo?',
-  'sb_input_box_below'              => '¿Caja de texto debajo de las entradas?',
+  'sb_input_box_location'           => 'Location of input box',
+  'sb_location_top'                 => 'Above entries',
+  'sb_location_bottom'              => 'Below entries',
   'sb_autoreload'                   => 'Cantidad de segundos a esperar para que recargue automaticamente el Shoutbox (Por defecto 0 = Off)',
   'sb_autoreload_help'              => 'Seleccionar 0 para desactivar la recarga automática',
   'sb_no_character_assigned'        => 'Aún no hay usuarios conectados. Al menos un usuario tiene que estar conectado para poder enviar una entrada.',

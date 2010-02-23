@@ -37,6 +37,10 @@ $lang = array(
   // Menu
   'sb_manage_archive'               => 'Manage Archive',
 
+  // Archive
+  'sb_written_by'                   => 'written by',
+  'sb_written_at'                   => 'at',
+
   // Admin
   'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
@@ -54,7 +58,9 @@ $lang = array(
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',
   'sb_show_date'                    => 'Show date also?',
   'sb_show_archive'                 => 'Show Archive?',
-  'sb_input_box_below'              => 'Input box below entries?',
+  'sb_input_box_location'           => 'Location of input box',
+  'sb_location_top'                 => 'Above entries',
+  'sb_location_bottom'              => 'Below entries',
   'sb_autoreload'                   => 'Time in seconds to wait for automatic reload of Shoutbox (Default 0 = Off)',
   'sb_autoreload_help'              => 'Set to 0 to disable automatic reload',
   'sb_no_character_assigned'        => 'No characters are connected yet. At least one character has to be connected to be able to post.',
