@@ -90,7 +90,7 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-    global $pm, $eqdkp_root_path, $eqdkp, $user;
+    global $pm, $eqdkp_root_path, $eqdkp, $user, $wherevalue;
 
     // initialize output
     $output = '';
@@ -119,8 +119,23 @@ if (!function_exists(shoutbox_module))
       }
       else
       {
-        // return the output for module manager
-        $output = $shoutbox->showShoutbox();
+        // output depending on position
+        $orientation = '';
+        switch ($wherevalue)
+        {
+        case 'left1':
+        case 'left2':
+        case 'right':
+          $orientation = 'vertical';
+          break;
+        case 'middle':
+        case 'bottom':
+          $orientation = 'horizontal';
+          break;
+        }
+        
+        // return the output for module
+        $output = $shoutbox->showShoutbox($orientation);
       }
     }
     else

@@ -154,31 +154,26 @@ if (!class_exists("Shoutbox"))
      * showShoutbox
      * show the complete shoutbox
      *
+     * @param  string  $orientation  orientation vertical/horizontal
+     *
      * @return  string
      */
-    public function showShoutbox()
+    public function showShoutbox($orientation='vertical')
     {
-      global $wherevalue, $eqdkp_root_path, $pcache;
+      global $eqdkp_root_path, $pcache;
 
       $htmlOut = '';
 
       // get ids
       $shoutbox_ids = $this->getShoutboxOutEntries();
 
-      // output depending on position
-      switch ($wherevalue)
+      // get the layout
+      $layout_file = $eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
+      if (file_exists($layout_file))
       {
-      case 'left1':
-      case 'left2':
-      case 'right':
-        include_once($eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_vertical.class.php');
-        $shoutbox_style = new sb_vertical($shoutbox_ids);
-        break;
-      case 'middle':
-      case 'bottom':
-        include_once($eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_horizontal.class.php');
-        $shoutbox_style = new sb_horizontal($shoutbox_ids);
-        break;
+        include_once($layout_file);
+        $class_name = 'sb_'.$orientation;
+        $shoutbox_style = new $class_name($shoutbox_ids);
       }
 
       // show shoutbox
