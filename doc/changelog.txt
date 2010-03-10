@@ -20,7 +20,7 @@ Changelog
 0.2.0 [xx/12/2009][Aderyn]
   Version for EQDKP 0.7
   Implemented - Caching
-  Implemented - New Archive
+  Implemented - Shoutbox Archive
 
 0.1.8 [08/12/2009][Aderyn]
   Fixed - Changed Timestamp to int in database

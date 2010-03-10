@@ -52,11 +52,11 @@ if (!class_exists("Shoutbox"))
      */
     public function __construct()
     {
-      global $eqdkp, $pcache;
+      global $eqdkp, $pcache, $user;
 
       $this->rss = new UniversalFeedCreator();
-      $this->rss->title          = 'Shoutbox';
-      $this->rss->description    = $eqdkp->config['main_title'].' - Shoutbox';
+      $this->rss->title          = $user->lang['shoutbox'];
+      $this->rss->description    = $eqdkp->config['main_title'].' - '.$user->lang['shoutbox'];
       $this->rss->link           = $pcache->BuildLink();
       $this->rss->syndicationURL = $pcache->BuildLink().$_SERVER['PHP_SELF'];
 
@@ -117,6 +117,9 @@ if (!class_exists("Shoutbox"))
         // process hook queue
         $pdh->process_hook_queue();
 
+        // recreate RSS
+        $this->createRSS();
+
         return true;
       }
 
@@ -144,6 +147,9 @@ if (!class_exists("Shoutbox"))
         // process hook queue
         $pdh->process_hook_queue();
 
+        // recreate RSS
+        $this->createRSS();
+
         return $result;
       }
 
@@ -160,7 +166,7 @@ if (!class_exists("Shoutbox"))
      */
     public function showShoutbox($orientation='vertical')
     {
-      global $eqdkp_root_path, $pcache;
+      global $eqdkp_root_path, $pcache, $tpl, $eqdkp, $user;
 
       $htmlOut = '';
 
@@ -180,12 +186,13 @@ if (!class_exists("Shoutbox"))
       if ($shoutbox_style)
         $htmlOut .= $shoutbox_style->showShoutbox();
 
-      // create RSS feed
-      $this->createRSS($shoutbox_ids);
+      // create RSS feed if they do not exist
+      $rss_file = $pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      if (!is_file($rss_file))
+        $this->createRSS();
 
       // add link to RSS
-      $htmlOut .= '<link rel="alternate" type="application/rss+xml" title="EQDkp-Plus Shoutbox"
-                    href="'.$pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox').'" />';
+      $tpl->add_rssfeed($eqdkp->config['guildtag'].' - '.$user->lang['shoutbox'], $rss_file);
 
       return $htmlOut;
     }
@@ -223,9 +230,6 @@ if (!class_exists("Shoutbox"))
       if ($shoutbox_style)
         $htmlOut .= $shoutbox_style->getContent($rpath, $decode);
 
-      // create RSS feed
-      $this->createRSS($shoutbox_ids);
-
       return $htmlOut;
     }
 
@@ -259,16 +263,16 @@ if (!class_exists("Shoutbox"))
     /**
      * createRSS
      * create RSS feed
-     *
-     * @param  array  $shoutbox_ids  Array of shoutbox ids to create RSS from
      */
-    private function createRSS($shoutbox_ids)
+    private function createRSS()
     {
       global $pcache, $pdh;
 
-      // create RSS feed item
+      // get shoutbox ids
+      $shoutbox_ids = $this->getShoutboxOutEntries();
       if (is_array($shoutbox_ids))
       {
+        // create RSS feed item
         foreach ($shoutbox_ids as $shoutbox_id)
         {
           $rssitem = new FeedItem();
