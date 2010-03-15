@@ -147,7 +147,7 @@ if (!class_exists("Shoutbox"))
       }
 
       // get last $(limit) entries
-      $sql = 'SELECT members.member_name, members.member_class_id, members.member_id, 
+      $sql = 'SELECT members.member_name, members.member_class_id, members.member_id,
                      shoutbox.shoutbox_date, shoutbox.shoutbox_text, shoutbox.shoutbox_id
               FROM `__shoutbox` AS shoutbox
               LEFT JOIN `__members` AS members ON members.member_id = shoutbox.member_id
@@ -400,7 +400,7 @@ if (!class_exists("Shoutbox"))
       {
         $no_entries = ($decode == true) ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries'];
 
-        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
+        $html .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                     <tr class="'.$eqdkp->switch_row_class().'"><td><div align="center">'.$no_entries.'</div></td></tr>
                   </table>';
       }
