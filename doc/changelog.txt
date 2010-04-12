@@ -17,6 +17,12 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
+0.2.0 [12/04/2010][Aderyn]
+  Fixed - [#1774] Shoutbox Uhrzeit stimmt nicht
+
+0.1.9 [15/03/2010][Aderyn]
+  Another Timestamp fix
+
 0.1.8 [08/12/2009][Aderyn]
   Fixed - Changed Timestamp to int in database
   Implemented - bad_cataclysm Template

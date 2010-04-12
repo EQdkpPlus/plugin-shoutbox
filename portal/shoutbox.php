@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(                        // the same name as the folder!
       'name'          => 'Shoutbox Module',                // The name to show
       'path'          => 'shoutbox',                       // Folder name again
-      'version'       => '0.1.9',                          // Version
+      'version'       => '0.2.0',                          // Version
       'author'        => 'Aderyn',                         // Author
       'contact'       => 'Aderyn@gmx.net',                 // email/internet adress
       'description'   => 'Display a shoutbox',             // Detailed Description
@@ -94,7 +94,7 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-    global $pm, $eqdkp_root_path, $eqdkp, $user;
+    global $pm, $eqdkp_root_path, $eqdkp, $user, $db, $sb_conf;
 
     // initialize output
     $output = '';
@@ -112,6 +112,8 @@ if (!function_exists(shoutbox_module))
 
         include_once($feedcreator_file);
         include_once($shoutbox_file);
+
+        // create the shoutbox object
         $shoutbox = new Shoutbox();
 
         // do requirements check
@@ -126,6 +128,16 @@ if (!function_exists(shoutbox_module))
         }
         else
         {
+          // read in config
+          $sql = 'SELECT * FROM `__shoutbox_config`';
+          if (($config_result = $db->query($sql)))
+          {
+            while(($rowc = $db->fetch_record($config_result)))
+            {
+              $sb_conf[$rowc['config_name']] = $rowc['config_value'];
+            }
+            $db->free_result($config_result);
+          }
           // return the output for module manager
           $output = $shoutbox->showShoutbox();
         }
