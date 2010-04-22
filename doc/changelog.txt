@@ -17,10 +17,16 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
-0.2.0 [xx/12/2009][Aderyn]
+0.3.0 [xx/04/2010][Aderyn]
   Version for EQDKP 0.7
   Implemented - Caching
   Implemented - Shoutbox Archive
+
+0.2.0 [12/04/2010][Aderyn]
+  Fixed - [#1774] Shoutbox Uhrzeit stimmt nicht
+
+0.1.9 [15/03/2010][Aderyn]
+  Another Timestamp fix
 
 0.1.8 [08/12/2009][Aderyn]
   Fixed - Changed Timestamp to int in database

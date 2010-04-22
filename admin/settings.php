@@ -114,6 +114,7 @@ else
 
 
 // -- Template ----------------------------------------------------------------
+$jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->assign_vars(array (
   // form
   'F_CONFIG'          => 'settings.php'.$SID,
@@ -136,7 +137,6 @@ $tpl->assign_vars(array (
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
 
   // credits
-  'JS_ABOUT'          => $jquery->Dialog_URL('About', $user->lang['sb_about_header'], '../about.php', '400', '250'),
   'SB_INFO_IMG'       => '../images/credits/info.png',
   'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
 ));

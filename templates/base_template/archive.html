@@ -1,3 +1,100 @@
-<!-- INCLUDE ../../../../templates/{TMPL_FOLDERNAME}/page_header.html -->
-<!-- INCLUDE ../sb_archive.html -->
-<!-- INCLUDE ../../../../templates/{TMPL_FOLDERNAME}/page_tail.html -->
+
+<script type="text/javascript">
+  function onShoutboxArchiveSearchFocus(input)
+  {
+    if (input.value == '{L_SEARCH}...')
+      input.value = '';
+  }
+
+  function onShoutboxArchiveSearchBlur(input)
+  {
+    if (input.value == '')
+      input.value = '{L_SEARCH}...';
+  }
+</script>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">
+      <span style="float:left">
+        <a href="{LINK_ARCHIVE}">{L_ARCHIVE}</a> {L_PAGE_TITLE}
+      </span>
+      <span style="float:right">
+        <form action="{LINK_ARCHIVE}" method="post">
+          <input type="text" class="input" value="{L_SEARCH}..." name="search" onFocus="onShoutboxArchiveSearchFocus(this);" onBlur="onShoutboxArchiveSearchBlur(this);">
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}">
+        </form>
+      </span>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="150" valign="top">
+            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+              <!-- BEGIN year_row -->
+              <tr>
+                <th align="center">{year_row.YEAR}</th>
+              </tr>
+              <!-- BEGIN month_row -->
+              <tr class="{year_row.month_row.CLASS}">
+                <td>
+                  <span style="float:left">
+                    &nbsp;
+                    <a href="{year_row.month_row.LINK_VIEW}">
+                      <img src="{EQDKP_ROOT_PATH}images/arrow.gif">&nbsp;&nbsp;{year_row.month_row.MONTH}
+                    </a>
+                  </span>
+                  <span style="float:right">
+                    ({year_row.month_row.COUNT})
+                  </span>
+                </td>
+              </tr>
+              <!-- END month_row -->
+              <!-- END year_row -->
+            </table>
+          </td>
+          <td valign="top">
+            <!-- IF S_COUNT gt 0 -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="2" class="border01">
+              <!-- BEGIN shoutbox_row -->
+              <tr>
+                <th align="left">
+                  <!-- IF CAN_DELETE -->
+                  <form action="{LINK_ARCHIVE}" method="post">
+                    <span style="float:right">
+                      <!-- IF S_YEAR --><input type="hidden" name="year" value="{S_YEAR}" /><!-- ENDIF S_YEAR -->
+                      <!-- IF S_MONTH --><input type="hidden" name="month" value="{S_MONTH}" /><!-- ENDIF S_MONTH -->
+                      <!-- IF S_SEARCH --><input type="hidden" name="search" value="{S_SEARCH}" /><!-- ENDIF S_SEARCH -->
+                      <input type="hidden" name="delete_id" value="{shoutbox_row.ID}" />
+                      <input type="submit" name="sb_delete" value="{L_DELETE}" class="liteoption bi_delete" />
+                    </span>
+                  </form>
+                  <!-- ENDIF -->
+                </th>
+              </tr>
+              <tr class="row1">
+                <td class="{shoutbox_row.CLASS}">
+                  <span style="float:left">{shoutbox_row.DATE} - {L_WRITTEN_BY} {shoutbox_row.MEMBER} {L_WRITTEN_AT} {shoutbox_row.TIME}</span>
+                  <br/>
+                  <hr noshade />
+                  <div class="newscontainer">{shoutbox_row.MESSAGE}</div>
+                </td>
+              </tr>
+              <!-- END shoutbox_row -->
+            </table>
+            <!-- ELSE -->
+            <table width="100%" border="0" cellspacing="1" cellpadding="2">
+              <tr><th>&nbsp;</th></tr>
+              <tr><td class="row1">{L_NO_ENTRIES}</td></tr>
+              <tr><th>&nbsp;</th></tr>
+            </table>
+            <!-- ENDIF S_COUNT -->
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br/>

@@ -45,11 +45,11 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $eqdkp->set_vars(array (
-  'page_title'        => $user->lang['shoutbox'],
-  'template_path'     => $pm->get_data('shoutbox', 'template_path'),
-  'template_file'     => 'show.html',
-  'gen_simple_header' => true,
-  'display'           => true
+  'page_title'    => $user->lang['shoutbox'],
+  'template_path' => $pm->get_data('shoutbox', 'template_path'),
+  'template_file' => 'show.html',
+  'header_format' => 'simple',
+  'display'       => true
   )
 );
 

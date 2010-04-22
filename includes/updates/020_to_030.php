@@ -21,7 +21,7 @@ if (!defined('EQDKP_INC'))
   header('HTTP/1.0 404 Not Found');exit;
 }
 
-$new_version = '0.2.0';
+$new_version = '0.3.0';
 $updateFunction = false;
 $reloadSETT = 'settings.php';
 

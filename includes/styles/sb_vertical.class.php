@@ -153,7 +153,7 @@ if (!class_exists("sb_vertical"))
       {
         $no_entries = ($utf8_encode ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries']);
 
-        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
+        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                        <tr class="'.$eqdkp->switch_row_class().'">
                          <td><div align="center">'.$no_entries.'</div></td>
                        </tr>
