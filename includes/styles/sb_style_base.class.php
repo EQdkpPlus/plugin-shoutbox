@@ -66,12 +66,11 @@ if (!class_exists("sb_style_base"))
      * getContent
      * get the content only of the shoutbox
      *
-     * @param  string   $rpath        root path
-     * @param  boolean  $utf8_encode  Encode UTF8?
+     * @param  string  $rpath  root path
      *
      * @return  string
      */
-    public function getContent($rpath='', $utf8_encode=false)
+    public function getContent($rpath='')
     {
       global $eqdkp_root_path;
 
@@ -83,7 +82,7 @@ if (!class_exists("sb_style_base"))
                   </form>';
 
       // layout content
-      $htmlOut .= $this->layoutContent($root_path, $utf8_encode);
+      $htmlOut .= $this->layoutContent($root_path);
 
       return $htmlOut;
     }
@@ -100,12 +99,11 @@ if (!class_exists("sb_style_base"))
      * layoutContent
      * layout the content only of the shoutbox
      *
-     * @param  string   $root_path    root path
-     * @param  boolean  $utf8_encode  Encode UTF8?
+     * @param  string  $root_path  root path
      *
      * @return  string
      */
-    protected abstract function layoutContent($root_path, $utf8_encode);
+    protected abstract function layoutContent($root_path);
 
     /**
      * shoutboxJCode

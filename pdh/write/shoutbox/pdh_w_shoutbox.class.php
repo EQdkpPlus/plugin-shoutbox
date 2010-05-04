@@ -121,14 +121,8 @@ if (!class_exists('pdh_w_shoutbox'))
     {
       global $bbcode;
 
-      // No html or javascript in shoutbox entries
-      $cleanup_text = strip_tags($text);
-
       // wrap words (do own handling cause of bbcodes)
-      $cleanup_text = $this->shoutbox_wordwrap($cleanup_text, $this->wordwrap, "\n", true);
-
-      // convert UTF8 htmlentities
-      $cleanup_text = $this->utf8_htmlentities($cleanup_text);
+      $cleanup_text = $this->shoutbox_wordwrap($text, $this->wordwrap, "\n", true);
 
       // wrap around with <p>
       $cleanup_text = '<p>'.$cleanup_text.'</p>';
@@ -201,92 +195,6 @@ if (!class_exists('pdh_w_shoutbox'))
       }
 
       return $wraped_text;
-    }
-
-    /**
-     * utf8_htmlentities
-     * get html entities of UTF-8 string
-     *
-     * @param  string  $content  text to replace entities
-     *
-     * @return  string
-     */
-    private function utf8_htmlentities($content)
-    {
-      // convert to array, and convert each array element to entity if neccessary
-      $contents = $this->unicode_string_to_array($content);
-      $count = count($contents);
-
-      $swap = '';
-      for ($i = 0; $i < $count; $i++)
-      {
-        $contents[$i] = $this->unicode_entity_replace($contents[$i]);
-        $swap .= $contents[$i];
-      }
-
-      return mb_convert_encoding($swap, 'UTF-8');
-    }
-
-    /**
-     * unicode_string_to_array
-     * convert unicode string to array of unicode chars
-     *
-     * @param  string  $string  unicode string to make array of
-     *
-     * @return  array
-     */
-    private function unicode_string_to_array($string)
-    {
-      $strlen = mb_strlen($string);
-      while ($strlen)
-      {
-        $array[] = mb_substr($string, 0, 1, 'UTF-8');
-        $string = mb_substr($string, 1, $strlen, 'UTF-8');
-        $strlen = mb_strlen($string);
-      }
-
-      return $array;
-    }
-
-    /**
-     * unicode_entity_replace
-     * replace unicode char by html entity
-     *
-     * @param  char  $c  unicode character
-     *
-     * @return  array
-     */
-    private function unicode_entity_replace($c)
-    {
-      // get ornial of character, if less than 127, just return, else check for UTF8 and decode
-      $h = ord($c{0});
-      if ($h <= 0x7F)
-      {
-        return $c;
-      }
-      else if ($h < 0xC2)
-      {
-        return $c;
-      }
-
-      if ($h <= 0xDF)
-      {
-        $h = ($h & 0x1F) << 6 | (ord($c{1}) & 0x3F);
-        $h = '&#'.$h.';';
-        return $h;
-      }
-      else if ($h <= 0xEF)
-      {
-        $h = ($h & 0x0F) << 12 | (ord($c{1}) & 0x3F) << 6 | (ord($c{2}) & 0x3F);
-        $h = '&#'.$h.';';
-        return $h;
-      }
-      else if ($h <= 0xF4)
-      {
-        $h = ($h & 0x0F) << 18 | (ord($c{1}) & 0x3F) << 12 | (ord($c{2}) & 0x3F) << 6 | (ord($c{3}) & 0x3F);
-        $h = '&#'.$h.';';
-        return $h;
-      }
     }
 
   } //end class

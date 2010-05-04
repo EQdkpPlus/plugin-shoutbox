@@ -45,9 +45,9 @@ if ($in->get('save_settings'))
 {
   // take over new values
   $savearray = array(
-      'sb_updatecheck'  =>  $in->get('sb_updatecheck', 0),
-      'sb_timezone'     =>  $in->get('sb_timezone'),
-      'sb_dstcorrect'   =>  $in->get('sb_dstcorrect', 0),
+      'sb_updatecheck' => $in->get('sb_updatecheck', 0),
+      'sb_timezone'    => $in->get('sb_timezone'),
+      'sb_dstcorrect'  => $in->get('sb_dstcorrect', 0),
   );
 
   // update configuration
@@ -58,7 +58,6 @@ if ($in->get('save_settings'))
     {
       $pdc->del('pdh_shoutbox_table');
     }
-
     // redirect
     redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
   }

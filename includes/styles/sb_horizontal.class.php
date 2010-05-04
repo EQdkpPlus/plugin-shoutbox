@@ -79,12 +79,11 @@ if (!class_exists("sb_horizontal"))
      * layoutContent
      * layout the content only of the shoutbox
      *
-     * @param  string   $root_path    root path
-     * @param  boolean  $utf8_encode  Encode UTF8?
+     * @param  string  $root_path  root path
      *
      * @return  string
      */
-    public function layoutContent($root_path, $utf8_encode)
+    public function layoutContent($root_path)
     {
       global $user, $eqdkp, $SID, $pdh, $eqdkp_root_path;
 
@@ -115,7 +114,6 @@ if (!class_exists("sb_horizontal"))
               $user->check_auth('a_shoutbox_delete', false))
           {
             $img = $root_path.'images/global/delete.png';
-            $delete_text = ($utf8_encode ? utf8_encode($user->lang['delete']) : $user->lang['delete']);
 
             // Java Script for delete
             $htmlOut .= '<span class="small bold floatRight hand" style="padding-right: 5px;" onclick="$(\'#del_shoutbox\').ajaxSubmit(
@@ -123,11 +121,11 @@ if (!class_exists("sb_horizontal"))
                              target: \'#htmlShoutboxTable\',
                              url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_delete='.$shoutbox_id.'&sb_root='.urlencode($root_path).'&sb_orientation=horizontal\',
                              beforeSubmit: function(formData, jqForm, options) {
-                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$delete_text.'\');
+                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$user->lang['delete'].'\');
                              }
                            }); ">
                            <span id="shoutbox_delete_button_'.$shoutbox_id.'">
-                             <img src="'.$img.'" alt="'.$delete_text.'" title="'.$delete_text.'"/>
+                             <img src="'.$img.'" alt="'.$user->lang['delete'].'" title="'.$user->lang['delete'].'"/>
                            </span>
                          </span>';
           }
@@ -135,7 +133,7 @@ if (!class_exists("sb_horizontal"))
           // output date as well as User and text
           $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $eqdkp->config['sb_show_date'])).
                       '<br/>'.
-                      $pdh->geth('shoutbox', 'membername', array($shoutbox_id, $utf8_encode)).
+                      $pdh->geth('shoutbox', 'membername', array($shoutbox_id)).
                       '</td><td style="padding-left: 7px;">'.
                       $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root_path));
 
@@ -148,11 +146,9 @@ if (!class_exists("sb_horizontal"))
       }
       else
       {
-        $no_entries = ($utf8_encode ? utf8_encode($user->lang['sb_no_entries']) : $user->lang['sb_no_entries']);
-
         $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                        <tr class="'.$eqdkp->switch_row_class().'">
-                         <td><div align="center">'.$no_entries.'</div></td>
+                         <td><div align="center">'.$user->lang['sb_no_entries'].'</div></td>
                        </tr>
                      </table>';
       }

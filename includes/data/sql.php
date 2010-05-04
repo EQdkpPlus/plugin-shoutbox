@@ -30,17 +30,17 @@ $shoutboxSQL = array(
 
   'install'   => array(
     '1'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox` (
-                  `shoutbox_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-                  `member_id` smallint(5) default \'-1\',
-                  `shoutbox_date` INT(11) UNSIGNED NOT NULL default \'0\',
-                  `shoutbox_text` text default NULL,
+                  `shoutbox_id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  `member_id` SMALLINT(5) DEFAULT \'-1\',
+                  `shoutbox_date` INT(11) UNSIGNED NOT NULL DEFAULT \'0\',
+                  `shoutbox_text` TEXT COLLATE utf8_bin DEFAULT NULL,
                   PRIMARY KEY (`shoutbox_id`)
-                )TYPE=InnoDB;',
+                ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;',
     '2'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox_config` (
-                  `config_name` varchar(255) NOT NULL default \'\',
-                  `config_value` varchar(255) default NULL,
+                  `config_name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT \'\',
+                  `config_value` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
                   PRIMARY KEY (`config_name`)
-                )TYPE=InnoDB;',
+                ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;',
   ),
 );
 

@@ -203,11 +203,10 @@ if (!class_exists("Shoutbox"))
      *
      * @param  string   $orientation  orientation vertical/horizontal
      * @param  string   $rpath        root path
-     * @param  boolean  $decode       UTF8 decode?
      *
      * @return  string
      */
-    public function getContent($orientation, $rpath='', $decode=false)
+    public function getContent($orientation, $rpath='')
     {
       global $eqdkp_root_path, $pcache, $pdh;
 
@@ -228,7 +227,7 @@ if (!class_exists("Shoutbox"))
 
       // get content
       if ($shoutbox_style)
-        $htmlOut .= $shoutbox_style->getContent($rpath, $decode);
+        $htmlOut .= $shoutbox_style->getContent($rpath);
 
       return $htmlOut;
     }
@@ -276,12 +275,12 @@ if (!class_exists("Shoutbox"))
         foreach ($shoutbox_ids as $shoutbox_id)
         {
           $rssitem = new FeedItem();
-          $rssitem->title       = $pdh->get('shoutbox', 'membername', array($shoutbox_id, $decode));
+          $rssitem->title       = utf8_decode($pdh->get('shoutbox', 'membername', array($shoutbox_id)));
           $rssitem->link        = $this->rss->link;
-          $rssitem->description = $pdh->geth('shoutbox', 'text', array($shoutbox_id));
+          $rssitem->description = utf8_decode($pdh->geth('shoutbox', 'text', array($shoutbox_id)));
           $rssitem->date        = $pdh->get('shoutbox', 'date', array($shoutbox_id));
           $rssitem->source      = $this->rss->link;
-          $rssitem->author      = $pdh->get('shoutbox', 'membername', array($shoutbox_id, $decode));
+          $rssitem->author      = utf8_decode($pdh->get('shoutbox', 'membername', array($shoutbox_id)));
           $rssitem->guid        = $shoutbox_id;
           $this->rss->addItem($rssitem);
         }
@@ -303,11 +302,15 @@ if (!class_exists("Shoutbox"))
       $result = $db->query($sql);
       if ($result)
       {
+        $sb_conf = array();
         while(($row = $db->fetch_record($result)))
         {
-          $eqdkp->config[$row['config_name']] = $row['config_value'];
+          $sb_conf[$row['config_name']] = $row['config_value'];
         }
         $db->free_result($result);
+
+        // merge to EQDKP config
+        $eqdkp->config = array_merge($eqdkp->config, $sb_conf);
       }
     }
 

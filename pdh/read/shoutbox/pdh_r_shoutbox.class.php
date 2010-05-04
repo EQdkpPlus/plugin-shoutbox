@@ -50,9 +50,9 @@ if (!class_exists('pdh_r_shoutbox'))
      * Presets array
      */
     public $presets = array(
-      'sbdate' => array('date',       array('%shoutbox_id%', true),  array()), // Show Date
-      'sbname' => array('membername', array('%shoutbox_id%', false), array()), // No UTF8-Encode
-      'sbtext' => array('text',       array('%shoutbox_id%'),        array())  // Use eqdkp_root_path
+      'sbdate' => array('date',       array('%shoutbox_id%', true),  array()), // true = Show Date
+      'sbname' => array('membername', array('%shoutbox_id%'),        array()),
+      'sbtext' => array('text',       array('%shoutbox_id%'),        array())
     );
 
     /**
@@ -179,34 +179,30 @@ if (!class_exists('pdh_r_shoutbox'))
      * get_membername
      * Return the member name corresponding to the shoutbox id
      *
-     * @param  int      $shoutbox_id  Shoutbox ID
-     * @param  boolean  $encode       Encode with UTF8?
+     * @param  int  $shoutbox_id  Shoutbox ID
      *
      * @returns string
      */
-    public function get_membername($shoutbox_id, $encode=false)
+    public function get_membername($shoutbox_id)
     {
       global $pdh;
 
-      $membername = $pdh->get('member', 'name', array($this->get_memberid($shoutbox_id), false, false));
-      return ($encode ? utf8_encode($membername) : $membername);
+      return $pdh->get('member', 'name', array($this->get_memberid($shoutbox_id), false, false));
     }
 
     /**
      * get_html_membername
      * Return the member name corresponding to the shoutbox id as html
      *
-     * @param  int      $shoutbox_id  Shoutbox ID
-     * @param  boolean  $encode       Encode with UTF8?
+     * @param  int  $shoutbox_id  Shoutbox ID
      *
      * @returns string
      */
-    public function get_html_membername($shoutbox_id, $encode=false)
+    public function get_html_membername($shoutbox_id)
     {
       global $pdh;
 
-      $membername = $pdh->get('member', 'html_name', array($this->get_memberid($shoutbox_id), false, false));
-      return ($encode ? utf8_encode($membername) : $membername);
+      return $pdh->geth('member', 'name', array($this->get_memberid($shoutbox_id), false, false));
     }
 
     /**
