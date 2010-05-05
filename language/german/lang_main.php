@@ -27,12 +27,12 @@ $lang = array(
 
   // Description
   'sb_short_desc'                   => 'Shoutbox',
-  'sb_long_desc'                    => 'Shoutbox ist ein Plugin mit dem User kleine Mitteilungen austauschen können.',
+  'sb_long_desc'                    => 'Shoutbox ist ein Plugin mit dem User kleine Mitteilungen austauschen kÃ¶nnen.',
 
   // General
   'sb_plugin_not_installed'         => 'Das Shoutbox Plugin ist nicht installiert',
-  'sb_php_version'                  => "Shoutbox benötigt PHP %1\$s oder höher. Dein Server läuft mit PHP %2\$s",
-  'sb_plus_version'                 => "Shoutbox benötigt EQDKP-PLUS %1\$s oder höher. Die installierte Version ist %2\$s",
+  'sb_php_version'                  => "Shoutbox benÃ¶tigt PHP %1\$s oder hÃ¶her. Dein Server lÃ¤uft mit PHP %2\$s",
+  'sb_plus_version'                 => "Shoutbox benÃ¶tigt EQDKP-PLUS %1\$s oder hÃ¶her. Die installierte Version ist %2\$s",
 
   // Menu
   'sb_manage_archive'               => 'Archiv Verwalten',
@@ -44,8 +44,8 @@ $lang = array(
   // Admin
   'sb_date_format'                  => 'd.m.Y H:i',  // DD.MM.YYYY HH:mm
   'sb_time_format'                  => 'H:i',        // HH:mm
-  'sb_delete_success'               => 'Einträge erfolgreich gelöscht',
-  'sb_settings_info'                => 'Weitere Einstellungen für die Shoutbox findet Ihr unter den <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodul Einstellungen</a>',
+  'sb_delete_success'               => 'EintrÃ¤ge erfolgreich gelÃ¶scht',
+  'sb_settings_info'                => 'Weitere Einstellungen fÃ¼r die Shoutbox findet Ihr unter den <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodul Einstellungen</a>',
 
   // Configuration
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',
@@ -55,24 +55,24 @@ $lang = array(
   'sb_dstcorrect'                   => 'Automatisch auf Sommerzeit umstellen?',
 
   // Portal Modules
-  'sb_output_count_limit'           => 'Maximale Anzahl an Shoutbox Einträgen.',
-  'sb_show_date'                    => 'Zusätzlich das Datum anzeigen?',
+  'sb_output_count_limit'           => 'Maximale Anzahl an Shoutbox EintrÃ¤gen.',
+  'sb_show_date'                    => 'ZusÃ¤tzlich das Datum anzeigen?',
   'sb_show_archive'                 => 'Archiv anzeigen?',
   'sb_input_box_location'           => 'Position des Eingabefeldes',
-  'sb_location_top'                 => 'Oberhalb der Einträge',
-  'sb_location_bottom'              => 'Unterhalb der Einträge',
+  'sb_location_top'                 => 'Oberhalb der EintrÃ¤ge',
+  'sb_location_bottom'              => 'Unterhalb der EintrÃ¤ge',
   'sb_autoreload'                   => 'Zeit in Sekunden nach der die Shoutbox automatisch neu geladen werden soll (Standard 0 = Aus)',
   'sb_autoreload_help'              => 'Wird 0 eingetragen so wird das automatische Neu Laden abgeschalten',
-  'sb_no_character_assigned'        => 'Es wurde kein Charakter verknüpft. Es muss ein Charakter verknüpft sein bevor Einträge gemacht werden können.',
+  'sb_no_character_assigned'        => 'Es wurde kein Charakter verknÃ¼pft. Es muss ein Charakter verknÃ¼pft sein bevor EintrÃ¤ge gemacht werden kÃ¶nnen.',
   'sb_submit_text'                  => 'Absenden',
   'sb_save_wait'                    => 'Speichern, bitte warten...',
   'sb_reload'                       => 'Neu laden',
-  'sb_no_entries'                   => 'Keine Einträge',
+  'sb_no_entries'                   => 'Keine EintrÃ¤ge',
   'sb_archive'                      => 'Archiv',
   'sb_shoutbox_archive'             => 'Shoutbox Archiv',
 
   // About/Credits
-  'sb_about_header'                 => 'Über Shoutbox',
+  'sb_about_header'                 => 'Ãœber Shoutbox',
   'sb_credits_part1'                => 'Shoutbox v',
   'sb_credits_part2'                => ' von Aderyn',
   'sb_copyright'                    => 'Copyright',

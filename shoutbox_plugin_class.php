@@ -28,7 +28,7 @@ if (!defined('EQDKP_INC'))
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
   public $version    = '0.3.0';
-  public $build      = '7736';
+  public $build      = '7756';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 
@@ -67,9 +67,11 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     ));
 
     // -- Register our permissions ------------------------
-    // 2 = Super-Admin, 3 = Admin, 4 = Member
-    $this->add_permission('a_shoutbox_delete', 'N', $user->lang['delete'], array(2,3));
-    $this->add_permission('u_shoutbox_add',    'Y', $user->lang['add'],    array(2,3,4));
+    // permissions: 'a'=admins, 'u'=user
+    // ('a'/'u', Permission-Name, Enable? 'Y'/'N', Language string, array of user-group-ids that should have this permission)
+    // Groups: 2 = Super-Admin, 3 = Admin, 4 = Member
+    $this->add_permission('a', 'delete', 'N', $user->lang['delete'], array(2,3));
+    $this->add_permission('u', 'add',    'Y', $user->lang['add'],    array(2,3,4));
 
     // -- Menu --------------------------------------------
     $this->add_menu('admin_menu', $this->gen_admin_menu());
