@@ -275,12 +275,12 @@ if (!class_exists("Shoutbox"))
         foreach ($shoutbox_ids as $shoutbox_id)
         {
           $rssitem = new FeedItem();
-          $rssitem->title       = utf8_decode($pdh->get('shoutbox', 'membername', array($shoutbox_id)));
+          $rssitem->title       = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
           $rssitem->link        = $this->rss->link;
-          $rssitem->description = utf8_decode($pdh->geth('shoutbox', 'text', array($shoutbox_id)));
+          $rssitem->description = $pdh->geth('shoutbox', 'text', array($shoutbox_id));
           $rssitem->date        = $pdh->get('shoutbox', 'date', array($shoutbox_id));
           $rssitem->source      = $this->rss->link;
-          $rssitem->author      = utf8_decode($pdh->get('shoutbox', 'membername', array($shoutbox_id)));
+          $rssitem->author      = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
           $rssitem->guid        = $shoutbox_id;
           $this->rss->addItem($rssitem);
         }
