@@ -34,7 +34,7 @@ $portal_module['shoutbox'] = array(               // the same name as the folder
                                'middle', 'bottom'),
       'settings'      => '1',
       'install'       => array(
-                           'autoenable'        => '0',
+                           'autoenable'        => '1',
                            'defaultposition'   => 'left2',
                            'defaultnumber'     => '1',
                          ),
@@ -133,7 +133,7 @@ if (!function_exists(shoutbox_module))
           $orientation = 'horizontal';
           break;
         }
-        
+
         // return the output for module
         $output = $shoutbox->showShoutbox($orientation);
       }

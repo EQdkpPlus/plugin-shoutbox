@@ -52,13 +52,13 @@ if (!class_exists("Shoutbox"))
      */
     public function __construct()
     {
-      global $eqdkp, $pcache, $user;
+      global $eqdkp, $user;
 
       $this->rss = new UniversalFeedCreator();
       $this->rss->title          = $user->lang['shoutbox'];
       $this->rss->description    = $eqdkp->config['main_title'].' - '.$user->lang['shoutbox'];
-      $this->rss->link           = $pcache->BuildLink();
-      $this->rss->syndicationURL = $pcache->BuildLink().$_SERVER['PHP_SELF'];
+      $this->rss->link           = $eqdkp->BuildLink();
+      $this->rss->syndicationURL = $eqdkp->BuildLink().$_SERVER['PHP_SELF'];
 
       // read in shoutbox config
       $this->readConfig();
@@ -187,7 +187,7 @@ if (!class_exists("Shoutbox"))
         $htmlOut .= $shoutbox_style->showShoutbox();
 
       // create RSS feed if they do not exist
-      $rss_file = $pcache->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      $rss_file = $eqdkp->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
       if (!is_file($rss_file))
         $this->createRSS();
 
