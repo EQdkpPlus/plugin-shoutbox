@@ -30,6 +30,8 @@ if (!class_exists('update_shoutbox_030'))
   {
     public $author      = 'Aderyn';
     public $version     = '0.3.0';    // new version
+	public $name		= 'Shoutbox 0.3.0 Update';
+	public $type 		= 'plugin_update';
     public $plugin_path = 'shoutbox'; // important!
   
     /**
