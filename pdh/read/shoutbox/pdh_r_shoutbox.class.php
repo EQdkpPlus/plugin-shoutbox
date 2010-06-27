@@ -83,7 +83,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function init()
     {
-      global $pdc, $db, $eqdkp;
+      global $pdc, $db, $core;
 
       // try to get from cache first
       $this->data = $pdc->get('pdh_shoutbox_table');
@@ -113,7 +113,7 @@ if (!class_exists('pdh_r_shoutbox'))
         while (($row = $db->fetch_record($result)))
         {
           // DST date correction?
-          if ($eqdkp->config['sb_dstcorrect'] == 1 && $correction != 0)
+          if ($core->config['sb_dstcorrect'] == 1 && $correction != 0)
           {
             $row['shoutbox_date'] = $row['shoutbox_date'] + $correction;
           }

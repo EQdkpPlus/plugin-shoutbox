@@ -52,19 +52,19 @@ if (!class_exists("Shoutbox"))
      */
     public function __construct()
     {
-      global $eqdkp, $user;
+      global $core, $user;
 
       $this->rss = new UniversalFeedCreator();
       $this->rss->title          = $user->lang['shoutbox'];
-      $this->rss->description    = $eqdkp->config['main_title'].' - '.$user->lang['shoutbox'];
-      $this->rss->link           = $eqdkp->BuildLink();
-      $this->rss->syndicationURL = $eqdkp->BuildLink().$_SERVER['PHP_SELF'];
+      $this->rss->description    = $core->config['main_title'].' - '.$user->lang['shoutbox'];
+      $this->rss->link           = $core->BuildLink();
+      $this->rss->syndicationURL = $core->BuildLink().$_SERVER['PHP_SELF'];
 
       // read in shoutbox config
       $this->readConfig();
 
       // get output limit
-      $this->output_limit = ($eqdkp->config['sb_output_count_limit'] > 0 ? $eqdkp->config['sb_output_count_limit'] : 10);
+      $this->output_limit = ($core->config['sb_output_count_limit'] > 0 ? $core->config['sb_output_count_limit'] : 10);
     }
 
     /**
@@ -166,7 +166,7 @@ if (!class_exists("Shoutbox"))
      */
     public function showShoutbox($orientation='vertical')
     {
-      global $eqdkp_root_path, $pcache, $tpl, $eqdkp, $user;
+      global $eqdkp_root_path, $pcache, $tpl, $core, $user;
 
       $htmlOut = '';
 
@@ -187,12 +187,12 @@ if (!class_exists("Shoutbox"))
         $htmlOut .= $shoutbox_style->showShoutbox();
 
       // create RSS feed if they do not exist
-      $rss_file = $eqdkp->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      $rss_file = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
       if (!is_file($rss_file))
         $this->createRSS();
 
       // add link to RSS
-      $tpl->add_rssfeed($eqdkp->config['guildtag'].' - '.$user->lang['shoutbox'], $rss_file);
+      $tpl->add_rssfeed($core->config['guildtag'].' - '.$user->lang['shoutbox'], $rss_file);
 
       return $htmlOut;
     }
@@ -296,7 +296,7 @@ if (!class_exists("Shoutbox"))
      */
     private function readConfig()
     {
-      global $eqdkp, $db;
+      global $core, $db;
 
       $sql = 'SELECT * FROM `__shoutbox_config`';
       $result = $db->query($sql);
@@ -310,7 +310,7 @@ if (!class_exists("Shoutbox"))
         $db->free_result($result);
 
         // merge to EQDKP config
-        $eqdkp->config = array_merge($eqdkp->config, $sb_conf);
+        $core->config = array_merge($core->config, $sb_conf);
       }
     }
 

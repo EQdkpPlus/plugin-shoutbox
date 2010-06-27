@@ -37,7 +37,7 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
   // -- Insert? ---------------------------------------------
   if ($sb_text && $sb_member_id != -1)
   {
-    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($eqdkp->config['sb_timezone'] ? $eqdkp->config['sb_timezone'] : 0));
+    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($core->config['sb_timezone'] ? $core->config['sb_timezone'] : 0));
   }
   // -- Delete? ---------------------------------------------
   else if ($sb_delete)
@@ -51,7 +51,7 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 else
 {
   $error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline">
-              <tr class="'.$eqdkp->switch_row_class().'">
+              <tr class="'.$core->switch_row_class().'">
                 <td><div align="center">'.$user->lang['sb_plugin_not_installed'].'</div></td>
               </tr>
             </table>';

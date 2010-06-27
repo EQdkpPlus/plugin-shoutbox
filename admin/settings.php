@@ -54,7 +54,7 @@ if ($in->get('save_settings'))
   if ($wpfcdb->UpdateConfig($savearray, $wpfcdb->CheckDBFields('config_name')))
   {
     // clear cache if dst correction has changed
-    if ($savearray['sb_dstcorrect'] != $eqdkp->config['sb_dstcorrect'])
+    if ($savearray['sb_dstcorrect'] != $core->config['sb_dstcorrect'])
     {
       $pdc->del('pdh_shoutbox_table');
     }
@@ -65,7 +65,7 @@ if ($in->get('save_settings'))
 
 
 // -- update check ------------------------------------------------------------
-$updchk_enabled = ($eqdkp->config['sb_updatecheck'] == 1) ? true : false;
+$updchk_enabled = ($core->config['sb_updatecheck'] == 1) ? true : false;
 $versionthing = array(
   'name'     => 'shoutbox',
   'version'  => $pm->get_data('shoutbox', 'version'),
@@ -81,7 +81,7 @@ $sbvcheck->PerformUpdateCheck();
 // Saved message
 if ($in->get('save'))
 {
-  $eqdkp->message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
+  $core->message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
 }
 
 
@@ -102,13 +102,13 @@ if (file_exists($timezone_file))
 // get timezone offset
 $temp = time()+Date('I')*3600;
 $dst = date('I', $temp);
-if ($dst == 1 && $eqdkp->config['sb_dstcorrect'] == 1)
+if ($dst == 1 && $core->config['sb_dstcorrect'] == 1)
 {
-  $cur_timezone = ($eqdkp->config['sb_timezone'] != '') ? $eqdkp->config['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
+  $cur_timezone = ($core->config['sb_timezone'] != '') ? $core->config['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
 }
 else
 {
-  $cur_timezone = ($eqdkp->config['sb_timezone'] != '') ? $eqdkp->config['sb_timezone'] : intval(date('Z', $temp)/3600);
+  $cur_timezone = ($core->config['sb_timezone'] != '') ? $core->config['sb_timezone'] : intval(date('Z', $temp)/3600);
 }
 
 
@@ -128,9 +128,9 @@ $tpl->assign_vars(array (
   'L_DSTCORRECT'      => $user->lang['sb_dstcorrect'],
 
   // Settings
-  'UPDATE_CHECK'      => $wpfcdb->isChecked($eqdkp->config['sb_updatecheck']),
+  'UPDATE_CHECK'      => $wpfcdb->isChecked($core->config['sb_updatecheck']),
   'DRDWN_TZONE'       => $html->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
-  'DST_CORRECT'       => $wpfcdb->isChecked($eqdkp->config['sb_dstcorrect']),
+  'DST_CORRECT'       => $wpfcdb->isChecked($core->config['sb_dstcorrect']),
 
   // update box
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
@@ -142,7 +142,7 @@ $tpl->assign_vars(array (
 
 
 // -- EQDKP -------------------------------------------------------------------
-$eqdkp->set_vars(array (
+$core->set_vars(array (
   'page_title'    => $user->lang['shoutbox'].' '.$user->lang['settings'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/settings.html',

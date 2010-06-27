@@ -38,13 +38,13 @@ $content = $shoutbox->showShoutbox();
 // -- Template ----------------------------------------------------------------
 $tpl->assign_vars(array (
   // Form
-  'ROW_CLASS'       => $eqdkp->switch_row_class(),
+  'ROW_CLASS'       => $core->switch_row_class(),
   'CONTENT'         => $content
 ));
 
 
 // -- EQDKP -------------------------------------------------------------------
-$eqdkp->set_vars(array (
+$core->set_vars(array (
   'page_title'    => $user->lang['shoutbox'],
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'show.html',

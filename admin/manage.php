@@ -47,7 +47,7 @@ if (is_array($delete_ids) && count($delete_ids) > 0)
     $shoutbox->deleteShoutboxEntry($delete_id);
   }
 
-  $eqdkp->message($user->lang['sb_delete_success'], $user->lang['shoutbox'], 'green');
+  $core->message($user->lang['sb_delete_success'], $user->lang['shoutbox'], 'green');
 }
 
 
@@ -79,7 +79,7 @@ foreach ($date_array as $year => $months)
     $tpl->assign_block_vars('year_row.month_row', array(
       'MONTH'     => strftime('%B', mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
-      'CLASS'     => $eqdkp->switch_row_class(),
+      'CLASS'     => $core->switch_row_class(),
       'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/admin/manage.php'.$SID.'&year='.$year.'&month='.$month
     ));
   }
@@ -172,7 +172,7 @@ $tpl->assign_vars(array (
 
 
 // -- EQDKP -------------------------------------------------------------------
-$eqdkp->set_vars(array (
+$core->set_vars(array (
   'page_title'    => $user->lang['shoutbox'].' '.$user->lang['sb_manage_archive'].' '.$page_title,
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/manage.html',

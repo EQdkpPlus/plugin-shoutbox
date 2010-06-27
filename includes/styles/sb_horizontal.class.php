@@ -41,13 +41,13 @@ if (!class_exists("sb_horizontal"))
      */
     protected function layoutShoutbox()
     {
-      global $eqdkp, $user;
+      global $core, $user;
 
       // default is empty output
       $htmlOut = '';
 
       // get location of form
-      $form_location = ($eqdkp->config['sb_input_box_location'] != '') ? $eqdkp->config['sb_input_box_location'] : 'top';
+      $form_location = ($core->config['sb_input_box_location'] != '') ? $core->config['sb_input_box_location'] : 'top';
 
       // is input on top (and user can add entries) append form first
       if ($form_location == 'top' && $user->check_auth('u_shoutbox_add', false))
@@ -61,7 +61,7 @@ if (!class_exists("sb_horizontal"))
       $htmlOut .= '</div>';
 
       // archive link? (User must be logged in to see archive link)
-      if ($eqdkp->config['sb_show_archive'] && $user->data['user_id'] != ANONYMOUS)
+      if ($core->config['sb_show_archive'] && $user->data['user_id'] != ANONYMOUS)
       {
         $htmlOut .= $this->getArchiveLink();
       }
@@ -85,7 +85,7 @@ if (!class_exists("sb_horizontal"))
      */
     public function layoutContent($root_path)
     {
-      global $user, $eqdkp, $SID, $pdh, $eqdkp_root_path;
+      global $user, $core, $SID, $pdh, $eqdkp_root_path;
 
       // empty output
       $htmlOut = '';
@@ -100,7 +100,7 @@ if (!class_exists("sb_horizontal"))
         foreach ($this->shoutbox_ids as $shoutbox_id)
         {
           // get class for row
-          $class = $eqdkp->switch_row_class();
+          $class = $core->switch_row_class();
 
           // output
           // Date  |  Text
@@ -131,7 +131,7 @@ if (!class_exists("sb_horizontal"))
           }
 
           // output date as well as User and text
-          $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $eqdkp->config['sb_show_date'])).
+          $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $core->config['sb_show_date'])).
                       '<br/>'.
                       $pdh->geth('shoutbox', 'membername', array($shoutbox_id)).
                       '</td><td style="padding-left: 7px;">'.
@@ -147,7 +147,7 @@ if (!class_exists("sb_horizontal"))
       else
       {
         $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                       <tr class="'.$eqdkp->switch_row_class().'">
+                       <tr class="'.$core->switch_row_class().'">
                          <td><div align="center">'.$user->lang['sb_no_entries'].'</div></td>
                        </tr>
                      </table>';
@@ -166,16 +166,16 @@ if (!class_exists("sb_horizontal"))
      */
     private function getForm($rpath='')
     {
-      global $user, $eqdkp, $eqdkp_root_path, $SID, $pdh, $html;
+      global $user, $core, $eqdkp_root_path, $SID, $pdh, $html;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
 
       // get location
-      $form_location = ($eqdkp->config['sb_input_box_location'] != '') ? $eqdkp->config['sb_input_box_location'] : 'top';
+      $form_location = ($core->config['sb_input_box_location'] != '') ? $core->config['sb_input_box_location'] : 'top';
 
       // get class for row
-      $class = $eqdkp->switch_row_class();
+      $class = $core->switch_row_class();
 
       // only display form if user has members assigned to
       $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
@@ -287,10 +287,10 @@ if (!class_exists("sb_horizontal"))
      */
     private function getArchiveLink()
     {
-      global $user, $eqdkp, $SID, $eqdkp_root_path;
+      global $user, $core, $SID, $eqdkp_root_path;
 
       $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                    <tr class="'.$eqdkp->switch_row_class().'">
+                    <tr class="'.$core->switch_row_class().'">
                       <td class="menu" align="right">
                         <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onClick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                       </td>

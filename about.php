@@ -41,7 +41,7 @@ $tpl->assign_vars(array(
 
 
 // ----------------------------------------------------------------------------
-$eqdkp->set_vars(array(
+$core->set_vars(array(
   'page_title'    => 'About Shoutbox',
   'template_file' => 'about.html',
   'template_path' => $pm->get_data('shoutbox', 'template_path'),

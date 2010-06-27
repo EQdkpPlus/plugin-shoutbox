@@ -90,7 +90,7 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-    global $pm, $eqdkp_root_path, $eqdkp, $user, $wherevalue;
+    global $pm, $eqdkp_root_path, $core, $user, $wherevalue;
 
     // initialize output
     $output = '';
@@ -112,7 +112,7 @@ if (!function_exists(shoutbox_module))
       if ($requirementscheck !== true)
       {
         $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                     <tr class="'.$eqdkp->switch_row_class().'">
+                     <tr class="'.$core->switch_row_class().'">
                        <td><div align="center">'.$requirementscheck.'</div></td>
                      </tr>
                    </table>';
@@ -141,7 +141,7 @@ if (!function_exists(shoutbox_module))
     else
     {
       $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                   <tr class="'.$eqdkp->switch_row_class().'">
+                   <tr class="'.$core->switch_row_class().'">
                      <td><div align="center">'.$user->lang['sb_plugin_not_installed'].'</div></td>
                    </tr>
                  </table>';
