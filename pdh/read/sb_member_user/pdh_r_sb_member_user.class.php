@@ -76,7 +76,7 @@ if (!class_exists('pdh_r_sb_member_user'))
      */
     public function init()
     {
-      global $pdc, $db, $core;
+      global $pdc, $db;
 
       // try to get from cache first
       $this->members = $pdc->get('pdh_sb_member_user_table.members');

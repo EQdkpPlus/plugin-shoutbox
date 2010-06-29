@@ -51,8 +51,6 @@ $lang = array(
   'sb_config_saved'                 => 'Settings saved successfully',
   'sb_header_general'               => 'General Shoutbox settings',
   'sb_updatecheck'                  => 'Enable check for new Plugin Versions',
-  'sb_timezone'                     => 'Timezone of the server',
-  'sb_dstcorrect'                   => 'Auto correct Daylight saving time?',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',

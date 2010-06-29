@@ -51,8 +51,6 @@ $lang = array(
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',
   'sb_header_general'               => 'Allgemeine Shoutbox Einstellungen',
   'sb_updatecheck'                  => 'Benachrichtigung bei Plugin-Updates',
-  'sb_timezone'                     => 'Zeitzone des Servers',
-  'sb_dstcorrect'                   => 'Automatisch auf Sommerzeit umstellen?',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Maximale Anzahl an Shoutbox Einträgen.',

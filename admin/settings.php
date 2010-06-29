@@ -46,18 +46,11 @@ if ($in->get('save_settings'))
   // take over new values
   $savearray = array(
       'sb_updatecheck' => $in->get('sb_updatecheck', 0),
-      'sb_timezone'    => $in->get('sb_timezone'),
-      'sb_dstcorrect'  => $in->get('sb_dstcorrect', 0),
   );
 
   // update configuration
   if ($wpfcdb->UpdateConfig($savearray, $wpfcdb->CheckDBFields('config_name')))
   {
-    // clear cache if dst correction has changed
-    if ($savearray['sb_dstcorrect'] != $core->config['sb_dstcorrect'])
-    {
-      $pdc->del('pdh_shoutbox_table');
-    }
     // redirect
     redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
   }
@@ -85,33 +78,6 @@ if ($in->get('save'))
 }
 
 
-// -- Timezone ----------------------------------------------------------------
-// load timezone array
-$sb_timezones = array();
-$timezone_file = $eqdkp_root_path.'plugins/shoutbox/language/'.$user->lang_name.'/lang_tz.php';
-// check for file exist, if not try fallback to english
-if (!file_exists($timezone_file))
-{
-  $timezone_file = $eqdkp_root_path.'plugins/shoutbox/language/english/lang_tz.php';
-}
-if (file_exists($timezone_file))
-{
-  include_once($timezone_file);
-}
-
-// get timezone offset
-$temp = time()+Date('I')*3600;
-$dst = date('I', $temp);
-if ($dst == 1 && $core->config['sb_dstcorrect'] == 1)
-{
-  $cur_timezone = ($core->config['sb_timezone'] != '') ? $core->config['sb_timezone'] : intval((date('Z', $temp)-1)/3600);
-}
-else
-{
-  $cur_timezone = ($core->config['sb_timezone'] != '') ? $core->config['sb_timezone'] : intval(date('Z', $temp)/3600);
-}
-
-
 // -- Template ----------------------------------------------------------------
 $jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->assign_vars(array (
@@ -124,13 +90,9 @@ $tpl->assign_vars(array (
   'L_RESET'           => $user->lang['reset'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
   'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
-  'L_TIMEZONE'        => $user->lang['sb_timezone'],
-  'L_DSTCORRECT'      => $user->lang['sb_dstcorrect'],
 
   // Settings
   'UPDATE_CHECK'      => $wpfcdb->isChecked($core->config['sb_updatecheck']),
-  'DRDWN_TZONE'       => $html->DropDown('sb_timezone', $sb_timezones, $cur_timezone),
-  'DST_CORRECT'       => $wpfcdb->isChecked($core->config['sb_dstcorrect']),
 
   // update box
   'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),

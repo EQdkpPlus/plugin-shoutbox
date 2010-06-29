@@ -8,7 +8,7 @@
  * Date:        $Date$
  * -----------------------------------------------------------------------
  * @author      $Author$
- * @copyright   2008 Aderyn
+ * @copyright   2008-2010 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
  * @version     $Rev$
@@ -83,43 +83,59 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     $this->add_pdh_read_module('shoutbox');
     $this->add_pdh_write_module('shoutbox');
     $this->add_pdh_read_module('sb_member_user');
+  }
 
+  /**
+    * pre_install
+    * Define Installation
+    */
+  public function pre_install()
+  {
+    global $eqdkp_root_path;
 
-    // -- SQL Data ----------------------------------------
+    // include SQL and default configuration data for installation
+    include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
+    include($eqdkp_root_path.'plugins/shoutbox/includes/data/config.php');
+
+    // define installation
+    for ($i = 1; $i <= count($shoutboxSQL['install']); $i++)
+      $this->add_sql(SQL_INSTALL, $shoutboxSQL['install'][$i]);
+
+    // insert configuration
+    if (is_array($config_vars))
+      $this->insertConfig('shoutbox_config', $config_vars);
+  }
+
+  /**
+    * pre_uninstall
+    * Define uninstallation
+    */
+  public function pre_uninstall()
+  {
+    global $eqdkp_root_path;
+
+    // include SQL data for uninstallation
     include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
 
-    // -- install -----------------------------------------
-    if (!($this->pm->check(PLUGIN_INSTALLED, 'shoutbox')))
-    {
-      // include default configuration data for installation
-      include($eqdkp_root_path.'plugins/shoutbox/includes/data/config.php');
-
-      // define installation
-      for ($i = 1; $i <= count($shoutboxSQL['install']); $i++)
-      {
-        // prepend uninstall string if we have one to be sure installation is clear
-        if ($shoutboxSQL['uninstall'][$i])
-        {
-          $this->add_sql(SQL_INSTALL, $shoutboxSQL['uninstall'][$i]);
-        }
-        $this->add_sql(SQL_INSTALL, $shoutboxSQL['install'][$i]);
-      }
-
-      // insert configuration
-      if (is_array($config_vars))
-      {
-        $this->insert_configuration($config_vars);
-      }
-    }
-
-    // -- uninstall ---------------------------------------
     for ($i = 1; $i <= count($shoutboxSQL['uninstall']); $i++)
-    {
-      if($shoutboxSQL['uninstall'][$i])
-      {
-        $this->add_sql(SQL_UNINSTALL, $shoutboxSQL['uninstall'][$i]);
-      }
-    }
+      $this->add_sql(SQL_UNINSTALL, $shoutboxSQL['uninstall'][$i]);
+  }
+
+  /**
+    * post_uninstall
+    * Define Post Uninstall
+    */
+  public function post_uninstall()
+  {
+    global $pdc, $pcache;
+
+    // clear cache
+    $pdc->del('pdh_shoutbox_table');
+    $pdc->del('pdh_sb_member_user_table.members');
+    $pdc->del('pdh_sb_member_user_table.users');
+
+    // clear RSS feed
+    $pcache->Delete($pcache->FilePath('shoutbox.xml', 'shoutbox'));
   }
 
   /**
@@ -157,20 +173,6 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     return;
   }
 
-  /**
-    * insert_configuration
-    * Insert the default configuration values into database
-    *
-    * @param    array    $config_vars   Array with all default configuration values
-    */
-  private function insert_configuration($config_vars)
-  {
-    foreach ($config_vars as $config_name => $config_value)
-    {
-      $sql = 'INSERT INTO `__shoutbox_config` VALUES(\''.$config_name.'\', \''.$config_value.'\');';
-      $this->add_sql(SQL_INSTALL, $sql);
-    }
-  }
-
 }
+
 ?>

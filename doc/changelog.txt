@@ -17,10 +17,11 @@
 
 Changelog
 --------------------------------------------------------------------------------------------------
-0.3.0 [xx/04/2010][Aderyn]
+0.3.0 [xx/06/2010][Aderyn]
   Version for EQDKP 0.7
   Implemented - Caching
   Implemented - Shoutbox Archive
+  Removed - Timezone, this is now part of the EQDKP framework
 
 0.2.0 [12/04/2010][Aderyn]
   Fixed - [#1774] Shoutbox Uhrzeit stimmt nicht

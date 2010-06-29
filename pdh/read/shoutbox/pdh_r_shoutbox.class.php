@@ -112,12 +112,6 @@ if (!class_exists('pdh_r_shoutbox'))
         // add row by row to local copy
         while (($row = $db->fetch_record($result)))
         {
-          // DST date correction?
-          if ($core->config['sb_dstcorrect'] == 1 && $correction != 0)
-          {
-            $row['shoutbox_date'] = $row['shoutbox_date'] + $correction;
-          }
-
           $this->data[$row['shoutbox_id']] = array(
             'member_id' => $row['member_id'],
             'date'      => $row['shoutbox_date'],
@@ -283,12 +277,12 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_date($shoutbox_id, $show_date=false)
     {
-      global $user;
+      global $user, $time;
 
       if ($show_date)
-        $date = date($user->lang['sb_date_format'], $this->get_date($shoutbox_id));
+        $date = $time->date($user->lang['sb_date_format'], $this->get_date($shoutbox_id));
       else
-        $date = date($user->lang['sb_time_format'], $this->get_date($shoutbox_id));
+        $date = $time->date($user->lang['sb_time_format'], $this->get_date($shoutbox_id));
 
       return $date;
     }

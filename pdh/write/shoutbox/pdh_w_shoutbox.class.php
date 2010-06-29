@@ -50,29 +50,20 @@ if (!class_exists('pdh_w_shoutbox'))
      *
      * @param  int     $member_id  Member ID
      * @param  string  $text       Text to insert
-     * @param  int     $timezone   Timezone
      *
      * @returns mixed, on success shoutbox id, else false
      */
-    public function add($member_id, $text, $timezone=0)
+    public function add($member_id, $text)
     {
-      global $db, $pdh;
-
-      // get timezone as integer
-      $timezone = ($timezone != '' && is_numeric($timezone)) ? intval($timezone) : 0;
+      global $db, $pdh, $time;
 
       // cleanup text
       $text = $this->cleanupText($text);
 
-      // get current timestamp
-      $cur_time = time() + ($timezone * 3600);
-      $cur_timestamp = mktime(gmdate('H', $cur_time), gmdate('i', $cur_time), gmdate('s', $cur_time),
-                              gmdate('n', $cur_time), gmdate('j', $cur_time), gmdate('Y', $cur_time));
-
       // add to database
       $sql_data = array(
         'member_id'     => $member_id,
-        'shoutbox_date' => $cur_timestamp,
+        'shoutbox_date' => $db->sql_escape($time->time),
         'shoutbox_text' => $db->sql_escape($text)
       );
       $result = $db->query('INSERT INTO `__shoutbox` :params', $sql_data);

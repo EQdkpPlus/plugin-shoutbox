@@ -98,11 +98,10 @@ if (!class_exists("Shoutbox"))
      * insertShoutboxEntry
      * Insert a shoutbox entry for current member
      *
-     * @param    int    $member_id   member id
-     * @param    string $text        text to insert
-     * @param    int    $tz          timezone offset
+     * @param    int     $member_id   member id
+     * @param    string  $text        text to insert
      */
-    public function insertShoutboxEntry($member_id, $text, $tz=0)
+    public function insertShoutboxEntry($member_id, $text)
     {
       global $user, $pdh;
 
@@ -110,7 +109,7 @@ if (!class_exists("Shoutbox"))
       if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
       {
         // insert
-        $shoutbox_id = $pdh->put('shoutbox', 'add', array($member_id, $text, $tz));
+        $shoutbox_id = $pdh->put('shoutbox', 'add', array($member_id, $text));
         if ($shoutbox_id === false)
           return false;
 

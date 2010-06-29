@@ -51,8 +51,6 @@ $lang = array(
   'sb_config_saved'                 => 'Los ajustes se han almacenado correctamente',
   'sb_header_general'               => 'Ajustes generales del Shoutbox',
   'sb_updatecheck'                  => 'Habilitar casilla de verificación para las nuevas versiones Plugin',
-  'sb_timezone'                     => 'Zona horaria del servidor',
-  'sb_dstcorrect'                   => '¿Ajustar automáticamente al horario de verano?',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Limitar entradas del shoutbox.',

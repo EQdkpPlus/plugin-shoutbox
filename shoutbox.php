@@ -37,7 +37,7 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
   // -- Insert? ---------------------------------------------
   if ($sb_text && $sb_member_id != -1)
   {
-    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text, ($core->config['sb_timezone'] ? $core->config['sb_timezone'] : 0));
+    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text);
   }
   // -- Delete? ---------------------------------------------
   else if ($sb_delete)
