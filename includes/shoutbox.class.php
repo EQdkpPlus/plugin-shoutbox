@@ -75,7 +75,7 @@ if (!class_exists("Shoutbox"))
      */
     public function checkRequirements()
     {
-      global $user;
+      global $user, $core;
 
       // set defult to OK
       $result = true;
@@ -85,10 +85,10 @@ if (!class_exists("Shoutbox"))
       {
         $result = sprintf($user->lang['sb_php_version'], $this->reqVersions['php'], phpversion());
       }
-      else if (version_compare(EQDKPPLUS_VERSION, $this->reqVersions['eqdkp'], "<"))
+      else if (version_compare($core->config['plus_version'], $this->reqVersions['eqdkp'], "<"))
       {
         $result = sprintf($user->lang['sb_plus_version'], $this->reqVersions['eqdkp'],
-                          ((EQDKPPLUS_VERSION > 0) ? EQDKPPLUS_VERSION : '[non-PLUS]'));
+                          (($core->config['plus_version'] > 0) ? $core->config['plus_version'] : '[non-PLUS]'));
       }
 
       return $result;
