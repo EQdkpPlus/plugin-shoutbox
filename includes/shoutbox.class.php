@@ -100,6 +100,8 @@ if (!class_exists("Shoutbox"))
      *
      * @param    int     $member_id   member id
      * @param    string  $text        text to insert
+     *
+     * @returns  true if success, otherwise false
      */
     public function insertShoutboxEntry($member_id, $text)
     {

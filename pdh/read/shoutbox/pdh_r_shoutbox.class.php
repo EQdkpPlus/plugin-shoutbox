@@ -315,7 +315,7 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       global $pdh;
 
-      return $pdh->get('sb_member_user', 'userid', array($this->get_memberid($shoutbox_id)));
+      return $pdh->get('member_connection', 'userid', array($this->get_memberid($shoutbox_id)));
     }
 
   } //end class

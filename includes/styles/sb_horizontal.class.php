@@ -178,8 +178,8 @@ if (!class_exists("sb_horizontal"))
       $class = $core->switch_row_class();
 
       // only display form if user has members assigned to
-      $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
-      if (is_array($member_ids) && count($member_ids) > 0)
+      $members = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
+      if (is_array($members) && count($members) > 0)
       {
         // html
         $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
@@ -251,18 +251,19 @@ if (!class_exists("sb_horizontal"))
       // for anonymous user, just return empty string
       $outHtml = '';
 
-
-      $member_ids = $pdh->get('sb_member_user', 'memberid_list', array($user->data['user_id']));
-      if (is_array($member_ids))
+      // get member array
+      $member_connections = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
+      if (is_array($member_connections))
       {
-        $membercount = count($member_ids);
+        $membercount = count($member_connections);
 
         // if more than 1 member, show dropdown box
         if ($membercount > 1)
         {
-          foreach ($member_ids as $member_id)
+          $members = array();
+          foreach ($member_connections as $member)
           {
-            $members[$member_id] = $pdh->get('member', 'name', array($member_id, false, false));
+            $members[$member['member_id']] = $member['member_name'];
           }
           // show dropdown box
           $outHtml .= $html->DropDown('sb_member_id', $members, '');
@@ -271,8 +272,8 @@ if (!class_exists("sb_horizontal"))
         else if ($membercount == 1)
         {
           // show name as text and member id as hidden value
-          $outHtml .= '<input type="hidden" name="sb_member_id" value="'.$member_ids[0].'"/>'.
-                      $pdh->get('member', 'name', array($member_ids[0], false, false));
+          $outHtml .= '<input type="hidden" name="sb_member_id" value="'.$member_connections[0]['member_id'].'"/>'.
+                      $member_connections[0]['member_name'];
         }
       }
 

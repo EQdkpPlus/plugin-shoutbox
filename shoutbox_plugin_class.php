@@ -28,7 +28,7 @@ if (!defined('EQDKP_INC'))
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
   public $version    = '0.3.0';
-  public $build      = '7799';
+  public $build      = '8489';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 
@@ -82,7 +82,11 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     // -- PDH Modules -------------------------------------
     $this->add_pdh_read_module('shoutbox');
     $this->add_pdh_write_module('shoutbox');
-    $this->add_pdh_read_module('sb_member_user');
+
+    // -- Exchange Modules --------------------------------
+    $this->add_exchange_module('shoutbox_add');
+    $this->add_exchange_module('shoutbox_list');
+    $this->add_exchange_module('shoutbox', true, 'shoutbox.xml');
   }
 
   /**
@@ -131,8 +135,6 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
 
     // clear cache
     $pdc->del('pdh_shoutbox_table');
-    $pdc->del('pdh_sb_member_user_table.members');
-    $pdc->del('pdh_sb_member_user_table.users');
 
     // clear RSS feed
     $pcache->Delete($pcache->FilePath('shoutbox.xml', 'shoutbox'));
