@@ -69,6 +69,10 @@ $lang = array(
   'sb_archive'                      => 'Archiv',
   'sb_shoutbox_archive'             => 'Shoutbox Archiv',
 
+  // Exchange
+  'sb_missing_member_id'            => 'Es wurde keine Member ID angegeben',
+  'sb_missing_text'                 => 'Es wurde kein Text angegeben',
+
   // About/Credits
   'sb_about_header'                 => 'Über Shoutbox',
   'sb_credits_part1'                => 'Shoutbox v',

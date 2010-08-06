@@ -38,11 +38,13 @@ if (!class_exists('exchange_shoutbox_add'))
 
       // parse xml request
       $xml = simplexml_load_string($body);
-      if ($xml && $xml->text && $xml->member_id)
+      $member_id = ($xml && $xml->member_id && is_numeric($xml->member_id)) ? $xml->member_id : -1;
+      $text      = ($xml && $xml->text) ? trim($xml->text) : '';
+      if ($xml && !empty($text) && $member_id != -1)
       {
         // insert xml text
         include_once($eqdkp_root_path.'plugins/shoutbox/includes/common.php');
-        $result = $shoutbox->insertShoutboxEntry($xml->member_id, $xml->text);
+        $result = $shoutbox->insertShoutboxEntry($member_id, trim($text));
 
         // return status
         $response = '<response><result>'.$result.'</result></response>';
@@ -50,10 +52,10 @@ if (!class_exists('exchange_shoutbox_add'))
       else
       {
         // missing data
-        if (!$xml->text)
-          $response = '<response><result>Missing text to insert</result></response>';
+        if (empty($text))
+          $response = '<response><result>'.$user->lang['sb_missing_text'].'</result></response>';
         else
-          $response = '<response><result>Missing Member ID to insert</result></response>';
+          $response = '<response><result>'.$user->lang['sb_missing_member_id'].'</result></response>';
       }
 
       return $response;
