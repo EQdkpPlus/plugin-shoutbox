@@ -38,9 +38,9 @@ if (!class_exists('exchange_shoutbox_add'))
 
       // parse xml request
       $xml = simplexml_load_string($body);
-      $member_id = ($xml && $xml->member_id && is_numeric($xml->member_id)) ? $xml->member_id : -1;
+      $member_id = ($xml && $xml->member_id) ? $xml->member_id : '';
       $text      = ($xml && $xml->text) ? trim($xml->text) : '';
-      if ($xml && !empty($text) && $member_id != -1)
+      if ($xml && $text && $member_id)
       {
         // insert xml text
         include_once($eqdkp_root_path.'plugins/shoutbox/includes/common.php');
