@@ -37,7 +37,7 @@ if (!class_exists('exchange_shoutbox_list'))
       global $user, $pdh;
 
       // set response
-      $response  = '<response>';
+      $response  = '<response><entries>';
 
       // be sure user is logged in
       if ($user->data['user_id'] != ANONYMOUS)
@@ -61,7 +61,7 @@ if (!class_exists('exchange_shoutbox_list'))
       }
 
       // end response
-      $response .= '</response>';
+      $response .= '</entries></response>';
 
       return $response;
     }
