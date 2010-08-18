@@ -25,6 +25,10 @@ $lang = array(
   'shoutbox'                        => 'Shoutbox',
   'sb_shoutbox'                     => 'Shoutbox',
 
+  // Portal
+  'shoutbox_name'                   => 'Shoutbox',
+  'shoutbox_desc'                   => 'Shoutbox es un plugin que permite intercambiar mensajes cortos entre usuarios.',
+
   // Description
   'sb_short_desc'                   => 'Shoutbox',
   'sb_long_desc'                    => 'Shoutbox es un plugin que permite intercambiar mensajes cortos entre usuarios.',
@@ -42,15 +46,12 @@ $lang = array(
   'sb_written_at'                   => 'at',
 
   // Admin
-  'sb_date_format'                  => 'Y/m/d H:i',  // YYYY/MM/DD HH:mm
-  'sb_time_format'                  => 'H:i',        // HH:mm
   'sb_delete_success'               => 'Successfully deleted entries',
   'sb_settings_info'                => 'Further Shoutbox settings could be found within the <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodule settings</a>',
 
   // Configuration
   'sb_config_saved'                 => 'Los ajustes se han almacenado correctamente',
   'sb_header_general'               => 'Ajustes generales del Shoutbox',
-  'sb_updatecheck'                  => 'Habilitar casilla de verificación para las nuevas versiones Plugin',
 
   // Portal Modules
   'sb_output_count_limit'           => 'Limitar entradas del shoutbox.',

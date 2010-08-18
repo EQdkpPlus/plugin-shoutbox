@@ -28,7 +28,7 @@ if (!defined('EQDKP_INC'))
 class shoutbox_Plugin_Class extends EQdkp_Plugin
 {
   public $version    = '0.3.0';
-  public $build      = '8489';
+  public $build      = '8575';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 
@@ -51,6 +51,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
       'path'              => 'shoutbox',
       'contact'           => 'Aderyn@gmx.net',
       'template_path'     => 'plugins/shoutbox/templates/',
+      'icon'              => 'images/adminmenu/shoutbox.png',
       'version'           => $this->version,
       'author'            => $this->copyright,
       'description'       => $user->lang['sb_short_desc'],
@@ -95,7 +96,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     */
   public function pre_install()
   {
-    global $eqdkp_root_path;
+    global $eqdkp_root_path, $core;
 
     // include SQL and default configuration data for installation
     include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
@@ -107,7 +108,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
 
     // insert configuration
     if (is_array($config_vars))
-      $this->insertConfig('shoutbox_config', $config_vars);
+      $core->config_set($config_vars, '', 'shoutbox');
   }
 
   /**
@@ -153,7 +154,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
       $admin_menu = array (
         'shoutbox' => array (
           'name' => $user->lang['shoutbox'],
-          'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
+          'icon' => './../../plugins/shoutbox/'.$this->data['icon'],
           1 => array (
             'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
             'text'  => $user->lang['settings'],

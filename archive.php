@@ -48,8 +48,8 @@ $date_array = array();
 foreach ($shoutbox_ids as $shoutbox_id)
 {
   $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_id));
-  $shoutbox_date_year  = date('Y', $shoutbox_date);
-  $shoutbox_date_month = date('m', $shoutbox_date);
+  $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
+  $shoutbox_date_month = $time->date('m', $shoutbox_date);
   $date_array[$shoutbox_date_year][$shoutbox_date_month][] = $shoutbox_id;
 }
 
@@ -64,7 +64,7 @@ foreach ($date_array as $year => $months)
   foreach ($months as $month => $ids)
   {
     $tpl->assign_block_vars('year_row.month_row', array(
-      'MONTH'     => strftime('%B', mktime(0, 0, 0, $month, 1, $year)),
+      'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
       'CLASS'     => $core->switch_row_class(),
       'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&year='.$year.'&month='.$month
@@ -78,7 +78,7 @@ if ($in->get('year') && $in->get('month'))
 {
   // add all shoutbox entries within date/month to the output array
   $shoutbox_out = $date_array[$in->get('year')][$in->get('month')];
-  $page_title   = strftime('%B', mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
+  $page_title   = $time->date('F', $time->mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
 }
 // -- search? -----------------------------------------------------------------
 else if ($in->get('search'))
@@ -99,10 +99,10 @@ else if (count($shoutbox_ids) > 0)
 {
   // show the last month only
   $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_ids[0]));
-  $shoutbox_date_year  = date('Y', $shoutbox_date);
-  $shoutbox_date_month = date('m', $shoutbox_date);
+  $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
+  $shoutbox_date_month = $time->date('m', $shoutbox_date);
   $shoutbox_out = $date_array[$shoutbox_date_year][$shoutbox_date_month];
-  $page_title   = strftime('%B', mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
+  $page_title   = $time->date('F', $time->mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
 }
 
 
@@ -117,8 +117,8 @@ foreach ($shoutbox_out as $shoutbox_id)
     'CLASS'   => $core->switch_row_class(),
     'ID'      => $shoutbox_id,
     'MEMBER'  => $pdh->geth('shoutbox', 'membername', array($shoutbox_id)),
-    'DATE'    => strftime($user->style['strtime_date'], $shoutbox_date),
-    'TIME'    => date($user->style['time'], $shoutbox_date),
+    'DATE'    => $time->date($user->style['date'], $shoutbox_date),
+    'TIME'    => $time->date($user->style['time'], $shoutbox_date),
     'MESSAGE' => $pdh->geth('shoutbox', 'text',       array($shoutbox_id))
   ));
 }

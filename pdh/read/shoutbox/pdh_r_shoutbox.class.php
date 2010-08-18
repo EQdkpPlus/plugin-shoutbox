@@ -280,9 +280,9 @@ if (!class_exists('pdh_r_shoutbox'))
       global $user, $time;
 
       if ($show_date)
-        $date = $time->date($user->lang['sb_date_format'], $this->get_date($shoutbox_id));
+        $date = $time->date($user->style['date_time'], $this->get_date($shoutbox_id));
       else
-        $date = $time->date($user->lang['sb_time_format'], $this->get_date($shoutbox_id));
+        $date = $time->date($user->style['time'], $this->get_date($shoutbox_id));
 
       return $date;
     }

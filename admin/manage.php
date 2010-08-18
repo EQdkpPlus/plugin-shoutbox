@@ -61,8 +61,8 @@ $date_array = array();
 foreach ($shoutbox_ids as $shoutbox_id)
 {
   $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_id));
-  $shoutbox_date_year  = date('Y', $shoutbox_date);
-  $shoutbox_date_month = date('m', $shoutbox_date);
+  $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
+  $shoutbox_date_month = $time->date('m', $shoutbox_date);
   $date_array[$shoutbox_date_year][$shoutbox_date_month][] = $shoutbox_id;
 }
 
@@ -77,7 +77,7 @@ foreach ($date_array as $year => $months)
   foreach ($months as $month => $ids)
   {
     $tpl->assign_block_vars('year_row.month_row', array(
-      'MONTH'     => strftime('%B', mktime(0, 0, 0, $month, 1, $year)),
+      'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
       'CLASS'     => $core->switch_row_class(),
       'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/admin/manage.php'.$SID.'&year='.$year.'&month='.$month
@@ -92,7 +92,7 @@ if ($in->get('year') && $in->get('month'))
   // add all shoutbox entries within date/month to the output array
   $shoutbox_out = $date_array[$in->get('year')][$in->get('month')];
   $url_suffix   = '&amp;year='.$in->get('year').'&amp;month='.$in->get('month');
-  $page_title   = strftime('%B', mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
+  $page_title   = $time->date('F', $time->mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
 }
 // -- search? -----------------------------------------------------------------
 else if ($in->get('search'))
@@ -114,11 +114,11 @@ else if (count($shoutbox_ids) > 0)
 {
   // show the last month only
   $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_ids[0]));
-  $shoutbox_date_year  = date('Y', $shoutbox_date);
-  $shoutbox_date_month = date('m', $shoutbox_date);
+  $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
+  $shoutbox_date_month = $time->date('m', $shoutbox_date);
   $shoutbox_out = $date_array[$shoutbox_date_year][$shoutbox_date_month];
   $url_suffix   = '';
-  $page_title   = strftime('%B', mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
+  $page_title   = $time->date('F', $time->mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
 }
 
 
@@ -135,7 +135,7 @@ $pagination = generate_pagination('manage.php'.$SID.$url_suffix, $total_entries,
 // -- display entries ---------------------------------------------------------
 $hptt_sort       = $in->get('sort');
 $hptt_url_suffix = $url_suffix.($start > 0 ? '&amp;start='.$start : '');
-$hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_ids, $shoutbox_out);
+$hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_ids, $shoutbox_out, array());
 
 
 // -- Template ----------------------------------------------------------------

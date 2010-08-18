@@ -60,9 +60,6 @@ if (!class_exists("Shoutbox"))
       $this->rss->link           = $core->BuildLink();
       $this->rss->syndicationURL = $core->BuildLink().$_SERVER['PHP_SELF'];
 
-      // read in shoutbox config
-      $this->readConfig();
-
       // get output limit
       $this->output_limit = ($core->config['sb_output_count_limit'] > 0 ? $core->config['sb_output_count_limit'] : 10);
     }
@@ -289,30 +286,6 @@ if (!class_exists("Shoutbox"))
 
       // save RSS
       $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
-    }
-
-    /**
-     * readConfig
-     * Read in the shoutbox configuration
-     */
-    private function readConfig()
-    {
-      global $core, $db;
-
-      $sql = 'SELECT * FROM `__shoutbox_config`';
-      $result = $db->query($sql);
-      if ($result)
-      {
-        $sb_conf = array();
-        while(($row = $db->fetch_record($result)))
-        {
-          $sb_conf[$row['config_name']] = $row['config_value'];
-        }
-        $db->free_result($result);
-
-        // merge to EQDKP config
-        $core->config = array_merge($core->config, $sb_conf);
-      }
     }
 
   }

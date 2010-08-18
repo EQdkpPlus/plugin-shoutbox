@@ -36,7 +36,7 @@ $tpl->assign_vars(array(
     'L_BUILD'        => $pm->plugins['shoutbox']->build,
     'L_STATUS'       => $pm->plugins['shoutbox']->vstatus,
     'L_COPYRIGHT'    => $user->lang['sb_copyright'],
-    'L_YEARR'        => date('Y'),
+    'L_YEARR'        => $time->date('Y'),
 ));
 
 

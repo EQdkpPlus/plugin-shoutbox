@@ -23,8 +23,6 @@ if (!defined('EQDKP_INC'))
 
 // Config Values
 $config_vars = array(
-    'sb_inst_version'   => $this->version,      # Save the version for Autoupdate?
-    'sb_updatecheck'    => '1',                 # Enable UpdateCheck?
 );
 
 ?>

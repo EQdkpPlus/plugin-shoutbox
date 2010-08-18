@@ -25,7 +25,6 @@ $shoutboxSQL = array(
 
   'uninstall' => array(
     '1'     => 'DROP TABLE IF EXISTS `__shoutbox`',
-    '2'     => 'DROP TABLE IF EXISTS `__shoutbox_config`',
   ),
 
   'install'   => array(
@@ -35,11 +34,6 @@ $shoutboxSQL = array(
                   `shoutbox_date` INT(11) UNSIGNED NOT NULL DEFAULT \'0\',
                   `shoutbox_text` TEXT COLLATE utf8_bin DEFAULT NULL,
                   PRIMARY KEY (`shoutbox_id`)
-                ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;',
-    '2'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox_config` (
-                  `config_name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT \'\',
-                  `config_value` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
-                  PRIMARY KEY (`config_name`)
                 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;',
   ),
 );

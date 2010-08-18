@@ -25,10 +25,6 @@ $eqdkp_root_path = './../../../';
 include_once('./../includes/common.php');
 
 
-// -- Check user permission ---------------------------------------------------
-$user->check_auth('a_shoutbox_');
-
-
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
@@ -36,8 +32,8 @@ if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 }
 
 
-// -- Init config database ----------------------------------------------------
-$wpfcdb = new AdditionalDB('shoutbox_config');
+// -- Check user permission ---------------------------------------------------
+$user->check_auth('a_shoutbox_');
 
 
 // -- save? -------------------------------------------------------------------
@@ -45,29 +41,14 @@ if ($in->get('save_settings'))
 {
   // take over new values
   $savearray = array(
-      'sb_updatecheck' => $in->get('sb_updatecheck', 0),
+      //'sb_updatecheck' => $in->get('sb_updatecheck', 0),
   );
 
   // update configuration
-  if ($wpfcdb->UpdateConfig($savearray, $wpfcdb->CheckDBFields('config_name')))
-  {
-    // redirect
-    redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
-  }
+  $core->config_set($savearray, '', 'shoutbox');
+  // redirect
+  redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
 }
-
-
-// -- update check ------------------------------------------------------------
-$updchk_enabled = ($core->config['sb_updatecheck'] == 1) ? true : false;
-$versionthing = array(
-  'name'     => 'shoutbox',
-  'version'  => $pm->get_data('shoutbox', 'version'),
-  'build'    => $pm->get_data('shoutbox', 'build'),
-  'enabled'  => $updchk_enabled,
-  'vstatus'  => $pm->plugins['shoutbox']->vstatus,
-);
-$sbvcheck = new PluginUpdCheck($versionthing);
-$sbvcheck->PerformUpdateCheck();
 
 
 // ----------------------------------------------------------------------------
@@ -89,13 +70,6 @@ $tpl->assign_vars(array (
   'L_SAVE'            => $user->lang['save'],
   'L_RESET'           => $user->lang['reset'],
   'L_GENERAL'         => $user->lang['sb_header_general'],
-  'L_UPDATE_CHECK'    => $user->lang['sb_updatecheck'],
-
-  // Settings
-  'UPDATE_CHECK'      => $wpfcdb->isChecked($core->config['sb_updatecheck']),
-
-  // update box
-  'UPDCHECK_BOX'      => $sbvcheck->OutputHTML(),
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',
