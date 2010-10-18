@@ -48,12 +48,12 @@ if (!class_exists('pdh_w_shoutbox'))
      * add
      * Add a new shoutbox entry
      *
-     * @param  int     $member_id  Member ID
-     * @param  string  $text       Text to insert
+     * @param  int     $usermember_id  User or Member ID
+     * @param  string  $text           Text to insert
      *
      * @returns mixed, on success shoutbox id, else false
      */
-    public function add($member_id, $text)
+    public function add($usermember_id, $text)
     {
       global $db, $pdh, $time;
 
@@ -62,9 +62,9 @@ if (!class_exists('pdh_w_shoutbox'))
 
       // add to database
       $sql_data = array(
-        'member_id'     => $member_id,
-        'shoutbox_date' => $db->sql_escape($time->time),
-        'shoutbox_text' => $db->sql_escape($text)
+        'user_or_member_id' => $usermember_id,
+        'shoutbox_date'     => $db->sql_escape($time->time),
+        'shoutbox_text'     => $db->sql_escape($text)
       );
       $result = $db->query('INSERT INTO `__shoutbox` :params', $sql_data);
       if (!$result)
@@ -80,7 +80,7 @@ if (!class_exists('pdh_w_shoutbox'))
      * delete
      * Delete a shoutbox entry from db
      *
-     * @param  int     $shoutbox_id  Shoutbox ID
+     * @param  int   $shoutbox_id  Shoutbox ID
      *
      * @returns boolean
      */
@@ -89,7 +89,34 @@ if (!class_exists('pdh_w_shoutbox'))
       global $db, $pdh;
 
       // delete from db
-      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$shoutbox_id;
+      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$db->sql_escape($shoutbox_id);
+      $result = $db->query($sql);
+      if (!$result)
+        return false;
+
+      // do hooks
+      $pdh->enqueue_hook('shoutbox_update');
+
+      return true;
+    }
+
+    /**
+     * set_user
+     * Updates an entry and sets member id to user id
+     *
+     * @param  int   $shoutbox_id  Shoutbox ID
+     * @param  int   $user_id      User ID
+     *
+     * @returns boolean
+     */
+    public function set_user($shoutbox_id, $user_id)
+    {
+      global $db, $pdh;
+
+      // update in db
+      $sql = 'UPDATE `__shoutbox`
+              SET `user_or_member_id`='.$db->sql_escape($user_id).'
+              WHERE shoutbox_id='.$db->sql_escape($shoutbox_id);
       $result = $db->query($sql);
       if (!$result)
         return false;

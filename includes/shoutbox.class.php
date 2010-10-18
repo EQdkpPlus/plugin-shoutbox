@@ -93,14 +93,14 @@ if (!class_exists("Shoutbox"))
 
     /**
      * insertShoutboxEntry
-     * Insert a shoutbox entry for current member
+     * Insert a shoutbox entry for current user or member
      *
-     * @param    int     $member_id   member id
-     * @param    string  $text        text to insert
+     * @param    int     $usermember_id   user or member id
+     * @param    string  $text            text to insert
      *
      * @returns  true if success, otherwise false
      */
-    public function insertShoutboxEntry($member_id, $text)
+    public function insertShoutboxEntry($usermember_id, $text)
     {
       global $user, $pdh;
 
@@ -108,7 +108,7 @@ if (!class_exists("Shoutbox"))
       if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
       {
         // insert
-        $shoutbox_id = $pdh->put('shoutbox', 'add', array($member_id, $text));
+        $shoutbox_id = $pdh->put('shoutbox', 'add', array($usermember_id, $text));
         if ($shoutbox_id === false)
           return false;
 
@@ -155,12 +155,39 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
+     * deleteAllEntries
+     * delete all shoutbox entries
+     */
+    public function deleteAllEntries()
+    {
+      global $user, $pdh;
+
+      // is user allowed to delete?
+      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('a_shoutbox_delete', false))
+      {
+        // get all shoutbox ids
+        $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+        if (is_array($shoutbox_ids))
+        {
+          foreach ($shoutbox_ids as $shoutbox_id)
+            $pdh->put('shoutbox', 'delete', array($shoutbox_id));
+
+          // process hook queue
+          $pdh->process_hook_queue();
+
+          // recreate RSS
+          $this->createRSS();
+        }
+      }
+    }
+
+    /**
      * showShoutbox
      * show the complete shoutbox
      *
      * @param  string  $orientation  orientation vertical/horizontal
      *
-     * @return  string
+     * @returns  string
      */
     public function showShoutbox($orientation='vertical')
     {
@@ -202,7 +229,7 @@ if (!class_exists("Shoutbox"))
      * @param  string   $orientation  orientation vertical/horizontal
      * @param  string   $rpath        root path
      *
-     * @return  string
+     * @returns  string
      */
     public function getContent($orientation, $rpath='')
     {
@@ -231,10 +258,46 @@ if (!class_exists("Shoutbox"))
     }
 
     /**
+     * convertFromMemberToUser
+     * convert all entries from member entries to user entries
+     *
+     * @returns  true if success, otherwise false
+     */
+    public function convertFromMemberToUser()
+    {
+      global $pdh;
+
+      // get all shoutbox ids
+      $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+      if (is_array($shoutbox_ids))
+      {
+        // for each entry, get the current member id, look up the corresponding user id and
+        // update with user id
+        foreach ($shoutbox_ids as $shoutbox_id)
+        {
+          // get member id
+          $member_id = $pdh->get('shoutbox', 'usermemberid', array($shoutbox_id));
+          // lookup the user id for this member
+          $user_id = $pdh->get('member_connection', 'userid', array($member_id));
+          // update with new user id
+          $pdh->put('shoutbox', 'set_user', array($shoutbox_id, $user_id));
+        }
+
+        // process hook queue
+        $pdh->process_hook_queue();
+
+        // recreate RSS
+        $this->createRSS();
+      }
+
+      return true;
+    }
+
+    /**
      * getShoutboxOutEntries
      * get the id list to display
      *
-     * @return  array(ids)
+     * @returns  array(ids)
      */
     private function getShoutboxOutEntries()
     {
@@ -273,12 +336,12 @@ if (!class_exists("Shoutbox"))
         foreach ($shoutbox_ids as $shoutbox_id)
         {
           $rssitem = new FeedItem();
-          $rssitem->title       = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
+          $rssitem->title       = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
           $rssitem->link        = $this->rss->link;
           $rssitem->description = $pdh->geth('shoutbox', 'text', array($shoutbox_id));
           $rssitem->date        = $pdh->get('shoutbox', 'date', array($shoutbox_id));
           $rssitem->source      = $this->rss->link;
-          $rssitem->author      = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
+          $rssitem->author      = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
           $rssitem->guid        = $shoutbox_id;
           $this->rss->addItem($rssitem);
         }

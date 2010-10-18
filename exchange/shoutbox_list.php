@@ -51,8 +51,8 @@ if (!class_exists('exchange_shoutbox_list'))
           {
             $response .= '<entry>';
             $response .= '  <id>'.$shoutbox_id.'</id>';
-            $response .= '  <member_id>'.$pdh->get('shoutbox', 'memberid', array($shoutbox_id)).'</member_id>';
-            $response .= '  <member_name>'.$pdh->get('shoutbox', 'membername', array($shoutbox_id)).'</member_name>';
+            $response .= '  <member_id>'.$pdh->get('shoutbox', 'usermemberid', array($shoutbox_id)).'</member_id>';
+            $response .= '  <member_name>'.$pdh->get('shoutbox', 'usermembername', array($shoutbox_id)).'</member_name>';
             $response .= '  <text><![CDATA['.$pdh->geth('shoutbox', 'text', array($shoutbox_id)).']]></text>';
             $response .= '  <date>'.$pdh->get('shoutbox', 'date', array($shoutbox_id)).'</date>';
             $response .= '</entry>';

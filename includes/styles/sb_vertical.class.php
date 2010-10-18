@@ -136,7 +136,7 @@ if (!class_exists("sb_vertical"))
           // output date as well as User and text
           $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $core->config['sb_show_date'])).
                       '<br/>'.
-                      $pdh->geth('shoutbox', 'membername', array($shoutbox_id)).
+                      $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).
                       ':<br/>'.
                       $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root_path));
 
@@ -180,9 +180,10 @@ if (!class_exists("sb_vertical"))
       // get class for row
       $class = $core->switch_row_class();
 
-      // only display form if user has members assigned to
+      // only display form if user has members assigned to or if user modus is selected
       $members = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
-      if (is_array($members) && count($members) > 0)
+      if ((is_array($members) && count($members) > 0) ||
+          $core->config['shoutbox']['sb_use_users'])
       {
         // html
         $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
@@ -199,7 +200,7 @@ if (!class_exists("sb_vertical"))
         $out .= '<tr class="'.$class.'">
                    <td>
                      <div align="center">'
-                     .$this->getFormMember().
+                     .$this->getFormName().
                     '</div>
                    </td>
                  </tr>
@@ -233,7 +234,7 @@ if (!class_exists("sb_vertical"))
                </table>
              </form>';
       }
-      else
+      else if ($core->config['shoutbox']['sb_use_users'])
       {
         $out .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
       }
@@ -242,41 +243,51 @@ if (!class_exists("sb_vertical"))
     }
 
     /**
-     * getFormMember
-     * get the Shoutbox <form> Members
+     * getFormName
+     * get the Shoutbox <form> Names
      *
      * @return  string
      */
-    private function getFormMember()
+    private function getFormName()
     {
-      global $user, $pdh, $html;
+      global $user, $pdh, $html, $core;
 
       // for anonymous user, just return empty string
       $outHtml = '';
 
-      // get member array
-      $member_connections = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
-      if (is_array($member_connections))
+      // if we have users, just return the single user, otherwise use member dropdown
+      if ($core->config['shoutbox']['sb_use_users'])
       {
-        $membercount = count($member_connections);
-
-        // if more than 1 member, show dropdown box
-        if ($membercount > 1)
+        // show name as text and user id as hidden value
+        $username = $pdh->get('user', 'name', array($user->data['user_id']));
+        $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$user->data['user_id'].'"/>'.$username;
+      }
+      else
+      {
+        // get member array
+        $member_connections = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
+        if (is_array($member_connections))
         {
-          $members = array();
-          foreach ($member_connections as $member)
+          $membercount = count($member_connections);
+  
+          // if more than 1 member, show dropdown box
+          if ($membercount > 1)
           {
-            $members[$member['member_id']] = $member['member_name'];
+            $members = array();
+            foreach ($member_connections as $member)
+            {
+              $members[$member['member_id']] = $member['member_name'];
+            }
+            // show dropdown box
+            $outHtml .= $html->DropDown('sb_usermember_id', $members, '');
           }
-          // show dropdown box
-          $outHtml .= $html->DropDown('sb_member_id', $members, '');
-        }
-        // if only one member, show just member
-        else if ($membercount == 1)
-        {
-          // show name as text and member id as hidden value
-          $outHtml .= '<input type="hidden" name="sb_member_id" value="'.$member_connections[0]['member_id'].'"/>'.
-                      $member_connections[0]['member_name'];
+          // if only one member, show just member
+          else if ($membercount == 1)
+          {
+            // show name as text and member id as hidden value
+            $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$member_connections[0]['member_id'].'"/>'.
+                        $member_connections[0]['member_name'];
+          }
         }
       }
 

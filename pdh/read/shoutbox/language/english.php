@@ -22,9 +22,9 @@ if (!defined('EQDKP_INC'))
 }
 
 $module_lang = array(
-  'date'       => 'Date',
-  'membername' => 'Name',
-  'text'       => 'Text'
+  'date'           => 'Date',
+  'usermembername' => 'Name',
+  'text'           => 'Text'
 );
 
 $preset_lang = array(

@@ -23,6 +23,7 @@ if (!defined('EQDKP_INC'))
 
 // Config Values
 $config_vars = array(
+  'sb_use_users'  => 1,  // We use users instead of members as default
 );
 
 ?>

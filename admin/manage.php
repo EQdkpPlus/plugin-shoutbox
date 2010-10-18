@@ -100,10 +100,10 @@ else if ($in->get('search'))
   // loop through all the shoutbox entries and try to find in either username or in text
   foreach ($shoutbox_ids as $shoutbox_id)
   {
-    $text   = $pdh->get('shoutbox', 'text',       array($shoutbox_id));
-    $member = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
+    $text   = $pdh->get('shoutbox', 'text',           array($shoutbox_id));
+    $name   = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
     $search = $in->get('search');
-    if (strpos($text, $search) !== false || strpos($member, $search) !== false)
+    if (strpos($text, $search) !== false || strpos($name, $search) !== false)
       $shoutbox_out[] = $shoutbox_id;
     $url_suffix = '&amp;search='.sanitize($in->get('search'));
     $page_title = $user->lang['search'].': '.sanitize($in->get('search'));

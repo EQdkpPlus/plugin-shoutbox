@@ -43,6 +43,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public $hooks = array(
       'member_update',
+      'user_update',
       'shoutbox_update'
     );
 
@@ -50,9 +51,9 @@ if (!class_exists('pdh_r_shoutbox'))
      * Presets array
      */
     public $presets = array(
-      'sbdate' => array('date',       array('%shoutbox_id%', true),  array()), // true = Show Date
-      'sbname' => array('membername', array('%shoutbox_id%'),        array()),
-      'sbtext' => array('text',       array('%shoutbox_id%'),        array())
+      'sbdate' => array('date',           array('%shoutbox_id%', true),  array()), // true = Show Date
+      'sbname' => array('usermembername', array('%shoutbox_id%'),        array()),
+      'sbtext' => array('text',           array('%shoutbox_id%'),        array())
     );
 
     /**
@@ -98,7 +99,7 @@ if (!class_exists('pdh_r_shoutbox'))
       // read all shoutbox entries from db
       $sql = 'SELECT
                 shoutbox_id,
-                member_id,
+                user_or_member_id,
                 shoutbox_date,
                 shoutbox_text
               FROM `__shoutbox`
@@ -113,9 +114,9 @@ if (!class_exists('pdh_r_shoutbox'))
         while (($row = $db->fetch_record($result)))
         {
           $this->data[$row['shoutbox_id']] = array(
-            'member_id' => $row['member_id'],
-            'date'      => $row['shoutbox_date'],
-            'text'      => $row['shoutbox_text']
+            'user_member_id' => $row['user_or_member_id'],
+            'date'           => $row['shoutbox_date'],
+            'text'           => $row['shoutbox_text']
           );
         }
         $db->free_result($result);
@@ -152,51 +153,65 @@ if (!class_exists('pdh_r_shoutbox'))
     }
 
     /**
-     * get_memberid
-     * Return the member id corresponding to the shoutbox id
+     * get_usermemberid
+     * Return the user or member id corresponding to the shoutbox id
      *
      * @param  int  $shoutbox_id  shoutbox id
      *
      * @returns integer
      */
-    public function get_memberid($shoutbox_id)
+    public function get_usermemberid($shoutbox_id)
     {
-      if (is_array($this->data[$shoutbox_id]) && isset($this->data[$shoutbox_id]['member_id']))
+      if (is_array($this->data[$shoutbox_id]) && isset($this->data[$shoutbox_id]['user_member_id']))
       {
-        return $this->data[$shoutbox_id]['member_id'];
+        return $this->data[$shoutbox_id]['user_member_id'];
       }
 
       return -1;
     }
 
     /**
-     * get_membername
-     * Return the member name corresponding to the shoutbox id
+     * get_usermembername
+     * Return the user or member name corresponding to the shoutbox id
      *
      * @param  int  $shoutbox_id  Shoutbox ID
      *
      * @returns string
      */
-    public function get_membername($shoutbox_id)
+    public function get_usermembername($shoutbox_id)
     {
-      global $pdh;
+      global $pdh, $core;
 
-      return $pdh->get('member', 'name', array($this->get_memberid($shoutbox_id), false, false));
+      if ($core->config['shoutbox']['sb_use_users'])
+      {
+        return $pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+      }
+      else
+      {
+        return $pdh->get('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+      }
     }
 
     /**
-     * get_html_membername
-     * Return the member name corresponding to the shoutbox id as html
+     * get_html_usermembername
+     * Return the user or member name corresponding to the shoutbox id as html
      *
      * @param  int  $shoutbox_id  Shoutbox ID
      *
      * @returns string
      */
-    public function get_html_membername($shoutbox_id)
+    public function get_html_usermembername($shoutbox_id)
     {
-      global $pdh;
+      global $pdh, $core;
 
-      return $pdh->geth('member', 'name', array($this->get_memberid($shoutbox_id), false, false));
+      if ($core->config['shoutbox']['sb_use_users'])
+      {
+        return $pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+      }
+      else
+      {
+        return $pdh->geth('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+      }
     }
 
     /**
@@ -313,9 +328,16 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_userid($shoutbox_id)
     {
-      global $pdh;
+      global $pdh, $core;
 
-      return $pdh->get('member_connection', 'userid', array($this->get_memberid($shoutbox_id)));
+      if ($core->config['shoutbox']['sb_use_users'])
+      {
+        return $this->get_usermemberid($shoutbox_id);
+      }
+      else
+      {
+        return $pdh->get('member_connection', 'userid', array($this->get_usermemberid($shoutbox_id)));
+      }
     }
 
   } //end class

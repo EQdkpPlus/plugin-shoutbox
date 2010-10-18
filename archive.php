@@ -116,7 +116,7 @@ foreach ($shoutbox_out as $shoutbox_id)
   $tpl->assign_block_vars('shoutbox_row', array(
     'CLASS'   => $core->switch_row_class(),
     'ID'      => $shoutbox_id,
-    'MEMBER'  => $pdh->geth('shoutbox', 'membername', array($shoutbox_id)),
+    'NAME'    => $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
     'DATE'    => $time->date($user->style['date'], $shoutbox_date),
     'TIME'    => $time->date($user->style['time'], $shoutbox_date),
     'MESSAGE' => $pdh->geth('shoutbox', 'text',       array($shoutbox_id))

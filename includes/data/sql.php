@@ -30,7 +30,7 @@ $shoutboxSQL = array(
   'install'   => array(
     '1'     => 'CREATE TABLE IF NOT EXISTS `__shoutbox` (
                   `shoutbox_id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-                  `member_id` SMALLINT(5) DEFAULT \'-1\',
+                  `user_or_member_id` SMALLINT(5) NOT NULL DEFAULT \'-1\',
                   `shoutbox_date` INT(11) UNSIGNED NOT NULL DEFAULT \'0\',
                   `shoutbox_text` TEXT COLLATE utf8_bin DEFAULT NULL,
                   PRIMARY KEY (`shoutbox_id`)

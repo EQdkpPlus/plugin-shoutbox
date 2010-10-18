@@ -48,6 +48,8 @@ $lang = array(
   // Admin
   'sb_delete_success'               => 'Successfully deleted entries',
   'sb_settings_info'                => 'Further Shoutbox settings could be found within the <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodule settings</a>',
+  'sb_use_users'                    => 'Use usernames instead of membernames',
+  'sb_use_users_help'               => 'On changing membernames to usernames all entries will be updated.<br/>On changing usernames to membernames all entries will be deleted!',
 
   // Configuration
   'sb_config_saved'                 => 'Settings saved successfully',
@@ -71,7 +73,7 @@ $lang = array(
   'sb_shoutbox_archive'             => 'Shoutbox Archive',
 
   // Exchange
-  'sb_missing_member_id'            => 'Missing Member ID to insert',
+  'sb_missing_id'                   => 'Missing User or Member ID to insert',
   'sb_missing_text'                 => 'Missing text to insert',
 
   // About/Credits

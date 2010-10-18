@@ -1,24 +1,33 @@
 
-<table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
- <tr>
-    <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png"></td>
-    <td class="row1" align="center">{L_SETTINGS_INFO}</td>
-  </tr>
-</table>
-<br>
-<form name="settings" action="{F_CONFIG}" method="post">
-  <table border="0" width="100%" cellspacing="1" cellpadding="2">
-    <tr>
-      <th align="center" colspan="2">{L_GENERAL}</th>
-    </tr>
-    <tr>
-      <th align="center" colspan="2">
-        <input type="submit" name="save_settings" value="{L_SAVE}" class="mainoption bi_ok" />
-        <input type="reset" name="sb_reset" value="{L_RESET}" class="liteoption bi_reset" />
-      </th>
-    </tr>
-  </table>
+<link rel='stylesheet' href='{TEMPLATE_PATH}/admin/settings.css' type='text/css' />
+<form name="sb_settings" action="{F_CONFIG}" method="post">
+  <fieldset>
+    <div id="sb_settings_general"
+      <legend>{L_GENERAL}</legend>
+      <div id="info_table">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+         <tr>
+            <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png"></td>
+            <td class="row1" align="center">{L_SETTINGS_INFO}</td>
+          </tr>
+        </table>
+      </div>
+      <dl>
+        <dt>
+          <label>{L_USE_USERS}</label><br/>
+          <span>{L_USE_USERS_HELP}</span>
+        </dt>
+        <dd>
+          <label>{F_USE_USERS}</label>
+        </dd>
+      </dl>
+    </div>
+    <br />
+	  <div align="center">
+      <input type="submit" name="save_settings" value="{L_SAVE}" class="mainoption bi_ok" />
+      <input type="reset" name="sb_reset" value="{L_RESET}" class="liteoption bi_reset" />
+    </div> 
+  </fieldset>
 </form>
-<br />
-
+<br/>
 <!-- INCLUDE about_footer.html -->

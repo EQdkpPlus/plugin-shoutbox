@@ -28,16 +28,16 @@ if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
   if (!defined('SKIP_LIGHTBOX')) define('SKIP_LIGHTBOX', 1);
 
   // get post/get values
-  $sb_text        = $in->get('sb_text');
-  $sb_member_id   = $in->get('sb_member_id', -1);
-  $sb_delete      = $in->get('sb_delete', 0);
-  $sb_root        = $in->get('sb_root');
-  $sb_orientation = $in->get('sb_orientation');
+  $sb_text          = $in->get('sb_text');
+  $sb_usermember_id = $in->get('sb_usermember_id', -1);
+  $sb_delete        = $in->get('sb_delete', 0);
+  $sb_root          = $in->get('sb_root');
+  $sb_orientation   = $in->get('sb_orientation');
 
   // -- Insert? ---------------------------------------------
   if ($sb_text && $sb_member_id != -1)
   {
-    $shoutbox->insertShoutboxEntry($sb_member_id, $sb_text);
+    $shoutbox->insertShoutboxEntry($sb_usermember_id, $sb_text);
   }
   // -- Delete? ---------------------------------------------
   else if ($sb_delete)
