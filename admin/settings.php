@@ -61,7 +61,7 @@ if ($in->get('save_settings'))
   // update configuration
   $core->config_set($savearray, '', 'shoutbox');
   // redirect
-  //redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
+  redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
 }
 
 
