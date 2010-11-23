@@ -43,7 +43,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public $hooks = array(
       'member_update',
-      'user_update',
+      'user',
       'shoutbox_update'
     );
 
@@ -184,7 +184,7 @@ if (!class_exists('pdh_r_shoutbox'))
 
       if ($core->config['shoutbox']['sb_use_users'])
       {
-        return $pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+        return $pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
       else
       {
@@ -206,7 +206,7 @@ if (!class_exists('pdh_r_shoutbox'))
 
       if ($core->config['shoutbox']['sb_use_users'])
       {
-        return $pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+        return $pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
       else
       {

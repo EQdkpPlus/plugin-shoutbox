@@ -74,6 +74,7 @@ foreach ($date_array as $year => $months)
 
 
 // -- year/month select? ------------------------------------------------------
+$page_title = '';
 if ($in->get('year') && $in->get('month'))
 {
   // add all shoutbox entries within date/month to the output array
@@ -119,7 +120,7 @@ foreach ($shoutbox_out as $shoutbox_id)
     'NAME'    => $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
     'DATE'    => $time->date($user->style['date'], $shoutbox_date),
     'TIME'    => $time->date($user->style['time'], $shoutbox_date),
-    'MESSAGE' => $pdh->geth('shoutbox', 'text',       array($shoutbox_id))
+    'MESSAGE' => $pdh->geth('shoutbox', 'text', array($shoutbox_id))
   ));
 }
 
@@ -132,15 +133,7 @@ $tpl->assign_vars(array(
   'S_MONTH'           => $in->get('month', ''),
   'S_SEARCH'          => $in->get('search', ''),
   'S_COUNT'           => count($shoutbox_out),
-
-  // language
-  'L_ARCHIVE'         => $user->lang['sb_shoutbox_archive'],
-  'L_PAGE_TITLE'      => ($page_title != '') ? '&raquo; '.$page_title : '',
-  'L_SEARCH'          => $user->lang['search'],
-  'L_DELETE'          => $user->lang['delete'],
-  'L_WRITTEN_BY'      => $user->lang['sb_written_by'],
-  'L_WRITTEN_AT'      => $user->lang['sb_written_at'],
-  'L_NO_ENTRIES'      => $user->lang['sb_no_entries'],
+  'S_PAGE_TITLE'      => ($page_title != '') ? '&raquo; '.$page_title : '',
 
   // Admin
   'CAN_DELETE'        => $user->check_auth('a_shoutbox_delete', false),

@@ -2,14 +2,14 @@
 <script type="text/javascript">
   function onShoutboxArchiveSearchFocus(input)
   {
-    if (input.value == '{L_SEARCH}...')
+    if (input.value == '{L_search}...')
       input.value = '';
   }
 
   function onShoutboxArchiveSearchBlur(input)
   {
     if (input.value == '')
-      input.value = '{L_SEARCH}...';
+      input.value = '{L_search}...';
   }
 </script>
 
@@ -17,12 +17,12 @@
   <tr>
     <th>
       <span style="float:left">
-        <a href="{LINK_MANAGE}">{L_ARCHIVE}</a> {L_PAGE_TITLE}
+        <a href="{LINK_MANAGE}">{L_shoutbox} {L_sb_manage_archive}</a> {SB_PAGE_TITLE}
       </span>
       <span style="float:right">
         <form action="{LINK_MANAGE}" method="post">
-          <input type="text" class="input search" value="{L_SEARCH}..." name="search" onFocus="onShoutboxArchiveSearchFocus(this);" onBlur="onShoutboxArchiveSearchBlur(this);">
-          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}">
+          <input type="text" class="input search" value="{L_search}..." name="search" onFocus="onShoutboxArchiveSearchFocus(this);" onBlur="onShoutboxArchiveSearchBlur(this);">
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_search}">
         </form>
       </span>
     </th>
@@ -67,8 +67,8 @@
                 <tr>
                   <th colspan="5">
                     <input name="start" type="hidden" value="{START}" />
-                    <input type="submit" name="sb_delete" value="{L_DELETE}" class="mainoption bi_delete" />
-                    <input type="reset" name="sb_reset" value="{L_RESET}" class="liteoption bi_reset" />
+                    <input type="submit" name="sb_delete" value="{L_delete}" class="mainoption bi_delete" />
+                    <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
                   </th>
                 </tr>
                 <!-- IF PAGINATION -->

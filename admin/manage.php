@@ -87,6 +87,7 @@ foreach ($date_array as $year => $months)
 
 
 // -- year/month select? ------------------------------------------------------
+$page_title = '';
 if ($in->get('year') && $in->get('month'))
 {
   // add all shoutbox entries within date/month to the output array
@@ -153,17 +154,11 @@ $tpl->assign_vars(array (
   // Form
   'LINK_MANAGE'       => $eqdkp_root_path.'plugins/shoutbox/admin/manage.php'.$SID,
   'SB_TABLE'          => $hptt->get_html_table($hptt_sort, $hptt_url_suffix, $start, $end),
+  'SB_PAGE_TITLE'     => ($page_title != '') ? '&raquo; '.$page_title : '',
 
   // pagination
   'START'             => $start,
   'PAGINATION'        => $pagination,
-
-  // language
-  'L_ARCHIVE'         => $user->lang['shoutbox'].' '.$user->lang['sb_manage_archive'],
-  'L_PAGE_TITLE'      => ($page_title != '') ? '&raquo; '.$page_title : '',
-  'L_SEARCH'          => $user->lang['search'],
-  'L_DELETE'          => $user->lang['delete'],
-  'L_RESET'           => $user->lang['reset'],
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',

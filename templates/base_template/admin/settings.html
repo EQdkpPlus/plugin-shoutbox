@@ -1,21 +1,21 @@
 
-<link rel='stylesheet' href='{TEMPLATE_PATH}/admin/settings.css' type='text/css' />
-<form name="sb_settings" action="{F_CONFIG}" method="post">
+<link rel='stylesheet' href='{TEMPLATE_PATH}/settings.css' type='text/css' />
+<form name="sb_settings" action="{ACTION}" method="post">
   <fieldset>
     <div id="sb_settings_general"
-      <legend>{L_GENERAL}</legend>
+      <legend>{L_sb_header_general}</legend>
       <div id="info_table">
         <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
          <tr>
             <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png"></td>
-            <td class="row1" align="center">{L_SETTINGS_INFO}</td>
+            <td class="row1" align="center">{L_sb_settings_info}</td>
           </tr>
         </table>
       </div>
       <dl>
         <dt>
-          <label>{L_USE_USERS}</label><br/>
-          <span>{L_USE_USERS_HELP}</span>
+          <label>{L_sb_use_users}</label><br/>
+          <span>{L_sb_use_users_help}</span>
         </dt>
         <dd>
           <label>{F_USE_USERS}</label>
@@ -24,8 +24,8 @@
     </div>
     <br />
 	  <div align="center">
-      <input type="submit" name="save_settings" value="{L_SAVE}" class="mainoption bi_ok" />
-      <input type="reset" name="sb_reset" value="{L_RESET}" class="liteoption bi_reset" />
+      <input type="submit" name="save_settings" value="{L_save}" class="mainoption bi_ok" />
+      <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
     </div> 
   </fieldset>
 </form>

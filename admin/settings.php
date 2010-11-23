@@ -77,16 +77,8 @@ if ($in->get('save'))
 $jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->assign_vars(array (
   // form
-  'F_CONFIG'          => 'settings.php'.$SID,
+  'ACTION'            => 'settings.php'.$SID,
   'F_USE_USERS'       => $html->CheckBox('sb_use_users', '', $core->config['shoutbox']['sb_use_users']),
-
-  // Language
-  'L_SETTINGS_INFO'   => $user->lang['sb_settings_info'],
-  'L_USE_USERS'       => $user->lang['sb_use_users'],
-  'L_USE_USERS_HELP'  => $user->lang['sb_use_users_help'],
-  'L_SAVE'            => $user->lang['save'],
-  'L_RESET'           => $user->lang['reset'],
-  'L_GENERAL'         => $user->lang['sb_header_general'],
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',
