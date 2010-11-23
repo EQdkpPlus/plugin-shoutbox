@@ -30,9 +30,9 @@ if (!class_exists("Shoutbox"))
   class Shoutbox
   {
     /**
-     * RSS object
+     * RSS Feed object
      */
-    private $rss;
+    private $rssFeed;
 
     /**
      * Required versions
@@ -52,13 +52,15 @@ if (!class_exists("Shoutbox"))
      */
     public function __construct()
     {
-      global $core, $user;
+      global $core, $pcache, $user;
 
-      $this->rss = new UniversalFeedCreator();
-      $this->rss->title          = $user->lang['shoutbox'];
-      $this->rss->description    = $core->config['main_title'].' - '.$user->lang['shoutbox'];
-      $this->rss->link           = $core->BuildLink();
-      $this->rss->syndicationURL = $core->BuildLink().$_SERVER['PHP_SELF'];
+      $this->rssFeed = new Feed();
+      $this->rssFeed->title          = $user->lang['shoutbox'];
+      $this->rssFeed->description    = $core->config['main_title'].' - '.$user->lang['shoutbox'];
+      $this->rssFeed->link           = $core->BuildLink();
+      $this->rssFeed->feedfile       = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      $this->rssFeed->published      = $time->time;
+      $this->rssFeed->language       = 'de-DE';
 
       // get output limit
       $this->output_limit = ($core->config['sb_output_count_limit'] > 0 ? $core->config['sb_output_count_limit'] : 10);
@@ -335,20 +337,19 @@ if (!class_exists("Shoutbox"))
         // create RSS feed item
         foreach ($shoutbox_ids as $shoutbox_id)
         {
-          $rssitem = new FeedItem();
+          $rssitem = new feeditems();
           $rssitem->title       = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
-          $rssitem->link        = $this->rss->link;
           $rssitem->description = $pdh->geth('shoutbox', 'text', array($shoutbox_id));
-          $rssitem->date        = $pdh->get('shoutbox', 'date', array($shoutbox_id));
-          $rssitem->source      = $this->rss->link;
+          $rssitem->link        = $this->rssFeed->link;
+          $rssitem->published   = $pdh->get('shoutbox', 'date', array($shoutbox_id));
           $rssitem->author      = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
-          $rssitem->guid        = $shoutbox_id;
-          $this->rss->addItem($rssitem);
+          $rssitem->source      = $this->rssFeed->link;
+          $this->rssFeed->addItem($rssitem);
         }
       }
 
       // save RSS
-      $this->rss->saveFeed('RSS2.0', $pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
+      $this->rssFeed->save($pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
     }
 
   }
