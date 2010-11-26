@@ -118,17 +118,15 @@ if (!class_exists("sb_style_base"))
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
       $autoreload = $autoreload * 1000; // to ms
 
-      $jscode  = "// wait for the DOM to be loaded
-                  $(document).ready(function() {
-                    $('#Shoutbox').ajaxForm({
-                      target: '#htmlShoutboxTable',
-                      beforeSubmit:  function(formData, jqForm, options) {
-                        showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang['sb_save_wait']."');
-                      },
-                      success: function() {
-                        showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang['sb_submit_text']."', '".$user->lang['sb_reload']."');
-                      }
-                    });
+      $jscode  = "$('#Shoutbox').ajaxForm({
+                    target: '#htmlShoutboxTable',
+                    beforeSubmit:  function(formData, jqForm, options) {
+                      showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang['sb_save_wait']."');
+                    },
+                    success: function() {
+                      showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang['sb_submit_text']."', '".$user->lang['sb_reload']."');
+                    }
+                  });
                  ";
       if ($autoreload > 0)
       {
@@ -136,10 +134,9 @@ if (!class_exists("sb_style_base"))
                       shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang['sb_reload']."');
                     }, ".$autoreload.");";
       }
-      $jscode .= '});';
 
+      $tpl->add_js($jscode, 'docready');
       $tpl->js_file($eqdkp_root_path.'plugins/shoutbox/includes/javascripts/shoutbox.js');
-      $tpl->add_js($jscode);
     }
   }
 }

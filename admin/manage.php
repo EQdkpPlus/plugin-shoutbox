@@ -140,15 +140,13 @@ $hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_i
 
 
 // -- Template ----------------------------------------------------------------
-$tpl->add_js('$(document).ready(function() {
-                $(\'#sb_delete_all\').click(function() {
-                  var isChecked = $(this).is(\':checked\');
-                  $(\'#sb_table :checkbox\').each(function() {
-                    this.checked = isChecked;
-                  });
+$tpl->add_js('$(\'#sb_delete_all\').click(function() {
+                var isChecked = $(this).is(\':checked\');
+                $(\'#sb_table :checkbox\').each(function() {
+                  this.checked = isChecked;
                 });
-                Init_RowClick();
-              });');
+              });
+              Init_RowClick();', 'docready');
 $jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->assign_vars(array (
   // Form

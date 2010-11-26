@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 $portal_module['shoutbox'] = array(               // the same name as the folder!
       'name'          => 'Shoutbox Module',       // The name to show
       'path'          => 'shoutbox',              // Folder name again
-      'version'       => '0.3.0',                 // Version
+      'version'       => '0.3.1',                 // Version
       'author'        => 'Aderyn',                // Author
       'contact'       => 'Aderyn@gmx.net',        // email/internet adress
       'description'   => 'Display a shoutbox',    // Detailed Description

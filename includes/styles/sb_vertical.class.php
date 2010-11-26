@@ -269,7 +269,7 @@ if (!class_exists("sb_vertical"))
         if (is_array($member_connections))
         {
           $membercount = count($member_connections);
-  
+
           // if more than 1 member, show dropdown box
           if ($membercount > 1)
           {

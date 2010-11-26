@@ -292,12 +292,12 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_date($shoutbox_id, $show_date=false)
     {
-      global $user, $time;
+      global $time;
 
       if ($show_date)
-        $date = $time->date($user->style['date_time'], $this->get_date($shoutbox_id));
+        $date = $time->user_date($this->get_date($shoutbox_id), true, false, false);
       else
-        $date = $time->date($user->style['time'], $this->get_date($shoutbox_id));
+        $date = $time->user_date($this->get_date($shoutbox_id), false, true, false);
 
       return $date;
     }
