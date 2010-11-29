@@ -15,16 +15,16 @@
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
-    <th align="center">
-      <span style="float:left">
+    <th class="center">
+      <div style="float:left">
         <a href="{LINK_ARCHIVE}">{L_sb_shoutbox_archive}</a> {S_PAGE_TITLE}
-      </span>
-      <span style="float:right">
+      </div>
+      <div style="float:right">
         <form action="{LINK_ARCHIVE}" method="post">
-          <input type="text" class="input search" value="{L_search}..." name="search" onFocus="onShoutboxArchiveSearchFocus(this);" onBlur="onShoutboxArchiveSearchBlur(this);">
-          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_search}">
+          <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align: middle;" title="{L_search}" />
         </form>
-      </span>
+      </div>
     </th>
   </tr>
   <tr>
@@ -35,7 +35,7 @@
             <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
               <!-- BEGIN year_row -->
               <tr>
-                <th align="center">{year_row.YEAR}</th>
+                <th class="center">{year_row.YEAR}</th>
               </tr>
               <!-- BEGIN month_row -->
               <tr class="{year_row.month_row.CLASS}">
@@ -43,7 +43,7 @@
                   <span style="float:left">
                     &nbsp;
                     <a href="{year_row.month_row.LINK_VIEW}">
-                      <img src="{EQDKP_ROOT_PATH}images/arrow.gif">&nbsp;&nbsp;{year_row.month_row.MONTH}
+                      <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="" />&nbsp;&nbsp;{year_row.month_row.MONTH}
                     </a>
                   </span>
                   <span style="float:right">

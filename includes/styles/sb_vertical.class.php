@@ -122,7 +122,7 @@ if (!class_exists("sb_vertical"))
             $htmlOut .= '<span class="small bold floatRight hand" onclick="$(\'#del_shoutbox\').ajaxSubmit(
                            {
                              target: \'#htmlShoutboxTable\',
-                             url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_delete='.$shoutbox_id.'&sb_root='.urlencode($root_path).'&sb_orientation=vertical\',
+                             url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&amp;sb_delete='.$shoutbox_id.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=vertical\',
                              beforeSubmit: function(formData, jqForm, options) {
                                deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$user->lang['delete'].'\');
                              }
@@ -151,7 +151,7 @@ if (!class_exists("sb_vertical"))
       {
         $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                        <tr class="'.$core->switch_row_class().'">
-                         <td><div align="center">'.$user->lang['sb_no_entries'].'</div></td>
+                         <td><div class="center">'.$user->lang['sb_no_entries'].'</div></td>
                        </tr>
                      </table>';
       }
@@ -199,24 +199,24 @@ if (!class_exists("sb_vertical"))
 
         $out .= '<tr class="'.$class.'">
                    <td>
-                     <div align="center">'
+                     <div class="center">'
                      .$this->getFormName().
                     '</div>
                    </td>
                  </tr>
                  <tr class="'.$class.'">
-                   <td><div align="center"><textarea class="input" name="sb_text" style="width: 90%;" rows="3"></textarea></div></td>
+                   <td><div class="center"><textarea class="input" name="sb_text" style="width: 90%;" rows="3"></textarea></div></td>
                  </tr>
                  <tr class="'.$class.'">
                    <td>
-                     <div align="center">
+                     <div class="center">
                        <input type="hidden" name="sb_root" value="'.urlencode($root_path).'"/>
                        <input type="hidden" name="sb_orientation" value="vertical"/>
                        <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
                          {
                            target: \'#htmlShoutboxTable\',
-                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&sb_root='.urlencode($root_path).'&sb_orientation=vertical\',
+                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=vertical\',
                            beforeSubmit: function(formData, jqForm, options) {
                              reloadShoutboxRequest(\''.$root_path.'\');
                            },
@@ -236,7 +236,7 @@ if (!class_exists("sb_vertical"))
       }
       else if ($core->config['shoutbox']['sb_use_users'])
       {
-        $out .= '<div align="center">'.$user->lang['sb_no_character_assigned'].'</div>';
+        $out .= '<div class="center">'.$user->lang['sb_no_character_assigned'].'</div>';
       }
 
       return $out;
@@ -307,7 +307,7 @@ if (!class_exists("sb_vertical"))
       $html = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                  <tr class="'.$core->switch_row_class().'">
                    <td class="menu">
-                     <div align="center">
+                     <div class="center">
                        <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                      </div>
                    </td>

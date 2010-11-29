@@ -1,14 +1,13 @@
 
-<link rel='stylesheet' href='{TEMPLATE_PATH}/settings.css' type='text/css' />
 <form name="sb_settings" action="{ACTION}" method="post">
   <fieldset>
-    <div id="sb_settings_general"
+    <div id="sb_settings_general">
       <legend>{L_sb_header_general}</legend>
       <div id="info_table">
         <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
          <tr>
-            <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png"></td>
-            <td class="row1" align="center">{L_sb_settings_info}</td>
+            <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="info" /></td>
+            <td class="row1 center">{L_sb_settings_info}</td>
           </tr>
         </table>
       </div>
@@ -23,11 +22,11 @@
       </dl>
     </div>
     <br />
-	  <div align="center">
+	  <div class="center">
       <input type="submit" name="save_settings" value="{L_save}" class="mainoption bi_ok" />
       <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
     </div> 
   </fieldset>
 </form>
-<br/>
+<br />
 <!-- INCLUDE about_footer.html -->

@@ -67,7 +67,7 @@ foreach ($date_array as $year => $months)
       'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
       'CLASS'     => $core->switch_row_class(),
-      'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&year='.$year.'&month='.$month
+      'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&amp;year='.$year.'&amp;month='.$month
     ));
   }
 }
@@ -87,8 +87,8 @@ else if ($in->get('search'))
   // loop through all the shoutbox entries and try to find in either username or in text
   foreach ($shoutbox_ids as $shoutbox_id)
   {
-    $text   = $pdh->get('shoutbox', 'text',       array($shoutbox_id));
-    $member = $pdh->get('shoutbox', 'membername', array($shoutbox_id));
+    $text   = $pdh->get('shoutbox', 'text',           array($shoutbox_id));
+    $member = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
     $search = $in->get('search');
     if (strpos($text, $search) !== false || strpos($member, $search) !== false)
       $shoutbox_out[] = $shoutbox_id;
