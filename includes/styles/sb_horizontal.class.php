@@ -304,7 +304,7 @@ if (!class_exists("sb_horizontal"))
       $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                     <tr class="'.$core->switch_row_class().'">
                       <td class="menu" align="right">
-                        <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onClick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
+                        <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                       </td>
                     </tr>
                   </table>';

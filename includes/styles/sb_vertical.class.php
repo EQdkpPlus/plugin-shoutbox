@@ -308,7 +308,7 @@ if (!class_exists("sb_vertical"))
                  <tr class="'.$core->switch_row_class().'">
                    <td class="menu">
                      <div align="center">
-                       <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onClick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
+                       <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                      </div>
                    </td>
                  </tr>
