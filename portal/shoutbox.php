@@ -142,7 +142,7 @@ if (!function_exists(shoutbox_module))
     {
       $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                    <tr class="'.$core->switch_row_class().'">
-                     <td><div class="center">'.$user->lang['sb_plugin_not_installed'].'</div></td>
+                     <td><div class="center">'.$user->lang('sb_plugin_not_installed').'</div></td>
                    </tr>
                  </table>';
     }

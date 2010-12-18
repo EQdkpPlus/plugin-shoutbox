@@ -121,17 +121,17 @@ if (!class_exists("sb_style_base"))
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',
                     beforeSubmit:  function(formData, jqForm, options) {
-                      showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang['sb_save_wait']."');
+                      showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang('sb_save_wait')."');
                     },
                     success: function() {
-                      showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang['sb_submit_text']."', '".$user->lang['sb_reload']."');
+                      showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang('sb_submit_text')."', '".$user->lang('sb_reload')."');
                     }
                   });
                  ";
       if ($autoreload > 0)
       {
         $jscode .= "setInterval(function() {
-                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang['sb_reload']."');
+                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang('sb_reload')."');
                     }, ".$autoreload.");";
       }
 

@@ -27,7 +27,7 @@ include_once('includes/common.php');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die($user->lang['sb_plugin_not_installed']);
+  message_die($user->lang('sb_plugin_not_installed'));
 }
 
 
@@ -92,7 +92,7 @@ else if ($in->get('search'))
     $search = $in->get('search');
     if (strpos($text, $search) !== false || strpos($member, $search) !== false)
       $shoutbox_out[] = $shoutbox_id;
-    $page_title = $user->lang['search'].': '.sanitize($in->get('search'));
+    $page_title = $user->lang('search').': '.sanitize($in->get('search'));
   }
 }
 // -- last month --------------------------------------------------------------
@@ -142,7 +142,7 @@ $tpl->assign_vars(array(
 
 // -- EQDKP -------------------------------------------------------------------
 $core->set_vars(array (
-  'page_title'    => $user->lang['sb_shoutbox_archive'].' '.$page_title,
+  'page_title'    => $user->lang('sb_shoutbox_archive').' '.$page_title,
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'archive.html',
   'display'       => true

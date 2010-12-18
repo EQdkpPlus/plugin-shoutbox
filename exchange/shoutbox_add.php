@@ -53,9 +53,9 @@ if (!class_exists('exchange_shoutbox_add'))
       {
         // missing data
         if (empty($text))
-          $response = '<response><result>'.$user->lang['sb_missing_text'].'</result></response>';
+          $response = '<response><result>'.$user->lang('sb_missing_text').'</result></response>';
         else
-          $response = '<response><result>'.$user->lang['sb_missing_id'].'</result></response>';
+          $response = '<response><result>'.$user->lang('sb_missing_id').'</result></response>';
       }
 
       return $response;

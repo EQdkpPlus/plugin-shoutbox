@@ -28,7 +28,7 @@ include_once('./../includes/common.php');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die($user->lang['sb_plugin_not_installed']);
+  message_die($user->lang('sb_plugin_not_installed'));
 }
 
 
@@ -69,12 +69,12 @@ if ($in->get('save_settings'))
 // Saved message
 if ($in->get('save'))
 {
-  $core->message($user->lang['sb_config_saved'], 'Shoutbox', 'green');
+  $core->message($user->lang('sb_config_saved'), 'Shoutbox', 'green');
 }
 
 
 // -- Template ----------------------------------------------------------------
-$jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
+$jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->css_file($eqdkp_root_path.'templates/'.$user->style['template_path'].'/settings.css');
 $tpl->assign_vars(array (
   // form
@@ -83,13 +83,13 @@ $tpl->assign_vars(array (
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',
-  'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
+  'L_CREDITS'         => $user->lang('sb_credits_part1').$pm->get_data('shoutbox', 'version').$user->lang('sb_credits_part2'),
 ));
 
 
 // -- EQDKP -------------------------------------------------------------------
 $core->set_vars(array (
-  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['settings'],
+  'page_title'    => $user->lang('shoutbox').' '.$user->lang('settings'),
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/settings.html',
   'display'       => true

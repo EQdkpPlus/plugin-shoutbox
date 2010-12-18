@@ -54,8 +54,8 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
       'icon'              => 'images/adminmenu/shoutbox.png',
       'version'           => $this->version,
       'author'            => $this->copyright,
-      'description'       => $user->lang['sb_short_desc'],
-      'long_description'  => $user->lang['sb_long_desc'],
+      'description'       => $user->lang('sb_short_desc'),
+      'long_description'  => $user->lang('sb_long_desc'),
       'homepage'          => 'http://www.eqdkp-plus.com/',
       'manuallink'        => false,
       'plus_version'      => '0.7',
@@ -71,8 +71,8 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     // permissions: 'a'=admins, 'u'=user
     // ('a'/'u', Permission-Name, Enable? 'Y'/'N', Language string, array of user-group-ids that should have this permission)
     // Groups: 2 = Super-Admin, 3 = Admin, 4 = Member
-    $this->add_permission('a', 'delete', 'N', $user->lang['delete'], array(2,3));
-    $this->add_permission('u', 'add',    'Y', $user->lang['add'],    array(2,3,4));
+    $this->add_permission('a', 'delete', 'N', $user->lang('delete'), array(2,3));
+    $this->add_permission('u', 'add',    'Y', $user->lang('add'),    array(2,3,4));
 
     // -- Menu --------------------------------------------
     $this->add_menu('admin_menu', $this->gen_admin_menu());
@@ -153,17 +153,17 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     {
       $admin_menu = array (
         'shoutbox' => array (
-          'name' => $user->lang['shoutbox'],
+          'name' => $user->lang('shoutbox'),
           'icon' => './../../plugins/shoutbox/'.$this->data['icon'],
           1 => array (
             'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
-            'text'  => $user->lang['settings'],
+            'text'  => $user->lang('settings'),
             'check' => 'a_shoutbox_',
             'icon'  => 'settings.png'
           ),
           2 => array (
             'link'  => 'plugins/shoutbox/admin/manage.php'.$SID,
-            'text'  => $user->lang['sb_manage_archive'],
+            'text'  => $user->lang('sb_manage_archive'),
             'check' => 'a_shoutbox_delete',
             'icon'  => './../glyphs/archive.png'
           )

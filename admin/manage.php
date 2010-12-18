@@ -34,7 +34,7 @@ $user->check_auth('a_shoutbox_delete');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die($user->lang['sb_plugin_not_installed']);
+  message_die($user->lang('sb_plugin_not_installed'));
 }
 
 
@@ -47,7 +47,7 @@ if (is_array($delete_ids) && count($delete_ids) > 0)
     $shoutbox->deleteShoutboxEntry($delete_id);
   }
 
-  $core->message($user->lang['sb_delete_success'], $user->lang['shoutbox'], 'green');
+  $core->message($user->lang('sb_delete_success'), $user->lang('shoutbox'), 'green');
 }
 
 
@@ -107,7 +107,7 @@ else if ($in->get('search'))
     if (strpos($text, $search) !== false || strpos($name, $search) !== false)
       $shoutbox_out[] = $shoutbox_id;
     $url_suffix = '&amp;search='.sanitize($in->get('search'));
-    $page_title = $user->lang['search'].': '.sanitize($in->get('search'));
+    $page_title = $user->lang('search').': '.sanitize($in->get('search'));
   }
 }
 // -- last month --------------------------------------------------------------
@@ -141,7 +141,7 @@ $hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_i
 
 // -- Template ----------------------------------------------------------------
 $jquery->selectall_checkbox('sb_delete_all', 'selected_ids[]');
-$jquery->Dialog('AboutShoutbox', $user->lang['sb_about_header'], array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
+$jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
 $tpl->assign_vars(array (
   // Form
   'LINK_MANAGE'       => $eqdkp_root_path.'plugins/shoutbox/admin/manage.php'.$SID,
@@ -154,13 +154,13 @@ $tpl->assign_vars(array (
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',
-  'L_CREDITS'         => $user->lang['sb_credits_part1'].$pm->get_data('shoutbox', 'version').$user->lang['sb_credits_part2'],
+  'L_CREDITS'         => $user->lang('sb_credits_part1').$pm->get_data('shoutbox', 'version').$user->lang('sb_credits_part2'),
 ));
 
 
 // -- EQDKP -------------------------------------------------------------------
 $core->set_vars(array (
-  'page_title'    => $user->lang['shoutbox'].' '.$user->lang['sb_manage_archive'].' '.$page_title,
+  'page_title'    => $user->lang('shoutbox').' '.$user->lang('sb_manage_archive').' '.$page_title,
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'admin/manage.html',
   'display'       => true

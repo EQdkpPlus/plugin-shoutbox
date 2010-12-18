@@ -27,7 +27,7 @@ include_once('includes/common.php');
 // -- Plugin installed? -------------------------------------------------------
 if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
 {
-  message_die($user->lang['sb_plugin_not_installed']);
+  message_die($user->lang('sb_plugin_not_installed'));
 }
 
 
@@ -45,7 +45,7 @@ $tpl->assign_vars(array (
 
 // -- EQDKP -------------------------------------------------------------------
 $core->set_vars(array (
-  'page_title'    => $user->lang['shoutbox'],
+  'page_title'    => $user->lang('shoutbox'),
   'template_path' => $pm->get_data('shoutbox', 'template_path'),
   'template_file' => 'show.html',
   'header_format' => 'simple',

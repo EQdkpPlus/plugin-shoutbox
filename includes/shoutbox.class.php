@@ -55,8 +55,8 @@ if (!class_exists("Shoutbox"))
       global $core, $pcache, $user;
 
       $this->rssFeed = new Feed();
-      $this->rssFeed->title          = $user->lang['shoutbox'];
-      $this->rssFeed->description    = $core->config['main_title'].' - '.$user->lang['shoutbox'];
+      $this->rssFeed->title          = $user->lang('shoutbox');
+      $this->rssFeed->description    = $core->config['main_title'].' - '.$user->lang('shoutbox');
       $this->rssFeed->link           = $core->BuildLink();
       $this->rssFeed->feedfile       = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
       $this->rssFeed->published      = $time->time;
@@ -82,11 +82,11 @@ if (!class_exists("Shoutbox"))
       // compare
       if (version_compare(phpversion(), $this->reqVersions['php'], "<"))
       {
-        $result = sprintf($user->lang['sb_php_version'], $this->reqVersions['php'], phpversion());
+        $result = sprintf($user->lang('sb_php_version'), $this->reqVersions['php'], phpversion());
       }
       else if (version_compare($core->config['plus_version'], $this->reqVersions['eqdkp'], "<"))
       {
-        $result = sprintf($user->lang['sb_plus_version'], $this->reqVersions['eqdkp'],
+        $result = sprintf($user->lang('sb_plus_version'), $this->reqVersions['eqdkp'],
                           (($core->config['plus_version'] > 0) ? $core->config['plus_version'] : '[non-PLUS]'));
       }
 
@@ -219,7 +219,7 @@ if (!class_exists("Shoutbox"))
         $this->createRSS();
 
       // add link to RSS
-      $tpl->add_rssfeed($core->config['guildtag'].' - '.$user->lang['shoutbox'], $rss_file);
+      $tpl->add_rssfeed($core->config['guildtag'].' - '.$user->lang('shoutbox'), $rss_file);
 
       return $htmlOut;
     }

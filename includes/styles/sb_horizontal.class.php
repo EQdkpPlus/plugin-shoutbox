@@ -121,11 +121,11 @@ if (!class_exists("sb_horizontal"))
                              target: \'#htmlShoutboxTable\',
                              url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&amp;sb_delete='.$shoutbox_id.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=horizontal\',
                              beforeSubmit: function(formData, jqForm, options) {
-                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$user->lang['delete'].'\');
+                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$user->lang('delete').'\');
                              }
                            }); ">
                            <span id="shoutbox_delete_button_'.$shoutbox_id.'">
-                             <img src="'.$img.'" alt="'.$user->lang['delete'].'" title="'.$user->lang['delete'].'"/>
+                             <img src="'.$img.'" alt="'.$user->lang('delete').'" title="'.$user->lang('delete').'"/>
                            </span>
                          </span>';
           }
@@ -148,7 +148,7 @@ if (!class_exists("sb_horizontal"))
       {
         $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                        <tr class="'.$core->switch_row_class().'">
-                         <td><div class="center">'.$user->lang['sb_no_entries'].'</div></td>
+                         <td><div class="center">'.$user->lang('sb_no_entries').'</div></td>
                        </tr>
                      </table>';
       }
@@ -209,7 +209,7 @@ if (!class_exists("sb_horizontal"))
                      <div class="center">
                        <input type="hidden" name="sb_root" value="'.urlencode($root_path).'"/>
                        <input type="hidden" name="sb_orientation" value="horizontal"/>
-                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang['sb_submit_text'].'"/></span>
+                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang('sb_submit_text').'"/></span>
                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
                          {
                            target: \'#htmlShoutboxTable\',
@@ -218,11 +218,11 @@ if (!class_exists("sb_horizontal"))
                              reloadShoutboxRequest(\''.$root_path.'\');
                            },
                            success: function() {
-                             reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang['sb_reload'].'\');
+                             reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang('sb_reload').'\');
                            }
                          });">
                          <span id="shoutbox_reload_button">
-                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang['sb_reload'].'" title="'.$user->lang['sb_reload'].'"/>
+                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang('sb_reload').'" title="'.$user->lang('sb_reload').'"/>
                          </span>
                        </span>
                      </div>
@@ -233,7 +233,7 @@ if (!class_exists("sb_horizontal"))
       }
       else if (!$core->config['shoutbox']['sb_use_users'])
       {
-        $out .= '<div class="center">'.$user->lang['sb_no_character_assigned'].'</div>';
+        $out .= '<div class="center">'.$user->lang('sb_no_character_assigned').'</div>';
       }
 
       return $out;
@@ -304,7 +304,7 @@ if (!class_exists("sb_horizontal"))
       $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
                     <tr class="'.$core->switch_row_class().'">
                       <td class="menu" align="right">
-                        <input type="button" class="liteoption bi_archive" value="'.$user->lang['sb_archive'].'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
+                        <input type="button" class="liteoption bi_archive" value="'.$user->lang('sb_archive').'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                       </td>
                     </tr>
                   </table>';
