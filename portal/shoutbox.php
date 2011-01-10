@@ -90,7 +90,7 @@ if (!function_exists(shoutbox_module))
 {
   function shoutbox_module()
   {
-    global $pm, $eqdkp_root_path, $core, $user, $wherevalue;
+    global $pm, $eqdkp_root_path, $core, $user, $pdh;
 
     // initialize output
     $output = '';
@@ -119,9 +119,20 @@ if (!function_exists(shoutbox_module))
       }
       else
       {
+        // default position is none
+        $position = '';
+
+        // get the Shoutbox Portal ID
+        $portal_ids = $pdh->get('portal', 'id_list', array(array('plugin' => 'shoutbox')));
+        if (is_array($portal_ids) && count($portal_ids) > 0)
+        {
+          // get the position of the shoutbox portal module
+          $position = $pdh->get('portal', 'position', array(array_pop($portal_ids)));
+        }
+
         // output depending on position
         $orientation = '';
-        switch ($wherevalue)
+        switch ($position)
         {
         case 'left1':
         case 'left2':
@@ -131,6 +142,9 @@ if (!function_exists(shoutbox_module))
         case 'middle':
         case 'bottom':
           $orientation = 'horizontal';
+          break;
+        default:
+          $orientation = 'vertical';
           break;
         }
 

@@ -202,7 +202,7 @@ if (!class_exists("sb_horizontal"))
                    </td>
                    <td>
                      <div class="center">
-                       <textarea class="input" name="sb_text" style="width: 100%;" rows="1"></textarea>
+                       <textarea class="input" name="sb_text" style="width: 100%;" rows="1" cols="1"></textarea>
                      </div>
                    </td>
                    <td width="150">

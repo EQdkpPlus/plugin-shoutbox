@@ -205,7 +205,7 @@ if (!class_exists("sb_vertical"))
                    </td>
                  </tr>
                  <tr class="'.$class.'">
-                   <td><div class="center"><textarea class="input" name="sb_text" style="width: 90%;" rows="3"></textarea></div></td>
+                   <td><div class="center"><textarea class="input" name="sb_text" style="width: 90%;" rows="3" cols="1"></textarea></div></td>
                  </tr>
                  <tr class="'.$class.'">
                    <td>
