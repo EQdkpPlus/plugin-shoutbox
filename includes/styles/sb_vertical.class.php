@@ -181,7 +181,7 @@ if (!class_exists("sb_vertical"))
       $class = $core->switch_row_class();
 
       // only display form if user has members assigned to or if user modus is selected
-      $members = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
+      $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
       if ((is_array($members) && count($members) > 0) ||
           $core->config['shoutbox']['sb_use_users'])
       {
@@ -265,19 +265,14 @@ if (!class_exists("sb_vertical"))
       else
       {
         // get member array
-        $member_connections = $pdh->get('member_connection', 'connection', array($user->data['user_id']));
-        if (is_array($member_connections))
+        $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
+        if (is_array($members))
         {
-          $membercount = count($member_connections);
+          $membercount = count($members);
 
           // if more than 1 member, show dropdown box
           if ($membercount > 1)
           {
-            $members = array();
-            foreach ($member_connections as $member)
-            {
-              $members[$member['member_id']] = $member['member_name'];
-            }
             // show dropdown box
             $outHtml .= $html->DropDown('sb_usermember_id', $members, '');
           }
@@ -285,8 +280,8 @@ if (!class_exists("sb_vertical"))
           else if ($membercount == 1)
           {
             // show name as text and member id as hidden value
-            $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$member_connections[0]['member_id'].'"/>'.
-                        $member_connections[0]['member_name'];
+            $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.key($members).'"/>'.
+                        current($members);
           }
         }
       }

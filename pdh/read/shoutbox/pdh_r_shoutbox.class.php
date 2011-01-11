@@ -336,7 +336,7 @@ if (!class_exists('pdh_r_shoutbox'))
       }
       else
       {
-        return $pdh->get('member_connection', 'userid', array($this->get_usermemberid($shoutbox_id)));
+        return $pdh->get('member', 'userid', array($this->get_usermemberid($shoutbox_id)));
       }
     }
 

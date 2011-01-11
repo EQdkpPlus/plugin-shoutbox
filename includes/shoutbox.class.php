@@ -280,7 +280,7 @@ if (!class_exists("Shoutbox"))
           // get member id
           $member_id = $pdh->get('shoutbox', 'usermemberid', array($shoutbox_id));
           // lookup the user id for this member
-          $user_id = $pdh->get('member_connection', 'userid', array($member_id));
+          $user_id = $pdh->get('member', 'userid', array($member_id));
           // update with new user id
           $pdh->put('shoutbox', 'set_user', array($shoutbox_id, $user_id));
         }
