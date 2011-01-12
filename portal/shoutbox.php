@@ -98,11 +98,12 @@ if (!function_exists(shoutbox_module))
     // check if shoutbox is installed
     if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
     {
-      include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
-      include_once($eqdkp_root_path.'libraries/UniversalFeedCreator/UniversalFeedCreator.class.php');
+      if (!class_exists('Shoutbox'))
+        include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 
       // skip Lightbox usage
-      if (!defined('SKIP_LIGHTBOX')) define('SKIP_LIGHTBOX', 1);
+      if (!defined('SKIP_LIGHTBOX'))
+        define('SKIP_LIGHTBOX', 1);
 
       // create shoutbox
       $shoutbox = new Shoutbox();
