@@ -8,7 +8,7 @@
  * Date:        $Date$
  * -----------------------------------------------------------------------
  * @author      $Author$
- * @copyright   2009 Aderyn
+ * @copyright   2009-2011 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
  * @version     $Rev$

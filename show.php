@@ -8,7 +8,7 @@
  * Date:        $Date: 2008-11-09 18:05:54 +0100 (So, 09 Nov 2008) $
  * -----------------------------------------------------------------------
  * @author      $Author: osr-corgan $
- * @copyright   2008 Aderyn
+ * @copyright   2008-2011 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
  * @version     $Rev: 3069 $
