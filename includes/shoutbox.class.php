@@ -25,9 +25,9 @@ if (!defined('EQDKP_INC'))
 /*+----------------------------------------------------------------------------
   | Shoutbox
   +--------------------------------------------------------------------------*/
-if (!class_exists("Shoutbox"))
+if (!class_exists("ShoutboxClass"))
 {
-  class Shoutbox
+  class ShoutboxClass
   {
     /**
      * RSS Feed object

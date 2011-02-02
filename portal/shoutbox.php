@@ -106,7 +106,7 @@ if (!function_exists(shoutbox_module))
         define('SKIP_LIGHTBOX', 1);
 
       // create shoutbox
-      $shoutbox = new Shoutbox();
+      $shoutbox = new ShoutboxClass();
 
       // do requirements check
       $requirementscheck = $shoutbox->checkRequirements();

@@ -31,7 +31,7 @@ include_once($eqdkp_root_path.'common.php');
 
 // -- Used Classes ------------------------------------------------------------
 include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
-$shoutbox = new Shoutbox();
+$shoutbox = new ShoutboxClass();
 
 
 // -- Check requirements ------------------------------------------------------

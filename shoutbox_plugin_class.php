@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC'))
 /*+----------------------------------------------------------------------------
   | shoutbox_Plugin_Class
   +--------------------------------------------------------------------------*/
-class shoutbox_Plugin_Class extends EQdkp_Plugin
+class shoutbox extends plugin_generic
 {
   public $version    = '0.3.1';
   public $build      = '9208';
@@ -42,8 +42,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
   {
     global $eqdkp_root_path, $user;
 
-    $this->eqdkp_plugin($pm);
-    $this->pm->get_language_pack('shoutbox');
+    parent::__construct($pm);
 
     $this->add_data(array (
       'name'              => 'Shoutbox',
@@ -152,7 +151,6 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
     if ($this->pm->check(PLUGIN_INSTALLED, 'shoutbox') && $user->check_auth('a_shoutbox_', false))
     {
       $admin_menu = array (
-        'shoutbox' => array (
           'name' => $user->lang('shoutbox'),
           'icon' => './../../plugins/shoutbox/'.$this->data['icon'],
           1 => array (
@@ -167,7 +165,7 @@ class shoutbox_Plugin_Class extends EQdkp_Plugin
             'check' => 'a_shoutbox_delete',
             'icon'  => './../glyphs/archive.png'
           )
-        )
+        
       );
 
       return $admin_menu;
