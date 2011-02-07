@@ -148,8 +148,6 @@ class shoutbox extends plugin_generic
   {
     global $user, $SID;
 
-    if ($this->pm->check(PLUGIN_INSTALLED, 'shoutbox') && $user->check_auth('a_shoutbox_', false))
-    {
       $admin_menu = array (
           'name' => $user->lang('shoutbox'),
           'icon' => './../../plugins/shoutbox/'.$this->data['icon'],
@@ -169,9 +167,6 @@ class shoutbox extends plugin_generic
       );
 
       return $admin_menu;
-    }
-
-    return;
   }
 
 }
