@@ -96,7 +96,7 @@ if (!function_exists(shoutbox_module))
     $output = '';
 
     // check if shoutbox is installed
-    if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
+    if ($pm->check('shoutbox', PLUGIN_INSTALLED))
     {
       if (!class_exists('Shoutbox'))
         include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');

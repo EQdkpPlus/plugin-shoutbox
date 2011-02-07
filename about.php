@@ -24,7 +24,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
-if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox') )
+if (!$pm->check('shoutbox', PLUGIN_INSTALLED) )
 {
   message_die('Shoutbox plugin not installed.');
 }

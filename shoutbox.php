@@ -22,7 +22,7 @@ include_once('includes/common.php');
 
 
 // Be sure plugin is installed
-if ($pm->check(PLUGIN_INSTALLED, 'shoutbox'))
+if ($pm->check('shoutbox', PLUGIN_INSTALLED))
 {
   // skip Lightbox usage
   if (!defined('SKIP_LIGHTBOX')) define('SKIP_LIGHTBOX', 1);

@@ -25,7 +25,7 @@ include_once('includes/common.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
-if (!$pm->check(PLUGIN_INSTALLED, 'shoutbox'))
+if (!$pm->check('shoutbox', PLUGIN_INSTALLED))
 {
   message_die($user->lang('sb_plugin_not_installed'));
 }
