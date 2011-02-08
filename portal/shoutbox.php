@@ -86,7 +86,7 @@ $portal_settings['shoutbox'] = array(
 
 
 // -- shoutbox_module ---------------------------------------------------------
-if (!function_exists(shoutbox_module))
+if (!function_exists('shoutbox_module'))
 {
   function shoutbox_module()
   {
@@ -98,7 +98,7 @@ if (!function_exists(shoutbox_module))
     // check if shoutbox is installed
     if ($pm->check('shoutbox', PLUGIN_INSTALLED))
     {
-      if (!class_exists('Shoutbox'))
+      if (!class_exists('ShoutboxClass'))
         include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 
       // skip Lightbox usage
