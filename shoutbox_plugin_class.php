@@ -50,7 +50,7 @@ class shoutbox extends plugin_generic
       'path'              => 'shoutbox',
       'contact'           => 'Aderyn@gmx.net',
       'template_path'     => 'plugins/shoutbox/templates/',
-      'icon'              => 'images/adminmenu/shoutbox.png',
+      'icon'              => $eqdkp_root_path.'plugins/shoutbox/images/adminmenu/shoutbox.png',
       'version'           => $this->version,
       'author'            => $this->copyright,
       'description'       => $user->lang('sb_short_desc'),
@@ -150,7 +150,7 @@ class shoutbox extends plugin_generic
 
       $admin_menu = array (
           'name' => $user->lang('shoutbox'),
-          'icon' => './../../plugins/shoutbox/'.$this->data['icon'],
+          'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
           1 => array (
             'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
             'text'  => $user->lang('settings'),
