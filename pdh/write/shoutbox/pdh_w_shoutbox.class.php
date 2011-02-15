@@ -63,8 +63,8 @@ if (!class_exists('pdh_w_shoutbox'))
       // add to database
       $sql_data = array(
         'user_or_member_id' => $usermember_id,
-        'shoutbox_date'     => $db->sql_escape($time->time),
-        'shoutbox_text'     => $db->sql_escape($text)
+        'shoutbox_date'     => $db->escape($time->time),
+        'shoutbox_text'     => $db->escape($text)
       );
       $result = $db->query('INSERT INTO `__shoutbox` :params', $sql_data);
       if (!$result)
@@ -89,7 +89,7 @@ if (!class_exists('pdh_w_shoutbox'))
       global $db, $pdh;
 
       // delete from db
-      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$db->sql_escape($shoutbox_id);
+      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$db->escape($shoutbox_id);
       $result = $db->query($sql);
       if (!$result)
         return false;
@@ -115,8 +115,8 @@ if (!class_exists('pdh_w_shoutbox'))
 
       // update in db
       $sql = 'UPDATE `__shoutbox`
-              SET `user_or_member_id`='.$db->sql_escape($user_id).'
-              WHERE shoutbox_id='.$db->sql_escape($shoutbox_id);
+              SET `user_or_member_id`='.$db->escape($user_id).'
+              WHERE shoutbox_id='.$db->escape($shoutbox_id);
       $result = $db->query($sql);
       if (!$result)
         return false;
