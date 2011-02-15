@@ -75,7 +75,7 @@ if ($in->get('save'))
 
 // -- Template ----------------------------------------------------------------
 $jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
-$tpl->css_file($eqdkp_root_path.'templates/'.$user->style['template_path'].'/settings.css');
+
 $tpl->assign_vars(array (
   // form
   'ACTION'            => 'settings.php'.$SID,
