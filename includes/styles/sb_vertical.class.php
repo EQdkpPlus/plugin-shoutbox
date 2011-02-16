@@ -47,7 +47,7 @@ if (!class_exists("sb_vertical"))
       $htmlOut = '';
 
       // get location of form
-      $form_location = ($core->config['sb_input_box_location'] != '') ? $core->config['sb_input_box_location'] : 'top';
+      $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
 
       // is input on top (and user can add entries) append form first
       if ($form_location == 'top' && $user->check_auth('u_shoutbox_add', false))
@@ -61,7 +61,7 @@ if (!class_exists("sb_vertical"))
       $htmlOut .= '</div>';
 
       // archive link? (User must be logged in to see archive link)
-      if ($core->config['sb_show_archive'] && $user->data['user_id'] != ANONYMOUS)
+      if ($core->config('sb_show_archive') && $user->data['user_id'] != ANONYMOUS)
       {
         $htmlOut .= $this->getArchiveLink();
       }
@@ -88,7 +88,7 @@ if (!class_exists("sb_vertical"))
       global $user, $core, $SID, $pdh, $eqdkp_root_path;
 
       // get location of form
-      $form_location = ($core->config['sb_input_box_location'] != '') ? $core->config['sb_input_box_location'] : 'top';
+      $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
 
       // empty output
       $htmlOut = '';
@@ -134,7 +134,7 @@ if (!class_exists("sb_vertical"))
           }
 
           // output date as well as User and text
-          $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $core->config['sb_show_date'])).
+          $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $core->config('sb_show_date'))).
                       '<br/>'.
                       $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).
                       ':<br/>'.
@@ -175,7 +175,7 @@ if (!class_exists("sb_vertical"))
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
 
       // get location
-      $form_location = ($core->config['sb_input_box_location'] != '') ? $core->config['sb_input_box_location'] : 'top';
+      $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
 
       // get class for row
       $class = $core->switch_row_class();
@@ -183,7 +183,7 @@ if (!class_exists("sb_vertical"))
       // only display form if user has members assigned to or if user modus is selected
       $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
       if ((is_array($members) && count($members) > 0) ||
-          $core->config['shoutbox']['sb_use_users'])
+          $core->config('sb_use_users', 'shoutbox'))
       {
         // html
         $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
@@ -234,7 +234,7 @@ if (!class_exists("sb_vertical"))
                </table>
              </form>';
       }
-      else if ($core->config['shoutbox']['sb_use_users'])
+      else if ($core->config('sb_use_users', 'shoutbox'))
       {
         $out .= '<div class="center">'.$user->lang('sb_no_character_assigned').'</div>';
       }
@@ -256,7 +256,7 @@ if (!class_exists("sb_vertical"))
       $outHtml = '';
 
       // if we have users, just return the single user, otherwise use member dropdown
-      if ($core->config['shoutbox']['sb_use_users'])
+      if ($core->config('sb_use_users', 'shoutbox'))
       {
         // show name as text and user id as hidden value
         $username = $pdh->get('user', 'name', array($user->data['user_id']));
@@ -265,7 +265,7 @@ if (!class_exists("sb_vertical"))
       else
       {
         // get member array
-        $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
+        $members = $pdh->aget('member', 'name', 0, array($pdh->get('member', 'connection_id', array($user->data['user_id']))));
         if (is_array($members))
         {
           $membercount = count($members);

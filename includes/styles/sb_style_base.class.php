@@ -114,7 +114,7 @@ if (!class_exists("sb_style_base"))
       global $user, $eqdkp_root_path, $core, $SID, $tpl;
 
       // set autoreload (0 = disable)
-      $autoreload = ($core->config['sb_autoreload'] != '') ? intval($core->config['sb_autoreload']) : 0;
+      $autoreload = ($core->config('sb_autoreload') != '') ? intval($core->config('sb_autoreload')) : 0;
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
       $autoreload = $autoreload * 1000; // to ms
 

@@ -40,7 +40,7 @@ $user->check_auth('a_shoutbox_');
 if ($in->get('save_settings'))
 {
   // is use_user change?
-  if ($in->get('sb_use_users', 0) != $core->config['shoutbox']['sb_use_users'])
+  if ($in->get('sb_use_users', 0) != $core->config('sb_use_users', 'shoutbox'))
   {
     // convert to member?
     if ($in->get('sb_use_users', '0') == '1')
@@ -79,7 +79,7 @@ $jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'.
 $tpl->assign_vars(array (
   // form
   'ACTION'            => 'settings.php'.$SID,
-  'F_USE_USERS'       => $html->CheckBox('sb_use_users', '', $core->config['shoutbox']['sb_use_users']),
+  'F_USE_USERS'       => $html->CheckBox('sb_use_users', '', $core->config('sb_use_users', 'shoutbox')),
 
   // credits
   'SB_INFO_IMG'       => '../images/credits/info.png',

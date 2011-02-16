@@ -52,18 +52,18 @@ if (!class_exists("ShoutboxClass"))
      */
     public function __construct()
     {
-      global $core, $pcache, $user;
+      global $core, $pcache, $user, $time;
 
       $this->rssFeed = new Feed();
       $this->rssFeed->title          = $user->lang('shoutbox');
-      $this->rssFeed->description    = $core->config['main_title'].' - '.$user->lang('shoutbox');
+      $this->rssFeed->description    = $core->config('main_title').' - '.$user->lang('shoutbox');
       $this->rssFeed->link           = $core->BuildLink();
       $this->rssFeed->feedfile       = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
       $this->rssFeed->published      = $time->time;
       $this->rssFeed->language       = 'de-DE';
 
       // get output limit
-      $this->output_limit = ($core->config['sb_output_count_limit'] > 0 ? $core->config['sb_output_count_limit'] : 10);
+      $this->output_limit = ($core->config('sb_output_count_limit') > 0 ? $core->config('sb_output_count_limit') : 10);
     }
 
     /**
@@ -84,10 +84,10 @@ if (!class_exists("ShoutboxClass"))
       {
         $result = sprintf($user->lang('sb_php_version'), $this->reqVersions['php'], phpversion());
       }
-      else if (version_compare($core->config['plus_version'], $this->reqVersions['eqdkp'], "<"))
+      else if (version_compare($core->config('plus_version'), $this->reqVersions['eqdkp'], "<"))
       {
         $result = sprintf($user->lang('sb_plus_version'), $this->reqVersions['eqdkp'],
-                          (($core->config['plus_version'] > 0) ? $core->config['plus_version'] : '[non-PLUS]'));
+                          (($core->config('plus_version') > 0) ? $core->config('plus_version') : '[non-PLUS]'));
       }
 
       return $result;
@@ -219,7 +219,7 @@ if (!class_exists("ShoutboxClass"))
         $this->createRSS();
 
       // add link to RSS
-      $tpl->add_rssfeed($core->config['guildtag'].' - '.$user->lang('shoutbox'), $rss_file);
+      $tpl->add_rssfeed($core->config('guildtag').' - '.$user->lang('shoutbox'), $rss_file);
 
       return $htmlOut;
     }

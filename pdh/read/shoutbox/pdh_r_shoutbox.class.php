@@ -182,7 +182,7 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       global $pdh, $core;
 
-      if ($core->config['shoutbox']['sb_use_users'])
+      if ($core->config('sb_use_users', 'shoutbox'))
       {
         return $pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
@@ -204,7 +204,7 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       global $pdh, $core;
 
-      if ($core->config['shoutbox']['sb_use_users'])
+      if ($core->config('sb_use_users', 'shoutbox'))
       {
         return $pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
@@ -330,7 +330,7 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       global $pdh, $core;
 
-      if ($core->config['shoutbox']['sb_use_users'])
+      if ($core->config('sb_use_users', 'shoutbox'))
       {
         return $this->get_usermemberid($shoutbox_id);
       }
