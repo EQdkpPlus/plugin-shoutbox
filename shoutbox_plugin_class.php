@@ -148,7 +148,7 @@ class shoutbox extends plugin_generic
   {
     global $user, $SID;
 
-      $admin_menu = array (
+      $admin_menu = array (array(
           'name' => $user->lang('shoutbox'),
           'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
           1 => array (
@@ -164,7 +164,7 @@ class shoutbox extends plugin_generic
             'icon'  => './../glyphs/archive.png'
           )
         
-      );
+      ));
 
       return $admin_menu;
   }
