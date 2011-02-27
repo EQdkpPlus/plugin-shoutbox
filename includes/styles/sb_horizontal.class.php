@@ -94,19 +94,17 @@ if (!class_exists("sb_horizontal"))
       if (is_array($this->shoutbox_ids) && count($this->shoutbox_ids) > 0 && is_dir($root_path))
       {
         // output table header
-        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">';
+        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch hoverrows">';
 
         // output
         foreach ($this->shoutbox_ids as $shoutbox_id)
         {
-          // get class for row
-          $class = $core->switch_row_class();
 
           // output
           // Date  |  Text
           // User [x]
 
-          $htmlOut .= '<tr class="'.$class.'" onmouseout="this.className=\''.$class.'\';" onmouseover="this.className=\'rowHover\';">
+          $htmlOut .= '<tr>
                          <td style="width: 15%;">';
 
           // if admin or own entry, ouput delete link
@@ -146,8 +144,8 @@ if (!class_exists("sb_horizontal"))
       }
       else
       {
-        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                       <tr class="'.$core->switch_row_class().'">
+        $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+                       <tr>
                          <td><div class="center">'.$user->lang('sb_no_entries').'</div></td>
                        </tr>
                      </table>';
@@ -174,9 +172,6 @@ if (!class_exists("sb_horizontal"))
       // get location
       $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
 
-      // get class for row
-      $class = $core->switch_row_class();
-
       // only display form if user has members assigned to or if user modus is selected
       $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
       if ((is_array($members) && count($members) > 0) ||
@@ -186,7 +181,7 @@ if (!class_exists("sb_horizontal"))
         $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
                 </form>
                 <form id="Shoutbox" name="Shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
-                  <table width="100%" border="0" cellspacing="1" cellpadding="2">';
+                  <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">';
 
         // input below? If true insert space row
         if ($form_location == 'bottom' && $user->check_auth('u_shoutbox_add', false))
@@ -194,7 +189,7 @@ if (!class_exists("sb_horizontal"))
           $out .= '<tr><th colspan="3">&nbsp;</th></tr>';
         }
 
-        $out .= '<tr class="'.$class.'">
+        $out .= '<tr>
                    <td width="150">
                      <div class="center">'
                        .$this->getFormName().
@@ -296,8 +291,8 @@ if (!class_exists("sb_horizontal"))
     {
       global $user, $core, $SID, $eqdkp_root_path;
 
-      $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                    <tr class="'.$core->switch_row_class().'">
+      $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+                    <tr>
                       <td class="menu" align="right">
                         <input type="button" class="liteoption bi_archive" value="'.$user->lang('sb_archive').'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
                       </td>

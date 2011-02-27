@@ -79,7 +79,6 @@ foreach ($date_array as $year => $months)
     $tpl->assign_block_vars('year_row.month_row', array(
       'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
-      'CLASS'     => $core->switch_row_class(),
       'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/admin/manage.php'.$SID.'&amp;year='.$year.'&amp;month='.$month
     ));
   }

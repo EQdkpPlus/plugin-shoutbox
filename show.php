@@ -38,7 +38,6 @@ $content = $shoutbox->showShoutbox();
 // -- Template ----------------------------------------------------------------
 $tpl->assign_vars(array (
   // Form
-  'ROW_CLASS'       => $core->switch_row_class(),
   'CONTENT'         => $content
 ));
 

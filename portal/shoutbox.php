@@ -112,8 +112,8 @@ if (!function_exists('shoutbox_module'))
       $requirementscheck = $shoutbox->checkRequirements();
       if ($requirementscheck !== true)
       {
-        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                     <tr class="'.$core->switch_row_class().'">
+        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+                     <tr>
                        <td><div class="center">'.$requirementscheck.'</div></td>
                      </tr>
                    </table>';
@@ -155,8 +155,8 @@ if (!function_exists('shoutbox_module'))
     }
     else
     {
-      $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
-                   <tr class="'.$core->switch_row_class().'">
+      $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+                   <tr>
                      <td><div class="center">'.$user->lang('sb_plugin_not_installed').'</div></td>
                    </tr>
                  </table>';

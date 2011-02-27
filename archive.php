@@ -66,7 +66,6 @@ foreach ($date_array as $year => $months)
     $tpl->assign_block_vars('year_row.month_row', array(
       'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
       'COUNT'     => count($ids),
-      'CLASS'     => $core->switch_row_class(),
       'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&amp;year='.$year.'&amp;month='.$month
     ));
   }
@@ -115,7 +114,6 @@ foreach ($shoutbox_out as $shoutbox_id)
 
   // output
   $tpl->assign_block_vars('shoutbox_row', array(
-    'CLASS'   => $core->switch_row_class(),
     'ID'      => $shoutbox_id,
     'NAME'    => $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
     'DATE'    => $time->date($user->style['date'], $shoutbox_date),
