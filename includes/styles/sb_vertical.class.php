@@ -199,10 +199,10 @@ if (!class_exists("sb_vertical"))
                     '</div>
                    </td>
                  </tr>
-                 <tr class="'.$class.'">
+                 <tr>
                    <td><div class="center"><textarea class="input" name="sb_text" style="width: 90%;" rows="3" cols="1"></textarea></div></td>
                  </tr>
-                 <tr class="'.$class.'">
+                 <tr>
                    <td>
                      <div class="center">
                        <input type="hidden" name="sb_root" value="'.urlencode($root_path).'"/>
