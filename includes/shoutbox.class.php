@@ -741,12 +741,13 @@ if (!class_exists("Shoutbox"))
      */
     private function getShoutboxJCode()
     {
-      global $user, $eqdkp_root_path, $conf_plus, $SID;
+      global $user, $eqdkp_root_path, $conf_plus, $SID, $_HMODE;
 
       // set autoreload
       $autoreload = ($conf_plus['sb_autoreload'] != '') ? intval($conf_plus['sb_autoreload']) : SHOUTBOX_AUTORELOAD;
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
-
+      $autoreload = ($_HMODE) ? 0 : $autoreload ; 
+      
       $jscode  = "<script type=\"text/javascript\" src=\"".$eqdkp_root_path."plugins/shoutbox/includes/javascripts/shoutbox.js\"></script>
                   <script type='text/javascript'>
                     // wait for the DOM to be loaded
