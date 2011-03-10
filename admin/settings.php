@@ -31,69 +31,102 @@ if (!$pm->check('shoutbox', PLUGIN_INSTALLED))
   message_die($user->lang('sb_plugin_not_installed'));
 }
 
-
-// -- Check user permission ---------------------------------------------------
-$user->check_auth('a_shoutbox_');
-
-
-// -- save? -------------------------------------------------------------------
-if ($in->get('save_settings'))
+/*+----------------------------------------------------------------------------
+  | ShoutboxSettings
+  +--------------------------------------------------------------------------*/
+class ShoutboxSettings extends page_generic
 {
-  // is use_user change?
-  if ($in->get('sb_use_users', 0) != $core->config('sb_use_users', 'shoutbox'))
+  /**
+   * Constructor
+   */
+  public function __construct()
   {
-    // convert to member?
-    if ($in->get('sb_use_users', '0') == '1')
-    {
-      $shoutbox->convertFromMemberToUser();
-    }
-    else
-    {
-      $shoutbox->deleteAllEntries();
-    }
+    $handler = array(
+      'sb_save' => array('process' => 'save', 'session_key' => true),
+    );
+    parent::__construct('a_shoutbox_', $handler);
+
+    $this->process();
   }
 
-  // take over new values
-  $savearray = array(
-    'sb_use_users' => $in->get('sb_use_users', 0),
-  );
 
-  // update configuration
-  $core->config_set($savearray, '', 'shoutbox');
-  // redirect
-  redirect('plugins/shoutbox/admin/settings.php'.$SID.'&save=true');
+  /**
+   * save
+   * Save the configuration
+   */
+  public function save()
+  {
+    global $in, $user, $core;
+
+    // is use_user change?
+    if ($in->get('sb_use_users', 0) != $core->config('sb_use_users', 'shoutbox'))
+    {
+      // convert to member?
+      if ($in->get('sb_use_users', '0') == '1')
+      {
+        $shoutbox->convertFromMemberToUser();
+        $messages[] = 'Converted from Member to Users';
+      }
+      else
+      {
+        $shoutbox->deleteAllEntries();
+        $messages[] = 'Deleted all entries';
+      }
+    }
+
+    // take over new values
+    $savearray = array(
+      'sb_use_users' => $in->get('sb_use_users', 0),
+    );
+
+    // update configuration
+    $core->config_set($savearray, '', 'shoutbox');
+    // Success message
+    $messages[] = $user->lang('sb_config_saved');
+
+    $this->display($messages);
+  }
+
+  /**
+   * display
+   * Display the page
+   *
+   * @param    array  $messages   Array of Messages to output
+   */
+  public function display($messages=array())
+  {
+    global $core, $user, $pm, $html, $jquery, $tpl;
+
+    // -- Messages ------------------------------------------------------------
+    if ($messages)
+    {
+      foreach($messages as $name)
+      {
+        $core->message($name, $user->lang('shoutbox'), 'green');
+      }
+    }
+
+    // -- Template ------------------------------------------------------------
+    $jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
+    $tpl->assign_vars(array (
+      // form
+      'F_USE_USERS'       => $html->CheckBox('sb_use_users', '', $core->config('sb_use_users', 'shoutbox')),
+
+      // credits
+      'SB_INFO_IMG'       => '../images/credits/info.png',
+      'L_CREDITS'         => $user->lang('sb_credits_part1').$pm->get_data('shoutbox', 'version').$user->lang('sb_credits_part2'),
+    ));
+
+    // -- EQDKP ---------------------------------------------------------------
+    $core->set_vars(array(
+      'page_title'    => $user->lang('shoutbox').' '.$user->lang('settings'),
+      'template_path' => $pm->get_data('shoutbox', 'template_path'),
+      'template_file' => 'admin/settings.html',
+      'display'       => true
+    ));
+  }
 }
 
-
-// ----------------------------------------------------------------------------
-// Saved message
-if ($in->get('save'))
-{
-  $core->message($user->lang('sb_config_saved'), 'Shoutbox', 'green');
-}
-
-
-// -- Template ----------------------------------------------------------------
-$jquery->Dialog('AboutShoutbox', $user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
-
-$tpl->assign_vars(array (
-  // form
-  'ACTION'            => 'settings.php'.$SID,
-  'F_USE_USERS'       => $html->CheckBox('sb_use_users', '', $core->config('sb_use_users', 'shoutbox')),
-
-  // credits
-  'SB_INFO_IMG'       => '../images/credits/info.png',
-  'L_CREDITS'         => $user->lang('sb_credits_part1').$pm->get_data('shoutbox', 'version').$user->lang('sb_credits_part2'),
-));
-
-
-// -- EQDKP -------------------------------------------------------------------
-$core->set_vars(array (
-  'page_title'    => $user->lang('shoutbox').' '.$user->lang('settings'),
-  'template_path' => $pm->get_data('shoutbox', 'template_path'),
-  'template_file' => 'admin/settings.html',
-  'display'       => true
-  )
-);
+$shoutboxSettings = new ShoutboxSettings();
 
 ?>

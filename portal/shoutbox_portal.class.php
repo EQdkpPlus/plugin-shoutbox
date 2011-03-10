@@ -21,52 +21,50 @@ if (!defined('EQDKP_INC'))
     header('HTTP/1.0 404 Not Found'); exit;
 }
 
-// -- Portal Module -----------------------------------------------------------
-$portal_module['shoutbox'] = array(               // the same name as the folder!
-      'name'          => 'Shoutbox Module',       // The name to show
-      'path'          => 'shoutbox',              // Folder name again
-      'version'       => '0.3.1',                 // Version
-      'author'        => 'Aderyn',                // Author
-      'contact'       => 'Aderyn@gmx.net',        // email/internet adress
-      'description'   => 'Display a shoutbox',    // Detailed Description
-      'positions'     => array('left1', 'left2',  // Which blocks should be usable? left1 (over menu), left2 (under menu), right, middle
-                               'right',
-                               'middle', 'bottom'),
-      'settings'      => '1',
-      'install'       => array(
-                           'autoenable'        => '1',
-                           'defaultposition'   => 'left2',
-                           'defaultnumber'     => '1',
-                         ),
-);
-
-
-// -- Settings ----------------------------------------------------------------
-/* Define the Settings if needed
-   name:       The name of the Database field & Input name
-   language:   The name of the language string in the language file
-   property:   What type of field? (text,checkbox,dropdown)
-   size:       Size of the field if required (optional)
-   options:    If dropdown: array('value'=>'Name')
-*/
-$portal_settings['shoutbox'] = array(
-  'pk_shoutbox_output_count_limit'  => array(
-        'name'      => 'sb_output_count_limit',
-        'language'  => 'sb_output_count_limit',
-        'property'  => 'text',
-        'size'      => '3',
-      ),
-  'pk_shoutbox_show_date'           => array(
+/*+----------------------------------------------------------------------------
+  | shoutbox_portal
+  +--------------------------------------------------------------------------*/
+class shoutbox_portal extends portal_generic
+{
+  /**
+   * Portal path
+   */
+  protected $path = 'shoutbox';
+  /**
+   * Portal data
+   */
+  protected $data = array(
+    'name'        => 'Shoutbox Module',
+    'version'     => '0.3.2',
+    'author'      => 'Aderyn',
+    'contact'     => 'Aderyn@gmx.net',
+    'description' => 'Display a shoutbox',
+  );
+  /**
+   * Positions this Module may appear
+   */
+  protected $positions = array('left1', 'left2', 'right', 'middle', 'bottom');
+  /**
+   * Settings
+   */
+  protected $settings = array(
+    'pk_shoutbox_output_count_limit'  => array(
+      'name'      => 'sb_output_count_limit',
+      'language'  => 'sb_output_count_limit',
+      'property'  => 'text',
+      'size'      => '3',
+    ),
+    'pk_shoutbox_show_date'           => array(
         'name'      => 'sb_show_date',
         'language'  => 'sb_show_date',
         'property'  => 'checkbox',
-      ),
-  'pk_shoutbox_show_archive'        => array(
+    ),
+    'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
         'property'  => 'checkbox',
-      ),
-  'pk_shoutbox_input_box_location'  => array(
+    ),
+    'pk_shoutbox_input_box_location'  => array(
         'name'      => 'sb_input_box_location',
         'language'  => 'sb_input_box_location',
         'property'  => 'dropdown',
@@ -74,21 +72,31 @@ $portal_settings['shoutbox'] = array(
               'top'    => 'sb_location_top',
               'bottom' => 'sb_location_bottom'
         ),
-      ),
-  'pk_shoutbox_autoreload'          => array(
+    ),
+    'pk_shoutbox_autoreload'          => array(
         'name'      => 'sb_autoreload',
         'language'  => 'sb_autoreload',
         'property'  => 'text',
         'size'      => '3',
         'help'      => 'sb_autoreload_help',
-      ),
-);
+    ),
+  );
+  /**
+   * Installation
+   */
+  protected $install = array(
+    'autoenable'      => '1',
+    'defaultposition' => 'left2',
+    'defaultnumber'   => '1',
+  );
 
-
-// -- shoutbox_module ---------------------------------------------------------
-if (!function_exists('shoutbox_module'))
-{
-  function shoutbox_module()
+  /**
+    * output
+    * Get the portal output
+    *
+    * @returns string
+    */
+  public function output()
   {
     global $pm, $eqdkp_root_path, $core, $user, $pdh;
 
@@ -165,4 +173,5 @@ if (!function_exists('shoutbox_module'))
     return $output;
   }
 }
+
 ?>

@@ -23,11 +23,11 @@ if (!defined('EQDKP_INC'))
 
 
 /*+----------------------------------------------------------------------------
-  | shoutbox_Plugin_Class
+  | shoutbox
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic
 {
-  public $version    = '0.3.1';
+  public $version    = '0.3.2';
   public $build      = '9208';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
