@@ -65,12 +65,12 @@ class ShoutboxSettings extends page_generic
       if ($in->get('sb_use_users', '0') == '1')
       {
         $shoutbox->convertFromMemberToUser();
-        $messages[] = 'Converted from Member to Users';
+        $messages[] = $user->lang('sb_convert_member_user_success');
       }
       else
       {
         $shoutbox->deleteAllEntries();
-        $messages[] = 'Deleted all entries';
+        $messages[] = $user->lang('sb_convert_user_member_success');
       }
     }
 

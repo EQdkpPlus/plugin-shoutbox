@@ -17,10 +17,10 @@
   <tr>
     <th>
       <div style="float:left">
-        <a href="{LINK_MANAGE}">{L_shoutbox} {L_sb_manage_archive}</a> {SB_PAGE_TITLE}
+        <a href="{ACTION}">{L_shoutbox} {L_sb_manage_archive}</a> {SB_PAGE_TITLE}
       </div>
       <div style="float:right">
-        <form action="{LINK_MANAGE}" method="post">
+        <form action="{ACTION}" method="post">
           <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
           <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_search}" />
         </form>
@@ -53,7 +53,7 @@
             </table>
           </td>
           <td>
-            <form method="post" action="{LINK_MANAGE}" id="sb_table">
+            <form method="post" action="{ACTION}" id="sb_table">
               <table width="100%" border="0" cellspacing="1" cellpadding="2">
                 <!-- IF PAGINATION -->
                 <tr class="row2">

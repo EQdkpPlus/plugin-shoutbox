@@ -50,6 +50,8 @@ $lang = array(
   'sb_settings_info'                => 'Weitere Einstellungen für die Shoutbox findet Ihr unter den <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodul Einstellungen</a>',
   'sb_use_users'                    => 'Benutzernamen anstatt der Charakternamen verwenden',
   'sb_use_users_help'               => 'Beim Ändern von Charakteren zu Benutzern werden die bestehenden Einträge aktualisiert.<br/>Beim Ändern von Benutzern zu Charakteren werden die bestehenden Einträge gelöscht!',
+  'sb_convert_member_user_success'  => 'Alle Charaktere in den Einträgen wurden erfolgreich zu Benutzern aktualisiert.',
+  'sb_convert_user_member_success'  => 'Alle bestehenden Einträge wurden gelöscht',
 
   // Configuration
   'sb_config_saved'                 => 'Einstellungen wurden gespeichert',
