@@ -147,7 +147,7 @@ if (!class_exists('pdh_w_shoutbox'))
 
       // bbcodes, set smiley path to special identifier cause shoutbox has to replace when showing
       $bbcode->SetSmiliePath('{SMILEY_PATH}');
-      $cleanup_text = $bbcode->toHTML($cleanup_text);
+      $cleanup_text = $bbcode->toHTML($cleanup_text, true);
       $cleanup_text = $bbcode->MyEmoticons($cleanup_text);
 
       return $cleanup_text;

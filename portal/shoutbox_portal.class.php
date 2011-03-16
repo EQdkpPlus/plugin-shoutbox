@@ -109,10 +109,6 @@ class shoutbox_portal extends portal_generic
       if (!class_exists('ShoutboxClass'))
         include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 
-      // skip Lightbox usage
-      if (!defined('SKIP_LIGHTBOX'))
-        define('SKIP_LIGHTBOX', 1);
-
       // create shoutbox
       $shoutbox = new ShoutboxClass();
 
