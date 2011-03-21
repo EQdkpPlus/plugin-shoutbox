@@ -17,10 +17,10 @@
   <tr>
     <th class="center">
       <div style="float:left">
-        <a href="{LINK_ARCHIVE}">{L_sb_shoutbox_archive}</a> {S_PAGE_TITLE}
+        <a href="{ACTION}">{L_sb_shoutbox_archive}</a> {S_PAGE_TITLE}
       </div>
       <div style="float:right">
-        <form action="{LINK_ARCHIVE}" method="post">
+        <form action="{ACTION}" method="post">
           <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
           <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align: middle;" title="{L_search}" />
         </form>
@@ -32,13 +32,13 @@
       <table width="100%" border="0" cellspacing="1" cellpadding="2">
         <tr>
           <td width="150" valign="top">
-            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
               <!-- BEGIN year_row -->
               <tr>
                 <th class="center">{year_row.YEAR}</th>
               </tr>
               <!-- BEGIN month_row -->
-              <tr class="{year_row.month_row.CLASS}">
+              <tr>
                 <td>
                   <span style="float:left">
                     <a href="{year_row.month_row.LINK_VIEW}" class="menu_arrow">{year_row.month_row.MONTH}</a>
@@ -59,7 +59,7 @@
               <tr>
                 <th align="left">
                   <!-- IF CAN_DELETE -->
-                  <form action="{LINK_ARCHIVE}" method="post">
+                  <form action="{ACTION}" method="post">
                     <span style="float:right">
                       <!-- IF S_YEAR --><input type="hidden" name="year" value="{S_YEAR}" /><!-- ENDIF S_YEAR -->
                       <!-- IF S_MONTH --><input type="hidden" name="month" value="{S_MONTH}" /><!-- ENDIF S_MONTH -->
