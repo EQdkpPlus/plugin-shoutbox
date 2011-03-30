@@ -42,7 +42,7 @@ class ShoutboxSettings extends page_generic
   public function __construct()
   {
     $handler = array(
-      'sb_save' => array('process' => 'save', 'session_key' => true),
+      'sb_save' => array('process' => 'save', 'session_key' => true, 'check' => 'a_shoutbox_'),
     );
     parent::__construct('a_shoutbox_', $handler);
 
