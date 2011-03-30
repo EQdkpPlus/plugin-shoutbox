@@ -106,6 +106,14 @@ if (!class_exists("sb_style_base"))
     protected abstract function layoutContent($root_path);
 
     /**
+     * jCodeOrientation
+     * get the orientation for the JCode output
+     *
+     * @return  string
+     */
+    protected abstract function jCodeOrientation();
+
+    /**
      * shoutboxJCode
      * output the Java Code for the Shoutbox
      */
@@ -131,7 +139,7 @@ if (!class_exists("sb_style_base"))
       if ($autoreload > 0)
       {
         $jscode .= "setInterval(function() {
-                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang('sb_reload')."');
+                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang('sb_reload')."', '".$this->jCodeOrientation()."');
                     }, ".$autoreload.");";
       }
 

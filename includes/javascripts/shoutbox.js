@@ -86,17 +86,18 @@ function deleteShoutboxRequest(root, id, textDelete) {
   * shoutboxAutoReload
   * auto reload the shoutbox
   *
-  * @param  root        string  root directory of eqdkp
-  * @param  sid         string  SID
-  * @param  textReload  string  text to display als alt of reload image
+  * @param  root         string  root directory of eqdkp
+  * @param  sid          string  SID
+  * @param  textReload   string  text to display als alt of reload image
+  * @param  orientation  string  orientation of shoutbox
   */
-function shoutboxAutoReload(root, sid, textReload)
+function shoutboxAutoReload(root, sid, textReload, orientation)
 {
   // get the content of the shoutbox
   $('#reload_shoutbox').ajaxSubmit(
   {
     target: '#htmlShoutboxTable',
-    url: root+'plugins/shoutbox/shoutbox.php'+sid+'&sb_root='+root,
+    url: root+'plugins/shoutbox/shoutbox.php'+sid+'&sb_root='+escape(root)+'&sb_orientation='+orientation,
     beforeSubmit: function(formData, jqForm, options) {
       reloadShoutboxRequest(root);
     },

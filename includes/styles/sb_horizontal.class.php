@@ -83,7 +83,7 @@ if (!class_exists("sb_horizontal"))
      *
      * @return  string
      */
-    public function layoutContent($root_path)
+    protected function layoutContent($root_path)
     {
       global $user, $core, $SID, $pdh, $eqdkp_root_path;
 
@@ -152,6 +152,17 @@ if (!class_exists("sb_horizontal"))
       }
 
       return $htmlOut;
+    }
+
+    /**
+     * jCodeOrientation
+     * get the orientation for the JCode output
+     *
+     * @return  string
+     */
+    protected function jCodeOrientation()
+    {
+      return 'horizontal';
     }
 
     /**
