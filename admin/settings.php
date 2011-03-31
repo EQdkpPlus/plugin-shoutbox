@@ -49,14 +49,13 @@ class ShoutboxSettings extends page_generic
     $this->process();
   }
 
-
   /**
    * save
    * Save the configuration
    */
   public function save()
   {
-    global $in, $user, $core;
+    global $in, $user, $core, $shoutbox;
 
     // is use_user change?
     if ($in->get('sb_use_users', 0) != $core->config('sb_use_users', 'shoutbox'))
