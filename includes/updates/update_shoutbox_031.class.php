@@ -52,8 +52,8 @@ if (!class_exists('update_shoutbox_031'))
         'german' => array(
           'update_shoutbox_031' => 'Shoutbox 0.3.1 Update Paket',
           // SQL
-           1 => 'Füge neue Benutzer oder Charakter Einstellung hinzu',
-           2 => 'Ändere in Benutzer oder Charakter Eintrag',
+           1 => 'FÃ¼ge neuen Benutzer oder Charakter Einstellung hinzu',
+           2 => 'Ã„ndere in Benutzer oder Charakter Eintrag',
         ),
       );
 

@@ -45,12 +45,14 @@ if (!class_exists('update_shoutbox_030'))
       $this->langs = array(
         'english' => array(
           'update_shoutbox_030' => 'Shoutbox 0.3.0 Update Package',
+          'update_function' => 'Copy config',
           // SQL
            1 => 'Delete guest setting',
            2 => 'Delete location setting',
         ),
         'german' => array(
           'update_shoutbox_030' => 'Shoutbox 0.3.0 Update Paket',
+          'update_function' => 'Kopiere Einstellungen',
           // SQL
            1 => 'Entferne Gast Einstellung',
            2 => 'Entferne Positions Einstellung',
