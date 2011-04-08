@@ -143,12 +143,16 @@ if (!class_exists('pdh_w_shoutbox'))
       $cleanup_text = $this->shoutbox_wordwrap($text, $this->wordwrap, "\n", true);
 
       // wrap around with <p>
-      $cleanup_text = '<p>'.$cleanup_text.'</p>';
+      $cleanup_text = '<p>'.trim($cleanup_text).'</p>';
 
       // bbcodes, set smiley path to special identifier cause shoutbox has to replace when showing
       $bbcode->SetSmiliePath('{SMILEY_PATH}');
       $cleanup_text = $bbcode->toHTML($cleanup_text, true);
       $cleanup_text = $bbcode->MyEmoticons($cleanup_text);
+
+      // for some unknown reasons, after the BBCode actions, we get some \n, but <br/> are already inserted.
+      // so just remove the \n's from the text
+      $cleanup_text = str_replace("\n", '', $cleanup_text);
 
       return $cleanup_text;
     }
