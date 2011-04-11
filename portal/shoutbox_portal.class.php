@@ -35,7 +35,7 @@ class shoutbox_portal extends portal_generic
    */
   protected $data = array(
     'name'        => 'Shoutbox Module',
-    'version'     => '0.3.2',
+    'version'     => '0.3.3',
     'author'      => 'Aderyn',
     'contact'     => 'Aderyn@gmx.net',
     'description' => 'Display a shoutbox',
@@ -63,6 +63,12 @@ class shoutbox_portal extends portal_generic
         'name'      => 'sb_show_archive',
         'language'  => 'sb_show_archive',
         'property'  => 'checkbox',
+    ),
+    'pk_shoutbox_max_text_length'  => array(
+      'name'      => 'sb_max_text_length',
+      'language'  => 'sb_max_text_length',
+      'property'  => 'text',
+      'size'      => '3',
     ),
     'pk_shoutbox_input_box_location'  => array(
         'name'      => 'sb_input_box_location',

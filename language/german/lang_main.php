@@ -61,6 +61,7 @@ $lang = array(
   'sb_output_count_limit'           => 'Maximale Anzahl an Shoutbox Einträgen.',
   'sb_show_date'                    => 'Zusätzlich das Datum anzeigen?',
   'sb_show_archive'                 => 'Archiv anzeigen?',
+  'sb_max_text_length'              => 'Maximal erlaubte Textlänge eines Eintrags',
   'sb_input_box_location'           => 'Position des Eingabefeldes',
   'sb_location_top'                 => 'Oberhalb der Einträge',
   'sb_location_bottom'              => 'Unterhalb der Einträge',

@@ -61,6 +61,7 @@ $lang = array(
   'sb_output_count_limit'           => 'Limit of shoutbox entries.',
   'sb_show_date'                    => 'Show date also?',
   'sb_show_archive'                 => 'Show Archive?',
+  'sb_max_text_length'              => 'Maximum length of a text entry',
   'sb_input_box_location'           => 'Location of input box',
   'sb_location_top'                 => 'Above entries',
   'sb_location_bottom'              => 'Below entries',
