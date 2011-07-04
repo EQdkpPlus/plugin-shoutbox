@@ -30,7 +30,6 @@ if (!class_exists('exchange_shoutbox_list'))
   class exchange_shoutbox_list
   {
     public $options = array();
-    public $type = 'REST';
 
     function post_shoutbox_list($params, $body)
     {
