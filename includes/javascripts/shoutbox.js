@@ -67,7 +67,7 @@ function reloadShoutboxRequest(root) {
 function reloadShoutboxFinished(root, textReload) {
   // enable submit button and reset reload image
   $('#shoutbox_reload_button').html('<img src="'+root+'plugins/shoutbox/images/reload.png" alt="'+textReload+'" title="'+textReload+'"/>');
-  $('input[name=sb_submit]').attr('disabled', '');
+  $('input[name=sb_submit]').removeAttr('disabled');
 }
 
 /**
