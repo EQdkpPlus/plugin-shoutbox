@@ -31,12 +31,12 @@ if (!class_exists('exchange_shoutbox_list'))
   {
     public $options = array();
 
-    function post_shoutbox_list($params, $body)
+    function get_shoutbox_list($params, $body)
     {
-      global $user, $pdh;
+      global $user, $pdh, $pex;
 
       // set response
-      $response  = '<response><entries>';
+      $response = array('entries' => array());
 
       // be sure user is logged in
       if ($user->data['user_id'] != ANONYMOUS)
@@ -48,19 +48,20 @@ if (!class_exists('exchange_shoutbox_list'))
           // build entry array
           foreach ($shoutbox_ids as $shoutbox_id)
           {
-            $response .= '<entry>';
-            $response .= '  <id>'.$shoutbox_id.'</id>';
-            $response .= '  <member_id>'.$pdh->get('shoutbox', 'usermemberid', array($shoutbox_id)).'</member_id>';
-            $response .= '  <member_name>'.$pdh->get('shoutbox', 'usermembername', array($shoutbox_id)).'</member_name>';
-            $response .= '  <text><![CDATA['.$pdh->geth('shoutbox', 'text', array($shoutbox_id)).']]></text>';
-            $response .= '  <date>'.$pdh->get('shoutbox', 'date', array($shoutbox_id)).'</date>';
-            $response .= '</entry>';
+            $response['entries']['entry:'.$shoutbox_id] = array(
+              'id'          => $shoutbox_id,
+              'member_id'   => $pdh->get('shoutbox', 'usermemberid', array($shoutbox_id)),
+              'member_name' => $pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
+              'text'        => $pdh->geth('shoutbox', 'text', array($shoutbox_id)),
+              'date'        => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
+            );
           }
         }
       }
-
-      // end response
-      $response .= '</entries></response>';
+      else
+      {
+        $response = $pex->error('access denied');
+      }
 
       return $response;
     }
