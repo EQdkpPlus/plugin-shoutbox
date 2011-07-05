@@ -40,7 +40,7 @@ function showShoutboxRequest(root, text) {
 function showShoutboxFinished(root, textSubmit, textReload) {
   // clear input field, enable input, show reload and set "Saving..." text back to send button
   $('textarea[name=sb_text]').val('');
-  $('textarea[name=sb_text]').attr('disabled', '');
+  $('textarea[name=sb_text]').removeAttr('disabled');
   $('#shoutbox_button').html('<input type="submit" class="liteoption bi_ok" name="sb_submit" value="'+textSubmit+'"/>');
   $('#shoutbox_reload_button').html('<img src="'+root+'plugins/shoutbox/images/reload.png" alt="'+textReload+'" title="'+textReload+'"/>');
 }
