@@ -185,7 +185,6 @@ if (!class_exists("sb_vertical"))
 
       // get location and max text length
       $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
-      $max_text_length = ($core->config('sb_max_text_length') && is_int($core->config('sb_max_text_length'))) ? $core->config('sb_max_text_length') : 160;
 
       // only display form if user has members assigned to or if user modus is selected
       $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
@@ -214,7 +213,7 @@ if (!class_exists("sb_vertical"))
                  <tr>
                    <td>
                      <div class="center">
-                       <textarea class="input" name="sb_text" style="width: 90%;" rows="3" cols="1" maxlength="'.$max_text_length.'"></textarea>
+                       <textarea class="input" name="sb_text" style="width: 90%;" rows="3" cols="1"></textarea>
                      </div>
                    </td>
                  </tr>

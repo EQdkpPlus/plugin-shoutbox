@@ -126,6 +126,9 @@ if (!class_exists("sb_style_base"))
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
       $autoreload = $autoreload * 1000; // to ms
 
+      // set maxlength
+      $max_text_length = ($core->config('sb_max_text_length') && is_int($core->config('sb_max_text_length'))) ? intval($core->config('sb_max_text_length')) : 160;
+
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',
                     beforeSubmit:  function(formData, jqForm, options) {
@@ -133,6 +136,17 @@ if (!class_exists("sb_style_base"))
                     },
                     success: function() {
                       showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang('sb_submit_text')."', '".$user->lang('sb_reload')."');
+                    }
+                  });
+
+                  $('textarea[name=sb_text]').live('keyup blur', function() {
+                    var maxlength = ".$max_text_length.";
+                    var value = $(this).val();
+
+                    // Trim
+                    if (value.length > maxlength)
+                    {
+                      $(this).val(value.slice(0, maxlength));
                     }
                   });
                  ";
