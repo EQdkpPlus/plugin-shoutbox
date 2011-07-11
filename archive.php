@@ -119,14 +119,14 @@ class ShoutboxArchive extends page_generic
 
     // -- year/month select? --------------------------------------------------
     $page_title = '';
-    if ($in->get('year') && $in->get('month'))
+    if ($in->exists('year') && $in->exists('month'))
     {
       // add all shoutbox entries within date/month to the output array
       $shoutbox_out = $date_array[$in->get('year')][$in->get('month')];
       $page_title   = $time->date('F', $time->mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
     }
     // -- search? -------------------------------------------------------------
-    else if ($in->get('search'))
+    else if ($in->exists('search'))
     {
       // loop through all the shoutbox entries and try to find in either username or in text
       foreach ($shoutbox_ids as $shoutbox_id)
@@ -138,6 +138,11 @@ class ShoutboxArchive extends page_generic
           $shoutbox_out[] = $shoutbox_id;
         $page_title = $user->lang('search').': '.sanitize($in->get('search'));
       }
+    }
+    // -- id? -----------------------------------------------------------------
+    else if ($in->exists('id'))
+    {
+      $shoutbox_out[] = $in->get('id');
     }
     // -- last month ----------------------------------------------------------
     else if (count($shoutbox_ids) > 0)

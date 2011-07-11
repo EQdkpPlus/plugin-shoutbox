@@ -28,7 +28,7 @@ if (!defined('EQDKP_INC'))
 class shoutbox extends plugin_generic
 {
   public $version    = '0.3.3';
-  public $build      = '10274';
+  public $build      = '10599';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 
@@ -87,6 +87,9 @@ class shoutbox extends plugin_generic
     $this->add_exchange_module('shoutbox_add');
     $this->add_exchange_module('shoutbox_list');
     $this->add_exchange_module('shoutbox', true, 'shoutbox.xml');
+
+    // -- Hooks -------------------------------------------
+    $this->add_hook('search', 'hook_search');
   }
 
   /**
@@ -163,10 +166,33 @@ class shoutbox extends plugin_generic
             'check' => 'a_shoutbox_delete',
             'icon'  => './../glyphs/archive.png'
           )
-        
+
       ));
 
       return $admin_menu;
+  }
+
+  /**
+    * hook_search
+    * Do the hook 'search'
+    *
+    * @return array
+    */
+  public function hook_search()
+  {
+    global $user;
+
+    // build search array
+    $search = array(
+      'shoutbox' => array(
+        'category'    => $user->lang('shoutbox'),
+        'module'      => 'shoutbox',
+        'method'      => 'search',
+        'permissions' => array('u_'),
+      ),
+    );
+
+    return $search;
   }
 
 }

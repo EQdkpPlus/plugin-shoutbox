@@ -340,6 +340,43 @@ if (!class_exists('pdh_r_shoutbox'))
       }
     }
 
+    /**
+     * get_search
+     * Searches the shoutbox module for the search value
+     *
+     * @param  string  $search  Value to search
+     *
+     * @returns array
+     */
+    public function get_search($search)
+    {
+      global $eqdkp_root_path, $SID;
+
+      // empty search results
+      $searchResults = array();
+
+      // loop through the data array and fill search results
+      if ($this->data && is_array($this->data))
+      {
+        foreach ($this->data as $shoutbox_id => $data)
+        {
+          $member = $this->get_usermembername($shoutbox_id);
+          $text   = $this->get_text($shoutbox_id);
+
+          if (strpos($text, $search) !== false || strpos($member, $search) !== false)
+          {
+            $searchResults[] = array(
+              'id'   => $this->get_html_usermembername($shoutbox_id),
+              'name' => $this->get_html_text($shoutbox_id),
+              'link' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&amp;id='.$shoutbox_id,
+            );
+          }
+        }
+      }
+
+      return $searchResults;
+    }
+
   } //end class
 } //end if class not exists
 
