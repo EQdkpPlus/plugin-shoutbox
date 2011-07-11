@@ -366,7 +366,7 @@ if (!class_exists('pdh_r_shoutbox'))
           if (strpos($text, $search) !== false || strpos($member, $search) !== false)
           {
             $searchResults[] = array(
-              'id'   => $this->get_html_usermembername($shoutbox_id),
+              'id'   => $this->get_html_date($shoutbox_id, true).'<br/>'.$this->get_html_usermembername($shoutbox_id),
               'name' => $this->get_html_text($shoutbox_id),
               'link' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&amp;id='.$shoutbox_id,
             );
