@@ -46,7 +46,7 @@ if (!class_exists('exchange_shoutbox_add'))
         $result = $shoutbox->insertShoutboxEntry($usermember_id, trim($text));
 
         // return status
-        $response = array('result' => $result);
+        $response = array('result' => ($result) ? 1 : 0);
       }
       else
       {
