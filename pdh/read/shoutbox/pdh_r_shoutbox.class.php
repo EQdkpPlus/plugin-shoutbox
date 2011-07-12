@@ -61,7 +61,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function __construct()
     {
-      $this->smiley_path = 'libraries/jquery/core/images/editor/icons';
+      $this->smiley_path = 'images/smilies';
     }
 
     /**
