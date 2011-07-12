@@ -289,22 +289,27 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_text($shoutbox_id, $rpath='')
     {
-      global $eqdkp_root_path;
+      global $eqdkp_root_path, $bbcode;
 
       // root path
       $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      // smilie path
+      $smilie_path = $root_path.$this->smiley_path;
 
-      // search array
-      $search = array(
-        '{SMILEY_PATH}',
-      );
-      // replace array
-      $replace = array(
-        $root_path.$this->smiley_path,
-      );
+      // get text
+      $text = $this->get_text($shoutbox_id);
 
-      // cleanup
-      $text = str_replace($search, $replace, $this->get_text($shoutbox_id));
+      // wrap around with <p>
+      $text = '<p>'.trim($text).'</p>';
+
+      // bbcodes
+      $bbcode->SetSmiliePath($smilie_path);
+      $text = $bbcode->toHTML($text, true);
+      $text = $bbcode->MyEmoticons($text);
+
+      // for some unknown reasons, after the BBCode actions, we get some \n, but <br/> are already inserted.
+      // so just remove the \n's from the text
+      $text = str_replace("\n", '', $text);
 
       return $text;
     }

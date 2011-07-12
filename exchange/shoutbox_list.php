@@ -55,6 +55,8 @@ if (!class_exists('exchange_shoutbox_list'))
       {
         // get the number of shoutbox entries to return
         $max_count = (isset($params['get']['number']) && intval($params['get']['number']) > 0) ? intval($params['get']['number']) : 10;
+        // get sort direction
+        $sort = (isset($params['get']['sort']) && $params['get']['sort'] == 'desc') ? 'desc' : 'asc';
 
         // get all shoutbox id's
         $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
@@ -62,6 +64,9 @@ if (!class_exists('exchange_shoutbox_list'))
         {
           // slice array
           $shoutbox_ids = array_slice($shoutbox_ids, 0, $max_count);
+
+          // sort sliced array
+          $shoutbox_ids = $pdh->sort($shoutbox_ids, 'shoutbox', 'date', $sort);
 
           // set root path
           $root = $env->httpHost.$env->server_path;
