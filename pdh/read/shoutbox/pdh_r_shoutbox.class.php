@@ -153,6 +153,52 @@ if (!class_exists('pdh_r_shoutbox'))
     }
 
     /**
+     * get_userid
+     * Return the user id corresponding to the shoutbox id
+     *
+     * @param  int  $shoutbox_id  shoutbox id
+     *
+     * @returns integer
+     */
+    public function get_userid($shoutbox_id)
+    {
+      global $pdh, $core;
+
+      // if we use users, just return the "memberuserid"; otherwise get user id from member id
+      if ($core->config('sb_use_users', 'shoutbox'))
+      {
+        return $this->get_usermemberid($shoutbox_id);
+      }
+      else
+      {
+        return $pdh->get('member', 'userid', array($this->get_usermemberid($shoutbox_id)));
+      }
+    }
+
+    /**
+     * get_memberid
+     * Return the member id corresponding to the shoutbox id
+     *
+     * @param  int  $shoutbox_id  shoutbox id
+     *
+     * @returns integer
+     */
+    public function get_memberid($shoutbox_id)
+    {
+      global $pdh, $core;
+
+      // if we use users, return -1, cause no member id is assigned; otherwise just return the "memberuserid"
+      if ($core->config('sb_use_users', 'shoutbox'))
+      {
+        return -1;
+      }
+      else
+      {
+        return $this->get_usermemberid($shoutbox_id);
+      }
+    }
+
+    /**
      * get_usermemberid
      * Return the user or member id corresponding to the shoutbox id
      *
@@ -316,28 +362,6 @@ if (!class_exists('pdh_r_shoutbox'))
       }
 
       return 0;
-    }
-
-    /**
-     * get_userid
-     * Return the user id corresponding to the shoutbox id
-     *
-     * @param  int  $shoutbox_id  Shoutbox ID
-     *
-     * @returns integer
-     */
-    public function get_userid($shoutbox_id)
-    {
-      global $pdh, $core;
-
-      if ($core->config('sb_use_users', 'shoutbox'))
-      {
-        return $this->get_usermemberid($shoutbox_id);
-      }
-      else
-      {
-        return $pdh->get('member', 'userid', array($this->get_usermemberid($shoutbox_id)));
-      }
     }
 
     /**

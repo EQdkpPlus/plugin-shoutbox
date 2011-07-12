@@ -29,11 +29,23 @@ if (!class_exists('exchange_shoutbox_list'))
 {
   class exchange_shoutbox_list
   {
+    /**
+     * Additional options
+     */
     public $options = array();
 
-    function get_shoutbox_list($params, $body)
+    /**
+     * get_shoutbox_list
+     * GET Request for shoutbox entries
+     *
+     * @param   array   $params   Parameters array
+     * @param   string  $body     XML body of request
+     *
+     * @returns array
+     */
+    public function get_shoutbox_list($params, $body)
     {
-      global $user, $pdh, $pex;
+      global $user, $pdh, $pex, $env;
 
       // set response
       $response = array('entries' => array());
@@ -41,19 +53,29 @@ if (!class_exists('exchange_shoutbox_list'))
       // be sure user is logged in
       if ($user->data['user_id'] != ANONYMOUS)
       {
+        // get the number of shoutbox entries to return
+        $max_count = (isset($params['get']['number']) && intval($params['get']['number']) > 0) ? intval($params['get']['number']) : 10;
+
         // get all shoutbox id's
         $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
         if (is_array($shoutbox_ids))
         {
+          // slice array
+          $shoutbox_ids = array_slice($shoutbox_ids, 0, $max_count);
+
+          // set root path
+          $root = $env->httpHost.$env->server_path;
+
           // build entry array
           foreach ($shoutbox_ids as $shoutbox_id)
           {
             $response['entries']['entry:'.$shoutbox_id] = array(
-              'id'          => $shoutbox_id,
-              'member_id'   => $pdh->get('shoutbox', 'usermemberid', array($shoutbox_id)),
-              'member_name' => $pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
-              'text'        => $pdh->geth('shoutbox', 'text', array($shoutbox_id)),
-              'date'        => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
+              'id'        => $shoutbox_id,
+              'member_id' => $pdh->get('shoutbox', 'memberid', array($shoutbox_id)),
+              'user_id'   => $pdh->get('shoutbox', 'userid', array($shoutbox_id)),
+              'name'      => $pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
+              'text'      => $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root)),
+              'date'      => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
             );
           }
         }

@@ -76,7 +76,7 @@ $lang = array(
   'sb_shoutbox_archive'             => 'Archivo Shoutbox',
 
   // Exchange
-  'sb_missing_id'                   => 'Missing User or Member ID to insert',
+  'sb_missing_char_id'              => 'Invalid Member ID entered',
   'sb_missing_text'                 => 'Missing text to insert',
 
   // About/Credits

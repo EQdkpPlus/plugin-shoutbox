@@ -76,7 +76,7 @@ $lang = array(
   'sb_shoutbox_archive'             => 'Shoutbox Archiv',
 
   // Exchange
-  'sb_missing_id'                   => 'Es wurde keine Benutzer oder Charakter ID angegeben',
+  'sb_missing_char_id'              => 'Es wurde keine gültige Charakter ID angegeben',
   'sb_missing_text'                 => 'Es wurde kein Text angegeben',
 
   // About/Credits

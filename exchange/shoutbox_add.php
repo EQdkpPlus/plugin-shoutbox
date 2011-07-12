@@ -29,32 +29,68 @@ if (!class_exists('exchange_shoutbox_add'))
 {
   class exchange_shoutbox_add
   {
+    /**
+     * Additional options
+     */
     public $options = array();
 
+    /**
+     * post_shoutbox_add
+     * POST Request to add shoutbox entry
+     *
+     * @param   array   $params   Parameters array
+     * @param   string  $body     XML body of request
+     *
+     * @returns array
+     */
     function post_shoutbox_add($params, $body)
     {
-      global $user, $eqdkp_root_path, $pex;
+      global $user, $eqdkp_root_path, $core, $pdh, $pex;
 
-      // parse xml request
-      $xml = simplexml_load_string($body);
-      $usermember_id = ($xml && $xml->id) ? intval($xml->id) : '';
-      $text          = ($xml && $xml->text) ? trim($xml->text) : '';
-      if ($xml && $text && $usermember_id > 0)
+      // be sure user is logged in
+      if ($user->data['user_id'] != ANONYMOUS)
       {
-        // insert xml text
-        include_once($eqdkp_root_path.'plugins/shoutbox/includes/common.php');
-        $result = $shoutbox->insertShoutboxEntry($usermember_id, trim($text));
+        // parse xml request
+        $xml = simplexml_load_string($body);
+        $member_id = ($xml && $xml->charid) ? intval($xml->charid) : '';
+        $text      = ($xml && $xml->text)   ? trim($xml->text)     : '';
 
-        // return status
-        $response = array('result' => ($result) ? 1 : 0);
+        // check if member id is valid for this user
+        $valid_members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
+        $member_valid = (is_array($valid_members) && in_array($member_id, $valid_members)) ? true : false;
+
+        // if we are in "user" mode OR member is valid, continue
+        if ($core->config('sb_use_users', 'shoutbox') || $member_valid)
+        {
+          // get usermember_id
+          $usermember_id = ($core->config('sb_use_users', 'shoutbox') ? intval($user->data['user_id']) : $member_id);
+
+          if (!empty($text) && $usermember_id > 0)
+          {
+            // insert xml text
+            include_once($eqdkp_root_path.'plugins/shoutbox/includes/common.php');
+            $result = $shoutbox->insertShoutboxEntry($usermember_id, trim($text));
+
+            // return status
+            $response = array('status' => ($result) ? 1 : 0);
+          }
+          else
+          {
+            // missing data
+            if (empty($text))
+              $response = $pex->error($user->lang('sb_missing_text'));
+            else
+              $response = $pex->error($user->lang('sb_missing_char_id'));
+          }
+        }
+        else
+        {
+          $response = $pex->error($user->lang('sb_missing_char_id'));
+        }
       }
       else
       {
-        // missing data
-        if (empty($text))
-          $response = $pex->error($user->lang('sb_missing_text'));
-        else
-          $response = $pex->error($user->lang('sb_missing_id'));
+        $response = $pex->error('access denied');
       }
 
       return $response;
