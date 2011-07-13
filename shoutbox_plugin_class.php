@@ -158,7 +158,7 @@ class shoutbox extends plugin_generic
             'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
             'text'  => $user->lang('settings'),
             'check' => 'a_shoutbox_',
-            'icon'  => 'settings.png'
+            'icon'  => 'manage_settings.png'
           ),
           2 => array (
             'link'  => 'plugins/shoutbox/admin/manage.php'.$SID,
