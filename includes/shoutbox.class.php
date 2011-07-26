@@ -52,13 +52,13 @@ if (!class_exists("ShoutboxClass"))
      */
     public function __construct()
     {
-      global $core, $pcache, $user, $time;
+      global $core, $pfh, $user, $time;
 
       $this->rssFeed = new Feed();
       $this->rssFeed->title          = $user->lang('shoutbox');
       $this->rssFeed->description    = $core->config('main_title').' - '.$user->lang('shoutbox');
       $this->rssFeed->link           = $core->BuildLink();
-      $this->rssFeed->feedfile       = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      $this->rssFeed->feedfile       = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'absolute');
       $this->rssFeed->published      = $time->time;
       $this->rssFeed->language       = 'de-DE';
 
@@ -193,7 +193,7 @@ if (!class_exists("ShoutboxClass"))
      */
     public function showShoutbox($orientation='vertical')
     {
-      global $eqdkp_root_path, $pcache, $tpl, $core, $user;
+      global $eqdkp_root_path, $pfh, $tpl, $core, $user;
 
       $htmlOut = '';
 
@@ -214,7 +214,7 @@ if (!class_exists("ShoutboxClass"))
         $htmlOut .= $shoutbox_style->showShoutbox();
 
       // create RSS feed if they do not exist
-      $rss_file = $core->BuildLink().$pcache->FileLink('shoutbox.xml', 'shoutbox');
+      $rss_file = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'absolute');
       if (!is_file($rss_file))
         $this->createRSS();
 
@@ -235,7 +235,7 @@ if (!class_exists("ShoutboxClass"))
      */
     public function getContent($orientation, $rpath='')
     {
-      global $eqdkp_root_path, $pcache, $pdh;
+      global $eqdkp_root_path, $pfh, $pdh;
 
       // get shoutbox ids to display
       $shoutbox_ids = $this->getShoutboxOutEntries();
@@ -328,7 +328,7 @@ if (!class_exists("ShoutboxClass"))
      */
     private function createRSS()
     {
-      global $pcache, $pdh;
+      global $pfh, $pdh;
 
       // get shoutbox ids
       $shoutbox_ids = $this->getShoutboxOutEntries();
@@ -349,7 +349,7 @@ if (!class_exists("ShoutboxClass"))
       }
 
       // save RSS
-      $this->rssFeed->save($pcache->FilePath('shoutbox.xml', 'shoutbox'), false);
+      $this->rssFeed->save($pfh->FilePath('shoutbox.xml', 'shoutbox'), false);
     }
 
   }

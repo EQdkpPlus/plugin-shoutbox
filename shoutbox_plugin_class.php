@@ -134,13 +134,13 @@ class shoutbox extends plugin_generic
     */
   public function post_uninstall()
   {
-    global $pdc, $pcache;
+    global $pdc, $pfh;
 
     // clear cache
     $pdc->del('pdh_shoutbox_table');
 
     // clear RSS feed
-    $pcache->Delete($pcache->FilePath('shoutbox.xml', 'shoutbox'));
+    $pfh->Delete($pfh->FilePath('shoutbox.xml', 'shoutbox'));
   }
 
   /**
