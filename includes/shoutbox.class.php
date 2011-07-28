@@ -214,7 +214,7 @@ if (!class_exists("ShoutboxClass"))
         $htmlOut .= $shoutbox_style->showShoutbox();
 
       // create RSS feed if they do not exist
-      $rss_file = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'absolute');
+      $rss_file = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'relative');
       if (!is_file($rss_file))
         $this->createRSS();
 
