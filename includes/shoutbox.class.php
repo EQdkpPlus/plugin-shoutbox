@@ -219,7 +219,7 @@ if (!class_exists("ShoutboxClass"))
         $this->createRSS();
 
       // add link to RSS
-      $tpl->add_rssfeed($core->config('guildtag').' - '.$user->lang('shoutbox'), $rss_file);
+      $tpl->add_rssfeed('shoutbox', $rss_file);
 
       return $htmlOut;
     }
