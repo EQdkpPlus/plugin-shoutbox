@@ -174,11 +174,10 @@ class ShoutboxManage extends page_generic
 
 
     // -- display entries -----------------------------------------------------
-    require_once($eqdkp_root_path.'core/html_pdh_tag_table.class.php');
     require_once($eqdkp_root_path.'plugins/shoutbox/includes/systems/shoutbox.esys.php');
     $hptt_sort       = $in->get('sort');
     $hptt_url_suffix = $url_suffix.($start > 0 ? '&amp;start='.$start : '');
-    $hptt = new html_pdh_tag_table($systems_shoutbox['pages']['manage'], $shoutbox_ids, $shoutbox_out, array());
+    $hptt = $this->get_hptt($systems_shoutbox['pages']['manage'], $shoutbox_ids, $shoutbox_out, array());
 
 
     // -- Template ------------------------------------------------------------
