@@ -45,7 +45,7 @@ if (!class_exists('exchange_shoutbox_list'))
      */
     public function get_shoutbox_list($params, $body)
     {
-      global $user, $pdh, $pex, $env;
+      global $user, $pdh, $pex, $env, $time;
 
       // set response
       $response = array('entries' => array());
@@ -80,7 +80,8 @@ if (!class_exists('exchange_shoutbox_list'))
               'user_id'   => $pdh->get('shoutbox', 'userid', array($shoutbox_id)),
               'name'      => $pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
               'text'      => $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root)),
-              'date'      => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
+              'date'      => $time->date('Y-m-d H:i', $pdh->get('shoutbox', 'date', array($shoutbox_id))),
+			  'timestamp' => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
             );
           }
         }

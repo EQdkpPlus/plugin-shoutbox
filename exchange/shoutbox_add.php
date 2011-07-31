@@ -52,7 +52,7 @@ if (!class_exists('exchange_shoutbox_add'))
       {
         // parse xml request
         $xml = simplexml_load_string($body);
-        $member_id = ($xml && $xml->charid) ? intval($xml->charid) : '';
+        $member_id = ($xml && $xml->charid) ? intval($xml->charid) : intval($pdh->get('user', 'mainchar', array($user->data['user_id'])));
         $text      = ($xml && $xml->text)   ? trim($xml->text)     : '';
 
         // check if member id is valid for this user
