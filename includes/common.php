@@ -30,8 +30,8 @@ include_once($eqdkp_root_path.'common.php');
 
 
 // -- Used Classes ------------------------------------------------------------
-include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
-$shoutbox = new ShoutboxClass();
+include_once(registry::get_const('root_path').'plugins/shoutbox/includes/shoutbox.class.php');
+$shoutbox = registry::register('ShoutboxClass');
 
 
 // -- Check requirements ------------------------------------------------------

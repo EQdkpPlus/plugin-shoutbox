@@ -29,6 +29,16 @@ if (!class_exists('pdh_r_shoutbox'))
   class pdh_r_shoutbox extends pdh_r_generic
   {
     /**
+     * __dependencies
+     * Get module dependencies
+     */
+    public static function __dependencies()
+    {
+      $dependencies = array('pdc', 'db', 'pdh', 'config', 'bbcode', 'time');
+      return array_merge(parent::$dependencies, $dependencies);
+    }
+
+    /**
      * Data array loaded by initialize
      */
     private $data;
@@ -70,9 +80,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function reset()
     {
-      global $pdc;
-
-      $pdc->del('pdh_shoutbox_table');
+      $this->pdc->del('pdh_shoutbox_table');
       unset($this->data);
     }
 
@@ -84,10 +92,8 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function init()
     {
-      global $pdc, $db, $core;
-
       // try to get from cache first
-      $this->data = $pdc->get('pdh_shoutbox_table');
+      $this->data = $this->pdc->get('pdh_shoutbox_table');
       if($this->data !== NULL)
       {
         return true;
@@ -104,14 +110,14 @@ if (!class_exists('pdh_r_shoutbox'))
                 shoutbox_text
               FROM `__shoutbox`
               ORDER BY shoutbox_date DESC;';
-      $result = $db->query($sql);
+      $result = $this->db->query($sql);
       if ($result)
       {
         // get DST correction value
         $correction = date('I') * 3600;
 
         // add row by row to local copy
-        while (($row = $db->fetch_record($result)))
+        while (($row = $this->db->fetch_record($result)))
         {
           $this->data[$row['shoutbox_id']] = array(
             'user_member_id' => $row['user_or_member_id'],
@@ -119,11 +125,11 @@ if (!class_exists('pdh_r_shoutbox'))
             'text'           => $row['shoutbox_text']
           );
         }
-        $db->free_result($result);
+        $this->db->free_result($result);
       }
 
       // add data to cache
-      $pdc->put('pdh_shoutbox_table', $this->data, null);
+      $this->pdc->put('pdh_shoutbox_table', $this->data, null);
 
       return true;
     }
@@ -162,16 +168,14 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_userid($shoutbox_id)
     {
-      global $pdh, $core;
-
       // if we use users, just return the "memberuserid"; otherwise get user id from member id
-      if ($core->config('sb_use_users', 'shoutbox'))
+      if ($this->config->get('sb_use_users', 'shoutbox'))
       {
         return $this->get_usermemberid($shoutbox_id);
       }
       else
       {
-        return $pdh->get('member', 'userid', array($this->get_usermemberid($shoutbox_id)));
+        return $this->pdh->get('member', 'userid', array($this->get_usermemberid($shoutbox_id)));
       }
     }
 
@@ -185,10 +189,8 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_memberid($shoutbox_id)
     {
-      global $pdh, $core;
-
       // if we use users, return -1, cause no member id is assigned; otherwise just return the "memberuserid"
-      if ($core->config('sb_use_users', 'shoutbox'))
+      if ($this->config->get('sb_use_users', 'shoutbox'))
       {
         return -1;
       }
@@ -226,15 +228,13 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_usermembername($shoutbox_id)
     {
-      global $pdh, $core;
-
-      if ($core->config('sb_use_users', 'shoutbox'))
+      if ($this->config->get('sb_use_users', 'shoutbox'))
       {
-        return $pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id)));
+        return $this->pdh->get('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
       else
       {
-        return $pdh->get('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+        return $this->pdh->get('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
       }
     }
 
@@ -248,15 +248,13 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_usermembername($shoutbox_id)
     {
-      global $pdh, $core;
-
-      if ($core->config('sb_use_users', 'shoutbox'))
+      if ($this->config->get('sb_use_users', 'shoutbox'))
       {
-        return $pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id)));
+        return $this->pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id)));
       }
       else
       {
-        return $pdh->geth('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
+        return $this->pdh->geth('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
       }
     }
 
@@ -289,10 +287,8 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_text($shoutbox_id, $rpath='')
     {
-      global $eqdkp_root_path, $bbcode;
-
       // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      $root_path = ($rpath != '') ? $rpath : $this->root_path;
       // smilie path
       $smilie_path = $root_path.$this->smiley_path;
 
@@ -303,9 +299,9 @@ if (!class_exists('pdh_r_shoutbox'))
       $text = '<p>'.trim($text).'</p>';
 
       // bbcodes
-      $bbcode->SetSmiliePath($smilie_path);
-      $text = $bbcode->toHTML($text, true);
-      $text = $bbcode->MyEmoticons($text);
+      $this->bbcode->SetSmiliePath($smilie_path);
+      $text = $this->bbcode->toHTML($text, true);
+      $text = $this->bbcode->MyEmoticons($text);
 
       // for some unknown reasons, after the BBCode actions, we get some \n, but <br/> are already inserted.
       // so just remove the \n's from the text
@@ -343,12 +339,10 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_html_date($shoutbox_id, $show_date=false)
     {
-      global $time;
-
       if ($show_date)
-        $date = $time->user_date($this->get_date($shoutbox_id), true, false, false);
+        $date = $this->time->user_date($this->get_date($shoutbox_id), true, false, false);
       else
-        $date = $time->user_date($this->get_date($shoutbox_id), false, true, false);
+        $date = $this->time->user_date($this->get_date($shoutbox_id), false, true, false);
 
       return $date;
     }
@@ -379,8 +373,6 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public function get_search($search)
     {
-      global $eqdkp_root_path, $SID;
-
       // empty search results
       $searchResults = array();
 
@@ -397,7 +389,7 @@ if (!class_exists('pdh_r_shoutbox'))
             $searchResults[] = array(
               'id'   => $this->get_html_date($shoutbox_id, true).'<br/>'.$this->get_html_usermembername($shoutbox_id),
               'name' => $this->get_html_text($shoutbox_id),
-              'link' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&amp;id='.$shoutbox_id,
+              'link' => $this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'&amp;id='.$shoutbox_id,
             );
           }
         }

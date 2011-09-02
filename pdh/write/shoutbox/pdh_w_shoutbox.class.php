@@ -28,6 +28,16 @@ if (!class_exists('pdh_w_shoutbox'))
 {
   class pdh_w_shoutbox extends pdh_w_generic
   {
+    /**
+     * __dependencies
+     * Get module dependencies
+     */
+    public static function __dependencies()
+    {
+      $dependencies = array('db', 'pdh', 'time');
+      return array_merge(parent::$dependencies, $dependencies);
+    }
+
     /*
      * Number of chars to wrap after
      */
@@ -55,25 +65,23 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function add($usermember_id, $text)
     {
-      global $db, $pdh, $time;
-
       // cleanup text
       $text = $this->cleanupText($text);
 
       // add to database
       $sql_data = array(
         'user_or_member_id' => $usermember_id,
-        'shoutbox_date'     => $db->escape($time->time),
-        'shoutbox_text'     => $db->escape($text)
+        'shoutbox_date'     => $this->db->escape($this->time->time),
+        'shoutbox_text'     => $this->db->escape($text)
       );
-      $result = $db->query('INSERT INTO `__shoutbox` :params', $sql_data);
+      $result = $this->db->query('INSERT INTO `__shoutbox` :params', $sql_data);
       if (!$result)
         return false;
 
       // do hooks
-      $pdh->enqueue_hook('shoutbox_update');
+      $this->pdh->enqueue_hook('shoutbox_update');
 
-      return $db->insert_id();
+      return $this->db->insert_id();
     }
 
     /**
@@ -86,16 +94,14 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function delete($shoutbox_id)
     {
-      global $db, $pdh;
-
       // delete from db
-      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$db->escape($shoutbox_id);
-      $result = $db->query($sql);
+      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$this->db->escape($shoutbox_id);
+      $result = $this->db->query($sql);
       if (!$result)
         return false;
 
       // do hooks
-      $pdh->enqueue_hook('shoutbox_update');
+      $this->pdh->enqueue_hook('shoutbox_update');
 
       return true;
     }
@@ -111,18 +117,16 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function set_user($shoutbox_id, $user_id)
     {
-      global $db, $pdh;
-
       // update in db
       $sql = 'UPDATE `__shoutbox`
-              SET `user_or_member_id`='.$db->escape($user_id).'
-              WHERE shoutbox_id='.$db->escape($shoutbox_id);
-      $result = $db->query($sql);
+              SET `user_or_member_id`='.$this->db->escape($user_id).'
+              WHERE shoutbox_id='.$this->db->escape($shoutbox_id);
+      $result = $this->db->query($sql);
       if (!$result)
         return false;
 
       // do hooks
-      $pdh->enqueue_hook('shoutbox_update');
+      $this->pdh->enqueue_hook('shoutbox_update');
 
       return true;
     }

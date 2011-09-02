@@ -27,8 +27,11 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 if (!class_exists("sb_style_base"))
 {
-  abstract class sb_style_base
+  abstract class sb_style_base extends gen_class
   {
+    /* List of dependencies */
+    public static $dependencies = array('user', 'config', 'tpl');
+
     /**
      * Output Shoutbox ids to display
      */
@@ -75,10 +78,10 @@ if (!class_exists("sb_style_base"))
       global $eqdkp_root_path;
 
       // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      $root_path = ($rpath != '') ? $rpath : $this->root_path;
 
       // the delete form
-      $htmlOut = '<form id="del_shoutbox" name="del_shoutbox" action="'.$eqdkp_root_path.'plugins/shoutbox/shoutbox.php" method="post">
+      $htmlOut = '<form id="del_shoutbox" name="del_shoutbox" action="'.$this->root_path.'plugins/shoutbox/shoutbox.php" method="post">
                   </form>';
 
       // layout content
@@ -119,23 +122,21 @@ if (!class_exists("sb_style_base"))
      */
     private function shoutboxJCode()
     {
-      global $user, $eqdkp_root_path, $core, $SID, $tpl;
-
       // set autoreload (0 = disable)
-      $autoreload = ($core->config('sb_autoreload') != '') ? intval($core->config('sb_autoreload')) : 0;
+      $autoreload = ($this->config->get('sb_autoreload') != '') ? intval($this->config->get('sb_autoreload')) : 0;
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
       $autoreload = $autoreload * 1000; // to ms
 
       // set maxlength
-      $max_text_length = ($core->config('sb_max_text_length') && is_int($core->config('sb_max_text_length'))) ? intval($core->config('sb_max_text_length')) : 160;
+      $max_text_length = ($this->config->get('sb_max_text_length') && is_int($this->config->get('sb_max_text_length'))) ? intval($this->config->get('sb_max_text_length')) : 160;
 
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',
                     beforeSubmit:  function(formData, jqForm, options) {
-                      showShoutboxRequest('".$eqdkp_root_path."', '".$user->lang('sb_save_wait')."');
+                      showShoutboxRequest('".$this->root_path."', '".$this->user->lang('sb_save_wait')."');
                     },
                     success: function() {
-                      showShoutboxFinished('".$eqdkp_root_path."', '".$user->lang('sb_submit_text')."', '".$user->lang('sb_reload')."');
+                      showShoutboxFinished('".$this->root_path."', '".$this->user->lang('sb_submit_text')."', '".$this->user->lang('sb_reload')."');
                     }
                   });
 
@@ -153,12 +154,12 @@ if (!class_exists("sb_style_base"))
       if ($autoreload > 0)
       {
         $jscode .= "setInterval(function() {
-                      shoutboxAutoReload('".$eqdkp_root_path."', '".$SID."', '".$user->lang('sb_reload')."', '".$this->jCodeOrientation()."');
+                      shoutboxAutoReload('".$this->root_path."', '".$this->SID."', '".$this->user->lang('sb_reload')."', '".$this->jCodeOrientation()."');
                     }, ".$autoreload.");";
       }
 
-      $tpl->add_js($jscode, 'docready');
-      $tpl->js_file($eqdkp_root_path.'plugins/shoutbox/includes/javascripts/shoutbox.js');
+      $this->tpl->add_js($jscode, 'docready');
+      $this->tpl->js_file($this->root_path.'plugins/shoutbox/includes/javascripts/shoutbox.js');
     }
   }
 }

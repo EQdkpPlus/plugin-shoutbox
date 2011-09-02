@@ -27,8 +27,11 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 if (!class_exists("ShoutboxClass"))
 {
-  class ShoutboxClass
+  class ShoutboxClass extends gen_class
   {
+    /* List of dependencies */
+    public static $dependencies = array('user', 'config', 'pdh', 'pfh', 'time', 'env', 'tpl');
+
     /**
      * RSS Feed object
      */
@@ -52,18 +55,17 @@ if (!class_exists("ShoutboxClass"))
      */
     public function __construct()
     {
-      global $core, $pfh, $user, $time;
-
-      $this->rssFeed = new Feed();
-      $this->rssFeed->title          = $user->lang('shoutbox');
-      $this->rssFeed->description    = $core->config('main_title').' - '.$user->lang('shoutbox');
-      $this->rssFeed->link           = $core->BuildLink();
-      $this->rssFeed->feedfile       = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'absolute');
-      $this->rssFeed->published      = $time->time;
+      require_once($this->root_path.'core/feed.class.php');
+      $this->rssFeed = registry::register('Feed');
+      $this->rssFeed->title          = $this->user->lang('shoutbox');
+      $this->rssFeed->description    = $this->config->get('main_title').' - '.$this->user->lang('shoutbox');
+      $this->rssFeed->link           = $this->env->buildlink();
+      $this->rssFeed->feedfile       = $this->pfh->FileLink('shoutbox.xml', 'shoutbox', 'absolute');
+      $this->rssFeed->published      = $this->time->time;
       $this->rssFeed->language       = 'de-DE';
 
       // get output limit
-      $this->output_limit = ($core->config('sb_output_count_limit') > 0 ? $core->config('sb_output_count_limit') : 10);
+      $this->output_limit = ($this->config->get('sb_output_count_limit') > 0 ? $this->config->get('sb_output_count_limit') : 10);
     }
 
     /**
@@ -74,20 +76,18 @@ if (!class_exists("ShoutboxClass"))
      */
     public function checkRequirements()
     {
-      global $user, $core;
-
       // set defult to OK
       $result = true;
 
       // compare
       if (version_compare(phpversion(), $this->reqVersions['php'], "<"))
       {
-        $result = sprintf($user->lang('sb_php_version'), $this->reqVersions['php'], phpversion());
+        $result = sprintf($this->user->lang('sb_php_version'), $this->reqVersions['php'], phpversion());
       }
-      else if (version_compare($core->config('plus_version'), $this->reqVersions['eqdkp'], "<"))
+      else if (version_compare($this->config->get('plus_version'), $this->reqVersions['eqdkp'], "<"))
       {
-        $result = sprintf($user->lang('sb_plus_version'), $this->reqVersions['eqdkp'],
-                          (($core->config('plus_version') > 0) ? $core->config('plus_version') : '[non-PLUS]'));
+        $result = sprintf($this->user->lang('sb_plus_version'), $this->reqVersions['eqdkp'],
+                          (($this->config->get('plus_version') > 0) ? $this->config->get('plus_version') : '[non-PLUS]'));
       }
 
       return $result;
@@ -104,18 +104,16 @@ if (!class_exists("ShoutboxClass"))
      */
     public function insertShoutboxEntry($usermember_id, $text)
     {
-      global $user, $pdh;
-
       // is user allowed to add a shoutbox entry?
-      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('u_shoutbox_add', false))
+      if ($this->user->data['user_id'] != ANONYMOUS && $this->user->check_auth('u_shoutbox_add', false))
       {
         // insert
-        $shoutbox_id = $pdh->put('shoutbox', 'add', array($usermember_id, $text));
+        $shoutbox_id = $this->pdh->put('shoutbox', 'add', array($usermember_id, $text));
         if ($shoutbox_id === false)
           return false;
 
         // process hook queue
-        $pdh->process_hook_queue();
+        $this->pdh->process_hook_queue();
 
         // recreate RSS
         $this->createRSS();
@@ -134,18 +132,16 @@ if (!class_exists("ShoutboxClass"))
      */
     public function deleteShoutboxEntry($shoutbox_id)
     {
-      global $user, $pdh;
-
       // is user owner of the shoutbox entry or is admin?
-      if (($user->data['user_id'] != ANONYMOUS && $user->data['user_id'] == $pdh->get('shoutbox', 'userid', array($shoutbox_id))) ||
-          ($user->check_auth('a_shoutbox_delete', false)))
+      if (($this->user->data['user_id'] != ANONYMOUS && $this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id))) ||
+          ($this->user->check_auth('a_shoutbox_delete', false)))
       {
-        $result = $pdh->put('shoutbox', 'delete', array($shoutbox_id));
+        $result = $this->pdh->put('shoutbox', 'delete', array($shoutbox_id));
         if (!$result)
           return false;
 
         // process hook queue
-        $pdh->process_hook_queue();
+        $this->pdh->process_hook_queue();
 
         // recreate RSS
         $this->createRSS();
@@ -162,20 +158,18 @@ if (!class_exists("ShoutboxClass"))
      */
     public function deleteAllEntries()
     {
-      global $user, $pdh;
-
       // is user allowed to delete?
-      if ($user->data['user_id'] != ANONYMOUS && $user->check_auth('a_shoutbox_delete', false))
+      if ($this->user->data['user_id'] != ANONYMOUS && $this->user->check_auth('a_shoutbox_delete', false))
       {
         // get all shoutbox ids
-        $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+        $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');
         if (is_array($shoutbox_ids))
         {
           foreach ($shoutbox_ids as $shoutbox_id)
-            $pdh->put('shoutbox', 'delete', array($shoutbox_id));
+            $this->pdh->put('shoutbox', 'delete', array($shoutbox_id));
 
           // process hook queue
-          $pdh->process_hook_queue();
+          $this->pdh->process_hook_queue();
 
           // recreate RSS
           $this->createRSS();
@@ -193,20 +187,18 @@ if (!class_exists("ShoutboxClass"))
      */
     public function showShoutbox($orientation='vertical')
     {
-      global $eqdkp_root_path, $pfh, $tpl, $core, $user;
-
       $htmlOut = '';
 
       // get ids
       $shoutbox_ids = $this->getShoutboxOutEntries();
 
       // get the layout
-      $layout_file = $eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
+      $layout_file = $this->root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
       if (file_exists($layout_file))
       {
         include_once($layout_file);
         $class_name = 'sb_'.$orientation;
-        $shoutbox_style = new $class_name($shoutbox_ids);
+        $shoutbox_style = registry::register($class_name, array($shoutbox_ids));
       }
 
       // show shoutbox
@@ -214,12 +206,12 @@ if (!class_exists("ShoutboxClass"))
         $htmlOut .= $shoutbox_style->showShoutbox();
 
       // create RSS feed if they do not exist
-      $rss_file = $pfh->FileLink('shoutbox.xml', 'shoutbox', 'relative');
+      $rss_file = $this->pfh->FileLink('shoutbox.xml', 'shoutbox', 'relative');
       if (!is_file($rss_file))
         $this->createRSS();
 
       // add link to RSS
-      $tpl->add_rssfeed($core->config('guildtag').' - '.$user->lang('shoutbox'), $rss_file);
+      $this->tpl->add_rssfeed($this->config->get('guildtag').' - '.$this->user->lang('shoutbox'), $rss_file);
 
       return $htmlOut;
     }
@@ -235,8 +227,6 @@ if (!class_exists("ShoutboxClass"))
      */
     public function getContent($orientation, $rpath='')
     {
-      global $eqdkp_root_path, $pfh, $pdh;
-
       // get shoutbox ids to display
       $shoutbox_ids = $this->getShoutboxOutEntries();
 
@@ -244,12 +234,12 @@ if (!class_exists("ShoutboxClass"))
       $htmlOut = '';
 
       // get the layout
-      $layout_file = $eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
+      $layout_file = $this->root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
       if (file_exists($layout_file))
       {
         include_once($layout_file);
         $class_name = 'sb_'.$orientation;
-        $shoutbox_style = new $class_name($shoutbox_ids);
+        $shoutbox_style = registry::register($class_name, array($shoutbox_ids));
       }
 
       // get content
@@ -267,10 +257,8 @@ if (!class_exists("ShoutboxClass"))
      */
     public function convertFromMemberToUser()
     {
-      global $pdh;
-
       // get all shoutbox ids
-      $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+      $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');
       if (is_array($shoutbox_ids))
       {
         // for each entry, get the current member id, look up the corresponding user id and
@@ -278,15 +266,15 @@ if (!class_exists("ShoutboxClass"))
         foreach ($shoutbox_ids as $shoutbox_id)
         {
           // get member id
-          $member_id = $pdh->get('shoutbox', 'usermemberid', array($shoutbox_id));
+          $member_id = $this->pdh->get('shoutbox', 'usermemberid', array($shoutbox_id));
           // lookup the user id for this member
-          $user_id = $pdh->get('member', 'userid', array($member_id));
+          $user_id = $this->pdh->get('member', 'userid', array($member_id));
           // update with new user id
-          $pdh->put('shoutbox', 'set_user', array($shoutbox_id, $user_id));
+          $this->pdh->put('shoutbox', 'set_user', array($shoutbox_id, $user_id));
         }
 
         // process hook queue
-        $pdh->process_hook_queue();
+        $this->pdh->process_hook_queue();
 
         // recreate RSS
         $this->createRSS();
@@ -303,12 +291,10 @@ if (!class_exists("ShoutboxClass"))
      */
     private function getShoutboxOutEntries()
     {
-      global $pdh;
-
       $shoutbox_out = array();
 
        // get all shoutbox id's
-      $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+      $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');
       if (is_array($shoutbox_ids))
       {
         $shoutbox_count = count($shoutbox_ids);
@@ -328,8 +314,6 @@ if (!class_exists("ShoutboxClass"))
      */
     private function createRSS()
     {
-      global $pfh, $pdh;
-
       // get shoutbox ids
       $shoutbox_ids = $this->getShoutboxOutEntries();
       if (is_array($shoutbox_ids))
@@ -337,19 +321,19 @@ if (!class_exists("ShoutboxClass"))
         // create RSS feed item
         foreach ($shoutbox_ids as $shoutbox_id)
         {
-          $rssitem = new feeditems();
-          $rssitem->title       = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
-          $rssitem->description = $pdh->geth('shoutbox', 'text', array($shoutbox_id));
+          $rssitem = registry::register('feeditems');
+          $rssitem->title       = $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
+          $rssitem->description = $this->pdh->geth('shoutbox', 'text', array($shoutbox_id));
           $rssitem->link        = $this->rssFeed->link;
-          $rssitem->published   = $pdh->get('shoutbox', 'date', array($shoutbox_id));
-          $rssitem->author      = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
+          $rssitem->published   = $this->pdh->get('shoutbox', 'date', array($shoutbox_id));
+          $rssitem->author      = $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
           $rssitem->source      = $this->rssFeed->link;
           $this->rssFeed->addItem($rssitem);
         }
       }
 
       // save RSS
-      $this->rssFeed->save($pfh->FilePath('shoutbox.xml', 'shoutbox'), false);
+      $this->rssFeed->save($this->pfh->FilePath('shoutbox.xml', 'shoutbox'), false);
     }
 
   }

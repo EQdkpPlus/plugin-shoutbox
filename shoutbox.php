@@ -22,8 +22,9 @@ include_once('includes/common.php');
 
 
 // Be sure plugin is installed
-if ($pm->check('shoutbox', PLUGIN_INSTALLED))
+if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED))
 {
+  $in = registry::register('input');
 
   // get post/get values
   $sb_text          = $in->get('sb_text');
@@ -50,7 +51,7 @@ else
 {
   $error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
               <tr>
-                <td><div class="center">'.$user->lang('sb_plugin_not_installed').'</div></td>
+                <td><div class="center">'.registry::register('user')->lang('sb_plugin_not_installed').'</div></td>
               </tr>
             </table>';
   echo $error;

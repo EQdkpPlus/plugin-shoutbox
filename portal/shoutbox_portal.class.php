@@ -27,6 +27,16 @@ if (!defined('EQDKP_INC'))
 class shoutbox_portal extends portal_generic
 {
   /**
+   * __dependencies
+   * Get module dependencies
+   */
+  public static function __dependencies()
+  {
+    $dependencies = array('pm', 'user', 'pdh');
+    return array_merge(parent::$dependencies, $dependencies);
+  }
+
+  /**
    * Portal path
    */
   protected $path = 'shoutbox';
@@ -104,19 +114,17 @@ class shoutbox_portal extends portal_generic
     */
   public function output()
   {
-    global $pm, $eqdkp_root_path, $core, $user, $pdh;
-
     // initialize output
     $output = '';
 
     // check if shoutbox is installed
-    if ($pm->check('shoutbox', PLUGIN_INSTALLED))
+    if ($this->pm->check('shoutbox', PLUGIN_INSTALLED))
     {
       if (!class_exists('ShoutboxClass'))
-        include_once($eqdkp_root_path.'plugins/shoutbox/includes/shoutbox.class.php');
+        include_once($this->root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 
       // create shoutbox
-      $shoutbox = new ShoutboxClass();
+      $shoutbox = registry::register('ShoutboxClass');
 
       // do requirements check
       $requirementscheck = $shoutbox->checkRequirements();
@@ -134,11 +142,11 @@ class shoutbox_portal extends portal_generic
         $position = '';
 
         // get the Shoutbox Portal ID
-        $portal_ids = $pdh->get('portal', 'id_list', array(array('plugin' => 'shoutbox')));
+        $portal_ids = $this->pdh->get('portal', 'id_list', array(array('plugin' => 'shoutbox')));
         if (is_array($portal_ids) && count($portal_ids) > 0)
         {
           // get the position of the shoutbox portal module
-          $position = $pdh->get('portal', 'position', array(array_pop($portal_ids)));
+          $position = $this->pdh->get('portal', 'position', array(array_pop($portal_ids)));
         }
 
         // output depending on position
@@ -167,7 +175,7 @@ class shoutbox_portal extends portal_generic
     {
       $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
                    <tr>
-                     <td><div class="center">'.$user->lang('sb_plugin_not_installed').'</div></td>
+                     <td><div class="center">'.$this->user->lang('sb_plugin_not_installed').'</div></td>
                    </tr>
                  </table>';
     }

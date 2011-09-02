@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC'))
 
 if (!class_exists('sb_style_base'))
 {
-  include_once($eqdkp_root_path.'plugins/shoutbox/includes/styles/sb_style_base.class.php');
+  include_once(registry::get_const('root_path').'plugins/shoutbox/includes/styles/sb_style_base.class.php');
 }
 
 /*+----------------------------------------------------------------------------
@@ -34,6 +34,16 @@ if (!class_exists("sb_horizontal"))
   class sb_horizontal extends sb_style_base
   {
     /**
+     * __dependencies
+     * Get module dependencies
+     */
+    public static function __dependencies()
+    {
+      $dependencies = array('user', 'config', 'pdh', 'html');
+      return array_merge(parent::$dependencies, $dependencies);
+    }
+
+    /**
      * layoutShoutbox
      * get the complete shoutbox layout
      *
@@ -41,16 +51,14 @@ if (!class_exists("sb_horizontal"))
      */
     protected function layoutShoutbox()
     {
-      global $core, $user;
-
       // default is empty output
       $htmlOut = '';
 
       // get location of form
-      $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
+      $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
 
       // is input on top (and user can add entries) append form first
-      if ($form_location == 'top' && $user->check_auth('u_shoutbox_add', false))
+      if ($form_location == 'top' && $this->user->check_auth('u_shoutbox_add', false))
       {
         $htmlOut .= $this->getForm();
       }
@@ -61,13 +69,13 @@ if (!class_exists("sb_horizontal"))
       $htmlOut .= '</div>';
 
       // archive link? (User must be logged in to see archive link)
-      if ($core->config('sb_show_archive') && $user->data['user_id'] != ANONYMOUS)
+      if ($this->config->get('sb_show_archive') && $this->user->data['user_id'] != ANONYMOUS)
       {
         $htmlOut .= $this->getArchiveLink();
       }
 
       // is input below (and user can add entries) append form
-      if ($form_location == 'bottom' && $user->check_auth('u_shoutbox_add', false))
+      if ($form_location == 'bottom' && $this->user->check_auth('u_shoutbox_add', false))
       {
         $htmlOut .= $this->getForm();
       }
@@ -85,8 +93,6 @@ if (!class_exists("sb_horizontal"))
      */
     protected function layoutContent($root_path)
     {
-      global $user, $core, $SID, $pdh, $eqdkp_root_path;
-
       // empty output
       $htmlOut = '';
 
@@ -108,8 +114,8 @@ if (!class_exists("sb_horizontal"))
                          <td style="width: 15%;">';
 
           // if admin or own entry, ouput delete link
-          if ($user->data['user_id'] == $pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
-              $user->check_auth('a_shoutbox_delete', false))
+          if ($this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
+              $this->user->check_auth('a_shoutbox_delete', false))
           {
             $img = $root_path.'images/global/delete.png';
 
@@ -117,23 +123,23 @@ if (!class_exists("sb_horizontal"))
             $htmlOut .= '<span class="small bold floatRight hand" style="padding-right: 5px;" onclick="$(\'#del_shoutbox\').ajaxSubmit(
                            {
                              target: \'#htmlShoutboxTable\',
-                             url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&amp;sb_delete='.$shoutbox_id.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=horizontal\',
+                             url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'&amp;sb_delete='.$shoutbox_id.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=horizontal\',
                              beforeSubmit: function(formData, jqForm, options) {
-                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$user->lang('delete').'\');
+                               deleteShoutboxRequest(\''.$root_path.'\', '.$shoutbox_id.', \''.$this->user->lang('delete').'\');
                              }
                            }); ">
                            <span id="shoutbox_delete_button_'.$shoutbox_id.'">
-                             <img src="'.$img.'" alt="'.$user->lang('delete').'" title="'.$user->lang('delete').'"/>
+                             <img src="'.$img.'" alt="'.$this->user->lang('delete').'" title="'.$this->user->lang('delete').'"/>
                            </span>
                          </span>';
           }
 
           // output date as well as User and text
-          $htmlOut .= $pdh->geth('shoutbox', 'date', array($shoutbox_id, $core->config('sb_show_date'))).
+          $htmlOut .= $this->pdh->geth('shoutbox', 'date', array($shoutbox_id, $this->config->get('sb_show_date'))).
                       '<br/>'.
-                      $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).
+                      $this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).
                       '</td><td style="padding-left: 7px;">'.
-                      $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root_path));
+                      $this->pdh->geth('shoutbox', 'text', array($shoutbox_id, $root_path));
 
           $htmlOut .= '  </td>
                        </tr>';
@@ -146,7 +152,7 @@ if (!class_exists("sb_horizontal"))
       {
         $htmlOut .= '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
                        <tr>
-                         <td><div class="center">'.$user->lang('sb_no_entries').'</div></td>
+                         <td><div class="center">'.$this->user->lang('sb_no_entries').'</div></td>
                        </tr>
                      </table>';
       }
@@ -175,18 +181,16 @@ if (!class_exists("sb_horizontal"))
      */
     private function getForm($rpath='')
     {
-      global $user, $core, $eqdkp_root_path, $SID, $pdh, $html;
-
       // root path
-      $root_path = ($rpath != '') ? $rpath : $eqdkp_root_path;
+      $root_path = ($rpath != '') ? $rpath : $this->root_path;
 
       // get location and max text length
-      $form_location = ($core->config('sb_input_box_location') != '') ? $core->config('sb_input_box_location') : 'top';
+      $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
 
       // only display form if user has members assigned to or if user modus is selected
-      $members = $pdh->get('member', 'connection_id', array($user->data['user_id']));
+      $members = $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));
       if ((is_array($members) && count($members) > 0) ||
-          $core->config('sb_use_users', 'shoutbox'))
+          $this->config->get('sb_use_users', 'shoutbox'))
       {
         // html
         $out = '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$root_path.'plugins/shoutbox/shoutbox.php" method="post">
@@ -195,7 +199,7 @@ if (!class_exists("sb_horizontal"))
                   <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">';
 
         // input below? If true insert space row
-        if ($form_location == 'bottom' && $user->check_auth('u_shoutbox_add', false))
+        if ($form_location == 'bottom' && $this->user->check_auth('u_shoutbox_add', false))
         {
           $out .= '<tr><th colspan="3">&nbsp;</th></tr>';
         }
@@ -215,20 +219,20 @@ if (!class_exists("sb_horizontal"))
                      <div class="center">
                        <input type="hidden" name="sb_root" value="'.urlencode($root_path).'"/>
                        <input type="hidden" name="sb_orientation" value="horizontal"/>
-                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang('sb_submit_text').'"/></span>
+                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$this->user->lang('sb_submit_text').'"/></span>
                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
                          {
                            target: \'#htmlShoutboxTable\',
-                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$SID.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=horizontal\',
+                           url:\''.$root_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'&amp;sb_root='.rawurlencode($root_path).'&amp;sb_orientation=horizontal\',
                            beforeSubmit: function(formData, jqForm, options) {
                              reloadShoutboxRequest(\''.$root_path.'\');
                            },
                            success: function() {
-                             reloadShoutboxFinished(\''.$root_path.'\', \''.$user->lang('sb_reload').'\');
+                             reloadShoutboxFinished(\''.$root_path.'\', \''.$this->user->lang('sb_reload').'\');
                            }
                          });">
                          <span id="shoutbox_reload_button">
-                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$user->lang('sb_reload').'" title="'.$user->lang('sb_reload').'"/>
+                           <img src="'.$root_path.'plugins/shoutbox/images/reload.png" alt="'.$this->user->lang('sb_reload').'" title="'.$this->user->lang('sb_reload').'"/>
                          </span>
                        </span>
                      </div>
@@ -237,9 +241,9 @@ if (!class_exists("sb_horizontal"))
                </table>
              </form>';
       }
-      else if (!$core->config('sb_use_users', 'shoutbox'))
+      else if (!$this->config->get('sb_use_users', 'shoutbox'))
       {
-        $out .= '<div class="center">'.$user->lang('sb_no_character_assigned').'</div>';
+        $out .= '<div class="center">'.$this->user->lang('sb_no_character_assigned').'</div>';
       }
 
       return $out;
@@ -253,22 +257,20 @@ if (!class_exists("sb_horizontal"))
      */
     private function getFormName()
     {
-      global $user, $pdh, $html, $core;
-
       // for anonymous user, just return empty string
       $outHtml = '';
 
       // if we have users, just return the single user, otherwise use member dropdown
-      if ($core->config('sb_use_users', 'shoutbox'))
+      if ($this->config->get('sb_use_users', 'shoutbox'))
       {
         // show name as text and user id as hidden value
-        $username = $pdh->get('user', 'name', array($user->data['user_id']));
-        $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$user->data['user_id'].'"/>'.$username;
+        $username = $this->pdh->get('user', 'name', array($this->user->data['user_id']));
+        $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$this->user->data['user_id'].'"/>'.$username;
       }
       else
       {
         // get member array
-        $members = $pdh->aget('member', 'name', 0, array($pdh->get('member', 'connection_id', array($user->data['user_id']))));
+        $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
         if (is_array($members))
         {
           $membercount = count($members);
@@ -277,7 +279,7 @@ if (!class_exists("sb_horizontal"))
           if ($membercount > 1)
           {
             // show dropdown box
-            $outHtml .= $html->DropDown('sb_usermember_id', $members, '');
+            $outHtml .= $this->html->DropDown('sb_usermember_id', $members, '');
           }
           // if only one member, show just member
           else if ($membercount == 1)
@@ -300,12 +302,10 @@ if (!class_exists("sb_horizontal"))
      */
     private function getArchiveLink()
     {
-      global $user, $core, $SID, $eqdkp_root_path;
-
       $htmlOut = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
                     <tr>
                       <td class="menu" align="right">
-                        <input type="button" class="liteoption bi_archive" value="'.$user->lang('sb_archive').'" onclick="window.location.href=\''.$eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'\'"/>
+                        <input type="button" class="liteoption bi_archive" value="'.$this->user->lang('sb_archive').'" onclick="window.location.href=\''.$this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'\'"/>
                       </td>
                     </tr>
                   </table>';

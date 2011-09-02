@@ -18,7 +18,8 @@
 
 if (!defined('EQDKP_INC'))
 {
-  header('HTTP/1.0 404 Not Found');exit;
+  header('HTTP/1.0 404 Not Found');
+  exit;
 }
 
 
@@ -27,6 +28,16 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic
 {
+  /**
+   * __dependencies
+   * Get module dependencies
+   */
+  public static function __dependencies()
+  {
+    $dependencies = array('user', 'config', 'pdc', 'pfh');
+    return array_merge(parent::$dependencies, $dependencies);
+  }
+
   public $version    = '0.3.3';
   public $build      = '10599';
   public $copyright  = 'Aderyn';
@@ -35,14 +46,10 @@ class shoutbox extends plugin_generic
   /**
     * Constructor
     * Initialize all informations for installing/uninstalling plugin
-    *
-    * @param    EQdkp_Plugin_Manager    $pm   Plugin Manager
     */
-  public function __construct($pm)
+  public function __construct()
   {
-    global $eqdkp_root_path, $user;
-
-    parent::__construct($pm);
+    parent::__construct();
 
     $this->add_data(array (
       'name'              => 'Shoutbox',
@@ -50,11 +57,11 @@ class shoutbox extends plugin_generic
       'path'              => 'shoutbox',
       'contact'           => 'Aderyn@gmx.net',
       'template_path'     => 'plugins/shoutbox/templates/',
-      'icon'              => $eqdkp_root_path.'plugins/shoutbox/images/adminmenu/shoutbox.png',
+      'icon'              => $this->root_path.'plugins/shoutbox/images/adminmenu/shoutbox.png',
       'version'           => $this->version,
       'author'            => $this->copyright,
-      'description'       => $user->lang('sb_short_desc'),
-      'long_description'  => $user->lang('sb_long_desc'),
+      'description'       => $this->user->lang('sb_short_desc'),
+      'long_description'  => $this->user->lang('sb_long_desc'),
       'homepage'          => 'http://www.eqdkp-plus.com/',
       'manuallink'        => false,
       'plus_version'      => '0.7',
@@ -62,16 +69,15 @@ class shoutbox extends plugin_generic
     ));
 
     $this->add_dependency(array(
-      'plus_version'      => '0.7',
-      'lib_version'       => '2.0.0',
+      'plus_version'      => '0.7'
     ));
 
     // -- Register our permissions ------------------------
     // permissions: 'a'=admins, 'u'=user
     // ('a'/'u', Permission-Name, Enable? 'Y'/'N', Language string, array of user-group-ids that should have this permission)
     // Groups: 2 = Super-Admin, 3 = Admin, 4 = Member
-    $this->add_permission('a', 'delete', 'N', $user->lang('delete'), array(2,3));
-    $this->add_permission('u', 'add',    'Y', $user->lang('add'),    array(2,3,4));
+    $this->add_permission('a', 'delete', 'N', $this->user->lang('delete'), array(2,3));
+    $this->add_permission('u', 'add',    'Y', $this->user->lang('add'),    array(2,3,4));
 
     // -- Menu --------------------------------------------
     $this->add_menu('admin_menu', $this->gen_admin_menu());
@@ -98,11 +104,9 @@ class shoutbox extends plugin_generic
     */
   public function pre_install()
   {
-    global $eqdkp_root_path, $core;
-
     // include SQL and default configuration data for installation
-    include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
-    include($eqdkp_root_path.'plugins/shoutbox/includes/data/config.php');
+    include($this->root_path.'plugins/shoutbox/includes/data/sql.php');
+    include($this->root_path.'plugins/shoutbox/includes/data/config.php');
 
     // define installation
     for ($i = 1; $i <= count($shoutboxSQL['install']); $i++)
@@ -110,7 +114,7 @@ class shoutbox extends plugin_generic
 
     // insert configuration
     if (is_array($config_vars))
-      $core->config_set($config_vars, '', 'shoutbox');
+      $this->config->set($config_vars, '', 'shoutbox');
   }
 
   /**
@@ -119,10 +123,8 @@ class shoutbox extends plugin_generic
     */
   public function pre_uninstall()
   {
-    global $eqdkp_root_path;
-
     // include SQL data for uninstallation
-    include($eqdkp_root_path.'plugins/shoutbox/includes/data/sql.php');
+    include($this->root_path.'plugins/shoutbox/includes/data/sql.php');
 
     for ($i = 1; $i <= count($shoutboxSQL['uninstall']); $i++)
       $this->add_sql(SQL_UNINSTALL, $shoutboxSQL['uninstall'][$i]);
@@ -134,13 +136,11 @@ class shoutbox extends plugin_generic
     */
   public function post_uninstall()
   {
-    global $pdc, $pfh;
-
     // clear cache
-    $pdc->del('pdh_shoutbox_table');
+    $this->pdc->del('pdh_shoutbox_table');
 
     // clear RSS feed
-    $pfh->Delete($pfh->FilePath('shoutbox.xml', 'shoutbox'));
+    $this->pfh->Delete($this->pfh->FilePath('shoutbox.xml', 'shoutbox'));
   }
 
   /**
@@ -149,27 +149,25 @@ class shoutbox extends plugin_generic
     */
   private function gen_admin_menu()
   {
-    global $user, $SID;
+    $admin_menu = array (array(
+        'name' => $this->user->lang('shoutbox'),
+        'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
+        1 => array (
+          'link'  => 'plugins/shoutbox/admin/settings.php'.$this->SID,
+          'text'  => $this->user->lang('settings'),
+          'check' => 'a_shoutbox_',
+          'icon'  => 'manage_settings.png'
+        ),
+        2 => array (
+          'link'  => 'plugins/shoutbox/admin/manage.php'.$this->SID,
+          'text'  => $this->user->lang('sb_manage_archive'),
+          'check' => 'a_shoutbox_delete',
+          'icon'  => './../glyphs/archive.png'
+        )
 
-      $admin_menu = array (array(
-          'name' => $user->lang('shoutbox'),
-          'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
-          1 => array (
-            'link'  => 'plugins/shoutbox/admin/settings.php'.$SID,
-            'text'  => $user->lang('settings'),
-            'check' => 'a_shoutbox_',
-            'icon'  => 'manage_settings.png'
-          ),
-          2 => array (
-            'link'  => 'plugins/shoutbox/admin/manage.php'.$SID,
-            'text'  => $user->lang('sb_manage_archive'),
-            'check' => 'a_shoutbox_delete',
-            'icon'  => './../glyphs/archive.png'
-          )
+    ));
 
-      ));
-
-      return $admin_menu;
+    return $admin_menu;
   }
 
   /**
@@ -180,12 +178,10 @@ class shoutbox extends plugin_generic
     */
   public function hook_search()
   {
-    global $user;
-
     // build search array
     $search = array(
       'shoutbox' => array(
-        'category'    => $user->lang('shoutbox'),
+        'category'    => $this->user->lang('shoutbox'),
         'module'      => 'shoutbox',
         'method'      => 'search',
         'permissions' => array('u_'),
