@@ -63,14 +63,13 @@ class ShoutboxManage extends page_generic
    */
   public function delete()
   {
-    $shoutbox = registry::register('shoutbox');
     $messages = array();
 
     $delete_ids = $this->in->getArray('selected_ids', 'int');
     if (is_array($delete_ids) && count($delete_ids) > 0)
     {
       foreach ($delete_ids as $delete_id)
-        $shoutbox->deleteShoutboxEntry($delete_id);
+        register('ShoutboxClass')->deleteShoutboxEntry($delete_id);
 
       $messages[] = $this->user->lang('sb_delete_success');
     }

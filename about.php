@@ -20,10 +20,11 @@ define('EQDKP_INC', true);
 define('PLUGIN', 'shoutbox');
 
 $eqdkp_root_path = './../../';
-include_once($eqdkp_root_path . 'common.php');
+include_once($eqdkp_root_path.'common.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
+$pm = register('plugin_manager');
 if (!$pm->check('shoutbox', PLUGIN_INSTALLED) )
 {
   message_die('Shoutbox plugin not installed.');
@@ -31,16 +32,16 @@ if (!$pm->check('shoutbox', PLUGIN_INSTALLED) )
 
 
 // ----------------------------------------------------------------------------
-$tpl->assign_vars(array(
-    'L_VERSION'      => $pm->get_data('shoutbox', 'version'),
-    'L_BUILD'        => $pm->plugins['shoutbox']->build,
-    'L_STATUS'       => $pm->plugins['shoutbox']->vstatus,
-    'L_YEARR'        => $time->date('Y'),
+register('template')->assign_vars(array(
+    'L_VERSION' => $pm->get_data('shoutbox', 'version'),
+    'L_BUILD'   => $pm->plugins['shoutbox']->build,
+    'L_STATUS'  => $pm->plugins['shoutbox']->vstatus,
+    'L_YEARR'   => register('timehandler')->date('Y'),
 ));
 
 
 // ----------------------------------------------------------------------------
-$core->set_vars(array(
+register('core')->set_vars(array(
   'page_title'    => 'About Shoutbox',
   'template_file' => 'about.html',
   'template_path' => $pm->get_data('shoutbox', 'template_path'),

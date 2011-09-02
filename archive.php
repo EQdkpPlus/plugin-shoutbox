@@ -24,22 +24,30 @@ $eqdkp_root_path = './../../';
 include_once('includes/common.php');
 
 
-// -- Plugin installed? -------------------------------------------------------
-if (!$pm->check('shoutbox', PLUGIN_INSTALLED))
-{
-  message_die($user->lang('sb_plugin_not_installed'));
-}
-
 /*+----------------------------------------------------------------------------
   | ShoutboxArchive
   +--------------------------------------------------------------------------*/
 class ShoutboxArchive extends page_generic
 {
   /**
+   * __dependencies
+   * Get module dependencies
+   */
+  public static function __dependencies()
+  {
+    $dependencies = array('pm', 'user', 'core', 'in', 'pdh', 'time', 'tpl');
+    return array_merge(parent::$dependencies, $dependencies);
+  }
+
+  /**
    * Constructor
    */
   public function __construct()
   {
+    // plugin installed?
+    if (!$this->pm->check('shoutbox', PLUGIN_INSTALLED))
+      message_die($this->user->lang('sb_plugin_not_installed'));
+
     $handler = array(
       'sb_delete' => array('process' => 'delete', 'session_key' => true, 'check' => 'a_shoutbox_delete'),
     );
@@ -54,12 +62,10 @@ class ShoutboxArchive extends page_generic
    */
   public function delete()
   {
-    global $in, $user, $shoutbox;
-
     $messages = array();
-    $rc = $shoutbox->deleteShoutboxEntry($in->get('delete_id', 0));
+    $rc = register('ShoutboxClass')->deleteShoutboxEntry($this->in->get('delete_id', 0));
     if ($rc !== false)
-      $messages[] = $user->lang('sb_delete_success');
+      $messages[] = $this->user->lang('sb_delete_success');
 
     $this->display($messages);
   }
@@ -72,19 +78,15 @@ class ShoutboxArchive extends page_generic
    */
   public function display($messages=array())
   {
-    global $core, $user, $pm, $pdh, $time, $tpl, $eqdkp_root_path, $SID, $in;
-
     // -- Messages ------------------------------------------------------------
     if ($messages)
     {
       foreach($messages as $name)
-      {
-        $core->message($name, $user->lang('shoutbox'), 'green');
-      }
+        $this->core->message($name, $this->user->lang('shoutbox'), 'green');
     }
 
     // -- get all shoutbox id's -----------------------------------------------
-    $shoutbox_ids = $pdh->get('shoutbox', 'id_list', array());
+    $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list', array());
     $shoutbox_out = array();
 
 
@@ -92,9 +94,9 @@ class ShoutboxArchive extends page_generic
     $date_array = array();
     foreach ($shoutbox_ids as $shoutbox_id)
     {
-      $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_id));
-      $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
-      $shoutbox_date_month = $time->date('m', $shoutbox_date);
+      $shoutbox_date       = $this->pdh->get('shoutbox', 'date', array($shoutbox_id));
+      $shoutbox_date_year  = $this->time->date('Y', $shoutbox_date);
+      $shoutbox_date_month = $this->time->date('m', $shoutbox_date);
       $date_array[$shoutbox_date_year][$shoutbox_date_month][] = $shoutbox_id;
     }
 
@@ -102,16 +104,16 @@ class ShoutboxArchive extends page_generic
     // -- output date select on left side -------------------------------------
     foreach ($date_array as $year => $months)
     {
-      $tpl->assign_block_vars('year_row', array(
+      $this->tpl->assign_block_vars('year_row', array(
         'YEAR' => $year
       ));
 
       foreach ($months as $month => $ids)
       {
-        $tpl->assign_block_vars('year_row.month_row', array(
-          'MONTH'     => $time->date('F', $time->mktime(0, 0, 0, $month, 1, $year)),
+        $this->tpl->assign_block_vars('year_row.month_row', array(
+          'MONTH'     => $this->time->date('F', $this->time->mktime(0, 0, 0, $month, 1, $year)),
           'COUNT'     => count($ids),
-          'LINK_VIEW' => $eqdkp_root_path.'plugins/shoutbox/archive.php'.$SID.'&session_key='.$user->data['session_key'].'&amp;year='.$year.'&amp;month='.$month
+          'LINK_VIEW' => $this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'&session_key='.$this->SKEY.'&amp;year='.$year.'&amp;month='.$month
         ));
       }
     }
@@ -119,40 +121,40 @@ class ShoutboxArchive extends page_generic
 
     // -- year/month select? --------------------------------------------------
     $page_title = '';
-    if ($in->exists('year') && $in->exists('month'))
+    if ($this->in->exists('year') && $this->in->exists('month'))
     {
       // add all shoutbox entries within date/month to the output array
-      $shoutbox_out = $date_array[$in->get('year')][$in->get('month')];
-      $page_title   = $time->date('F', $time->mktime(0, 0, 0, $in->get('month'), 1, $in->get('year'))).' '.$in->get('year');
+      $shoutbox_out = $date_array[$this->in->get('year')][$this->in->get('month')];
+      $page_title   = $this->time->date('F', $this->time->mktime(0, 0, 0, $this->in->get('month'), 1, $this->in->get('year'))).' '.$this->in->get('year');
     }
     // -- search? -------------------------------------------------------------
-    else if ($in->exists('search'))
+    else if ($this->in->exists('search'))
     {
       // loop through all the shoutbox entries and try to find in either username or in text
       foreach ($shoutbox_ids as $shoutbox_id)
       {
-        $text   = $pdh->get('shoutbox', 'text',           array($shoutbox_id));
-        $member = $pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
-        $search = $in->get('search');
+        $text   = $this->pdh->get('shoutbox', 'text',           array($shoutbox_id));
+        $member = $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
+        $search = $this->in->get('search');
         if (strpos($text, $search) !== false || strpos($member, $search) !== false)
           $shoutbox_out[] = $shoutbox_id;
-        $page_title = $user->lang('search').': '.sanitize($in->get('search'));
+        $page_title = $this->user->lang('search').': '.sanitize($this->in->get('search'));
       }
     }
     // -- id? -----------------------------------------------------------------
-    else if ($in->exists('id'))
+    else if ($this->in->exists('id'))
     {
-      $shoutbox_out[] = $in->get('id');
+      $shoutbox_out[] = $this->in->get('id');
     }
     // -- last month ----------------------------------------------------------
     else if (count($shoutbox_ids) > 0)
     {
       // show the last month only
-      $shoutbox_date       = $pdh->get('shoutbox', 'date', array($shoutbox_ids[0]));
-      $shoutbox_date_year  = $time->date('Y', $shoutbox_date);
-      $shoutbox_date_month = $time->date('m', $shoutbox_date);
+      $shoutbox_date       = $this->pdh->get('shoutbox', 'date', array($shoutbox_ids[0]));
+      $shoutbox_date_year  = $this->time->date('Y', $shoutbox_date);
+      $shoutbox_date_month = $this->time->date('m', $shoutbox_date);
       $shoutbox_out = $date_array[$shoutbox_date_year][$shoutbox_date_month];
-      $page_title   = $time->date('F', $time->mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
+      $page_title   = $this->time->date('F', $this->time->mktime(0, 0, 0, $shoutbox_date_month, 1, $shoutbox_date_year)).' '.$shoutbox_date_year;
     }
 
 
@@ -160,43 +162,43 @@ class ShoutboxArchive extends page_generic
     foreach ($shoutbox_out as $shoutbox_id)
     {
       // show a new date row if it's not the same as the last one
-      $shoutbox_date = $pdh->get('shoutbox', 'date', array($shoutbox_id));
+      $shoutbox_date = $this->pdh->get('shoutbox', 'date', array($shoutbox_id));
 
       // output
-      $tpl->assign_block_vars('shoutbox_row', array(
+      $this->tpl->assign_block_vars('shoutbox_row', array(
         'ID'      => $shoutbox_id,
-        'NAME'    => $pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
-        'DATE'    => $time->date($user->style['date'], $shoutbox_date),
-        'TIME'    => $time->date($user->style['time'], $shoutbox_date),
-        'MESSAGE' => $pdh->geth('shoutbox', 'text', array($shoutbox_id))
+        'NAME'    => $this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
+        'DATE'    => $this->time->date($this->user->style['date'], $shoutbox_date),
+        'TIME'    => $this->time->date($this->user->style['time'], $shoutbox_date),
+        'MESSAGE' => $this->pdh->geth('shoutbox', 'text', array($shoutbox_id))
       ));
     }
 
 
     // -- Template ----------------------------------------------------------------
-    $tpl->assign_vars(array(
+    $this->tpl->assign_vars(array(
       // Form
-      'S_YEAR'            => $in->get('year', ''),
-      'S_MONTH'           => $in->get('month', ''),
-      'S_SEARCH'          => $in->get('search', ''),
+      'S_YEAR'            => $this->in->get('year', ''),
+      'S_MONTH'           => $this->in->get('month', ''),
+      'S_SEARCH'          => $this->in->get('search', ''),
       'S_COUNT'           => count($shoutbox_out),
       'S_PAGE_TITLE'      => ($page_title != '') ? '&raquo; '.$page_title : '',
 
       // Admin
-      'CAN_DELETE'        => $user->check_auth('a_shoutbox_delete', false),
+      'CAN_DELETE'        => $this->user->check_auth('a_shoutbox_delete', false),
     ));
 
 
     // -- EQDKP ---------------------------------------------------------------
-    $core->set_vars(array (
-      'page_title'    => $user->lang('sb_shoutbox_archive').' '.$page_title,
-      'template_path' => $pm->get_data('shoutbox', 'template_path'),
+    $this->core->set_vars(array (
+      'page_title'    => $this->user->lang('sb_shoutbox_archive').' '.$page_title,
+      'template_path' => $this->pm->get_data('shoutbox', 'template_path'),
       'template_file' => 'archive.html',
       'display'       => true
     ));
   }
 }
 
-$shoutboxArchive = new ShoutboxArchive();
+register('ShoutboxArchive');
 
 ?>

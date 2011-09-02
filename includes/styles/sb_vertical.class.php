@@ -117,8 +117,8 @@ if (!class_exists("sb_vertical"))
                          <td>';
 
           // if admin or own entry, ouput delete link
-          if ($user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
-              $user->check_auth('a_shoutbox_delete', false))
+          if ($this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
+              $this->user->check_auth('a_shoutbox_delete', false))
           {
             $img = $root_path.'images/global/delete.png';
 
@@ -226,7 +226,7 @@ if (!class_exists("sb_vertical"))
                      <div class="center">
                        <input type="hidden" name="sb_root" value="'.urlencode($root_path).'"/>
                        <input type="hidden" name="sb_orientation" value="vertical"/>
-                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$user->lang('sb_submit_text').'"/></span>
+                       <span id="shoutbox_button"><input type="submit" class="mainoption bi_ok" name="sb_submit" value="'.$this->user->lang('sb_submit_text').'"/></span>
                        <span class="small bold hand" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
                          {
                            target: \'#htmlShoutboxTable\',

@@ -25,27 +25,27 @@ include_once('includes/common.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
-if (!$pm->check('shoutbox', PLUGIN_INSTALLED))
+if (!register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED))
 {
-  message_die($user->lang('sb_plugin_not_installed'));
+  message_die(register('user')->lang('sb_plugin_not_installed'));
 }
 
 
 // -- Get content -------------------------------------------------------------
-$content = $shoutbox->showShoutbox();
+$content =register('ShoutboxClass')->showShoutbox();
 
 
 // -- Template ----------------------------------------------------------------
-$tpl->assign_vars(array (
+register('template')->assign_vars(array (
   // Form
-  'CONTENT'         => $content
+  'CONTENT' => $content
 ));
 
 
 // -- EQDKP -------------------------------------------------------------------
-$core->set_vars(array (
-  'page_title'    => $user->lang('shoutbox'),
-  'template_path' => $pm->get_data('shoutbox', 'template_path'),
+register('core')->set_vars(array (
+  'page_title'    => register('user')->lang('shoutbox'),
+  'template_path' => register('plugin_manager')->get_data('shoutbox', 'template_path'),
   'template_file' => 'show.html',
   'header_format' => 'simple',
   'display'       => true
