@@ -27,8 +27,11 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 if (!class_exists('exchange_shoutbox_list'))
 {
-  class exchange_shoutbox_list
+  class exchange_shoutbox_list extends gen_class
   {
+    /* List of dependencies */
+    public static $dependencies = array('user', 'pdh', 'env', 'time', 'pex'=>'plus_exchange');
+
     /**
      * Additional options
      */
@@ -45,13 +48,11 @@ if (!class_exists('exchange_shoutbox_list'))
      */
     public function get_shoutbox_list($params, $body)
     {
-      global $user, $pdh, $pex, $env, $time;
-
       // set response
       $response = array('entries' => array());
 
       // be sure user is logged in
-      if ($user->data['user_id'] != ANONYMOUS)
+      if ($this->user->data['user_id'] != ANONYMOUS)
       {
         // get the number of shoutbox entries to return
         $max_count = (isset($params['get']['number']) && intval($params['get']['number']) > 0) ? intval($params['get']['number']) : 10;
@@ -59,36 +60,36 @@ if (!class_exists('exchange_shoutbox_list'))
         $sort = (isset($params['get']['sort']) && $params['get']['sort'] == 'desc') ? 'desc' : 'asc';
 
         // get all shoutbox id's
-        $shoutbox_ids = $pdh->get('shoutbox', 'id_list');
+        $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');
         if (is_array($shoutbox_ids))
         {
           // slice array
           $shoutbox_ids = array_slice($shoutbox_ids, 0, $max_count);
 
           // sort sliced array
-          $shoutbox_ids = $pdh->sort($shoutbox_ids, 'shoutbox', 'date', $sort);
+          $shoutbox_ids = $this->pdh->sort($shoutbox_ids, 'shoutbox', 'date', $sort);
 
           // set root path
-          $root = $env->httpHost.$env->server_path;
+          $root = $this->env->httpHost.$this->env->server_path;
 
           // build entry array
           foreach ($shoutbox_ids as $shoutbox_id)
           {
             $response['entries']['entry:'.$shoutbox_id] = array(
               'id'        => $shoutbox_id,
-              'member_id' => $pdh->get('shoutbox', 'memberid', array($shoutbox_id)),
-              'user_id'   => $pdh->get('shoutbox', 'userid', array($shoutbox_id)),
-              'name'      => $pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
-              'text'      => $pdh->geth('shoutbox', 'text', array($shoutbox_id, $root)),
-              'date'      => $time->date('Y-m-d H:i', $pdh->get('shoutbox', 'date', array($shoutbox_id))),
-			  'timestamp' => $pdh->get('shoutbox', 'date', array($shoutbox_id)),
+              'member_id' => $this->pdh->get('shoutbox', 'memberid', array($shoutbox_id)),
+              'user_id'   => $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)),
+              'name'      => $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
+              'text'      => $this->pdh->geth('shoutbox', 'text', array($shoutbox_id, $root)),
+              'date'      => $this->time->date('Y-m-d H:i', $this->pdh->get('shoutbox', 'date', array($shoutbox_id))),
+              'timestamp' => $this->pdh->get('shoutbox', 'date', array($shoutbox_id)),
             );
           }
         }
       }
       else
       {
-        $response = $pex->error('access denied');
+        $response = $this->pex->error('access denied');
       }
 
       return $response;
