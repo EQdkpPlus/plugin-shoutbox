@@ -193,4 +193,5 @@ class shoutbox extends plugin_generic
 
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_shoutbox', shoutbox::__dependencies());
 ?>

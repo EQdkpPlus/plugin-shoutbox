@@ -212,4 +212,5 @@ if (!class_exists('pdh_w_shoutbox'))
   } //end class
 } //end if class not exists
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_pdh_w_shoutbox', pdh_w_shoutbox::__dependencies());
 ?>

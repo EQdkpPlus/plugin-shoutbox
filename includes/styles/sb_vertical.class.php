@@ -325,4 +325,5 @@ if (!class_exists("sb_vertical"))
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_sb_vertical', sb_vertical::__dependencies());
 ?>

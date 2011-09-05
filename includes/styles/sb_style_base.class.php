@@ -164,4 +164,5 @@ if (!class_exists("sb_style_base"))
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_sb_style_base', sb_style_base::$dependencies);
 ?>
