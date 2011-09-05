@@ -47,7 +47,7 @@ $lang = array(
 
   // Admin
   'sb_delete_success'               => 'Successfully deleted entries',
-  'sb_settings_info'                => 'Further Shoutbox settings could be found within the <a href="'.$eqdkp_root_path.'admin/manage_portal.php'.$SID.'">Portalmodule settings</a>',
+  'sb_settings_info'                => 'Further Shoutbox settings could be found within the <a href="'.registry::get_const('root_path').'admin/manage_portal.php'.registry::get_const('SID').'">Portalmodule settings</a>',
   'sb_use_users'                    => 'Use usernames instead of membernames',
   'sb_use_users_help'               => 'On changing membernames to usernames all entries will be updated.<br/>On changing usernames to membernames all entries will be deleted!',
   'sb_convert_member_user_success'  => 'All membernames within the entries have been successfully updated to usernames.',
