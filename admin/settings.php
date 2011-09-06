@@ -120,7 +120,6 @@ class ShoutboxSettings extends page_generic
       'L_CREDITS'         => $this->user->lang('sb_credits_part1').$this->pm->get_data('shoutbox', 'version').$this->user->lang('sb_credits_part2'),
     ));
 
-    echo $this->pm->get_data('shoutbox', 'template_path');
 
     // -- EQDKP ---------------------------------------------------------------
     $this->core->set_vars(array(
