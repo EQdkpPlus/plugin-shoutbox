@@ -48,7 +48,7 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function __construct()
     {
-      parent::pdh_w_generic();
+      parent::__construct();
 
       // set default wordwrap
       $this->wordwrap = 20;
