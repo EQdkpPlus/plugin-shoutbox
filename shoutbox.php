@@ -18,7 +18,7 @@
 
 define('EQDKP_INC', true);
 $eqdkp_root_path = './../../';
-include_once('includes/common.php');
+include_once('./includes/common.php');
 
 
 // Be sure plugin is installed

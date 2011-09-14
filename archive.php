@@ -199,7 +199,7 @@ class ShoutboxArchive extends page_generic
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_ShoutboxArchive', ShoutboxArchive::__dependencies());
 register('ShoutboxArchive');
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_ShoutboxArchive', ShoutboxArchive::__dependencies());
 ?>
