@@ -78,4 +78,5 @@ if (!class_exists('update_shoutbox_031'))
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_update_shoutbox_031', update_shoutbox_031::__dependencies());
 ?>

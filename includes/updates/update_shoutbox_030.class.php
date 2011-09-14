@@ -28,6 +28,12 @@ if (!class_exists('update_shoutbox_030'))
 {
   class update_shoutbox_030 extends sql_update_task
   {
+	public static function __dependencies()
+	{
+		$dependencies = array('db', 'config');
+		return array_merge(parent::__dependencies(), $dependencies);
+	}
+
     public $author      = 'Aderyn';
     public $version     = '0.3.0';    // new version
     public $name        = 'Shoutbox 0.3.0 Update';
@@ -74,29 +80,27 @@ if (!class_exists('update_shoutbox_030'))
      */
     public function update_function()
     {
-      global $db, $core;
-
       // default settings
       $new_settings = array();
 
       // copy all settings from shoutbox config table to core config
       $sql = 'SELECT config_name, config_value FROM `__shoutbox_config`;';
-      $config_result = $db->query($sql);
+      $config_result = $this->db->query($sql);
       if ($config_result)
       {
-        while (($row = $db->fetch_record($config_result)))
+        while (($row = $this->db->fetch_record($config_result)))
         {
           $new_settings[$row['config_name']] = $row['config_value'];
         }
-        $db->free_result($config_result);
+        $this->db->free_result($config_result);
       }
 
       // insert settings into core config table
-      $core->config_set($new_settings, '', 'shoutbox');
+      $this->config->set($new_settings, '', 'shoutbox');
 
       // delete old config table
       $sql = 'DROP TABLE `__shoutbox_config`;';
-      $db->query($sql);
+      $this->db->query($sql);
 
       return true;
     }
@@ -104,4 +108,5 @@ if (!class_exists('update_shoutbox_030'))
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_update_shoutbox_030', update_shoutbox_030::__dependencies());
 ?>

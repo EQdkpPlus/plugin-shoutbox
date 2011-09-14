@@ -28,6 +28,12 @@ if (!class_exists('update_shoutbox_033'))
 {
   class update_shoutbox_033 extends sql_update_task
   {
+	public static function __dependencies()
+	{
+		$dependencies = array('config');
+		return array_merge(parent::__dependencies(), $dependencies);
+	}
+
     public $author      = 'Aderyn';
     public $version     = '0.3.3';    // new version
     public $name        = 'Shoutbox 0.3.3 Update';
@@ -66,13 +72,13 @@ if (!class_exists('update_shoutbox_033'))
      */
     public function update_function()
     {
-      global $core;
-
       // set as 'core' config
-      $core->config_set('sb_max_text_length', '160');
+      $this->config->set('sb_max_text_length', '160');
+	  return true;
     }
 
   }
 }
 
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_update_shoutbox_033', update_shoutbox_033::__dependencies());
 ?>
