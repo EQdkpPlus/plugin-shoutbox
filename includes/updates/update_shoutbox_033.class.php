@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC'))
 }
 
 
-include_once($eqdkp_root_path.'maintenance/includes/sql_update_task.class.php');
+include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
 if (!class_exists('update_shoutbox_033'))
 {
