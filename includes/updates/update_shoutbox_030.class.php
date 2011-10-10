@@ -28,6 +28,10 @@ if (!class_exists('update_shoutbox_030'))
 {
   class update_shoutbox_030 extends sql_update_task
   {
+    /**
+	 * __dependencies
+	 * Get module dependencies
+	 */
 	public static function __dependencies()
 	{
 		$dependencies = array('db', 'config');

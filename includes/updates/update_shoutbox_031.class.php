@@ -28,6 +28,16 @@ if (!class_exists('update_shoutbox_031'))
 {
   class update_shoutbox_031 extends sql_update_task
   {
+	/**
+	 * __dependencies
+	 * Get module dependencies
+	 */
+	public static function __dependencies()
+	{
+		$dependencies = array('config');
+		return array_merge(parent::__dependencies(), $dependencies);
+	}
+  
     public $author      = 'Aderyn';
     public $version     = '0.3.1';    // new version
     public $name        = 'Shoutbox 0.3.1 Update';
@@ -45,12 +55,14 @@ if (!class_exists('update_shoutbox_031'))
       $this->langs = array(
         'english' => array(
           'update_shoutbox_031' => 'Shoutbox 0.3.1 Update Package',
+		  'update_function'     => 'Set new user or character setting',
           // SQL
            1 => 'Insert new user or character setting',
            2 => 'Change to user or character field',
         ),
         'german' => array(
           'update_shoutbox_031' => 'Shoutbox 0.3.1 Update Paket',
+		  'update_function'     => 'Setze neue Benutzer oder Charakter Einstellung',
           // SQL
            1 => 'Füge neuen Benutzer oder Charakter Einstellung hinzu',
            2 => 'Ändere in Benutzer oder Charakter Eintrag',
@@ -70,10 +82,13 @@ if (!class_exists('update_shoutbox_031'))
      *
      * @returns  true/false
      */
-    /*public function update_function()
+    public function update_function()
     {
+	  // when updating, there will be members instead of users, so set new value in config
+	  $this->config->set('sb_use_users', '0');
+	
       return true;
-    }*/
+    }
 
   }
 }

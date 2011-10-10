@@ -28,6 +28,10 @@ if (!class_exists('update_shoutbox_033'))
 {
   class update_shoutbox_033 extends sql_update_task
   {
+    /**
+	 * __dependencies
+	 * Get module dependencies
+	 */
 	public static function __dependencies()
 	{
 		$dependencies = array('config');
@@ -74,6 +78,7 @@ if (!class_exists('update_shoutbox_033'))
     {
       // set as 'core' config
       $this->config->set('sb_max_text_length', '160');
+	  
 	  return true;
     }
 
