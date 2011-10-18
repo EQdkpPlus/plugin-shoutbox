@@ -85,7 +85,7 @@ if (!class_exists('update_shoutbox_031'))
     public function update_function()
     {
 	  // when updating, there will be members instead of users, so set new value in config
-	  $this->config->set('sb_use_users', '0');
+	  $this->config->set('sb_use_users', '0', 'shoutbox');
 	
       return true;
     }
