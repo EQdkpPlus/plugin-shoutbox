@@ -75,8 +75,6 @@ if (!class_exists("sb_style_base"))
      */
     public function getContent($rpath='')
     {
-      global $eqdkp_root_path;
-
       // root path
       $root_path = ($rpath != '') ? $rpath : $this->root_path;
 

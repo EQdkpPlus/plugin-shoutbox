@@ -39,7 +39,7 @@ class shoutbox extends plugin_generic
   }
 
   public $version    = '0.3.3';
-  public $build      = '10599';
+  public $build      = '11404';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
 

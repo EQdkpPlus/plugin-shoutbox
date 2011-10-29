@@ -270,7 +270,9 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       if (is_array($this->data[$shoutbox_id]) && isset($this->data[$shoutbox_id]['text']))
       {
-        return stripslashes($this->data[$shoutbox_id]['text']);
+        // within the db a \n is stored as literal "\n", so we have to redo this by replacing
+        $text = str_replace('\n', "\n", $this->data[$shoutbox_id]['text']);
+        return stripslashes($text);
       }
 
       return '';
