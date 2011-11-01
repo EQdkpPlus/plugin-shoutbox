@@ -32,10 +32,10 @@ if (!class_exists('pdh_w_shoutbox'))
      * __dependencies
      * Get module dependencies
      */
-    public static function __dependencies()
+    public static function __shortcuts()
     {
-      $dependencies = array('db', 'pdh', 'time');
-      return array_merge(parent::$dependencies, $dependencies);
+      $shortcuts = array('db', 'pdh', 'time');
+      return array_merge(parent::$shortcuts, $shortcuts);
     }
 
     /*
@@ -212,5 +212,5 @@ if (!class_exists('pdh_w_shoutbox'))
   } //end class
 } //end if class not exists
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_pdh_w_shoutbox', pdh_w_shoutbox::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_shoutbox', pdh_w_shoutbox::__shortcuts());
 ?>

@@ -30,7 +30,7 @@ if (!class_exists("sb_style_base"))
   abstract class sb_style_base extends gen_class
   {
     /* List of dependencies */
-    public static $dependencies = array('user', 'config', 'tpl');
+    public static $shortcuts = array('user', 'config', 'tpl');
 
     /**
      * Output Shoutbox ids to display
@@ -162,5 +162,5 @@ if (!class_exists("sb_style_base"))
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_sb_style_base', sb_style_base::$dependencies);
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sb_style_base', sb_style_base::$shortcuts);
 ?>

@@ -30,7 +30,7 @@ if (!class_exists("ShoutboxClass"))
   class ShoutboxClass extends gen_class
   {
     /* List of dependencies */
-    public static $dependencies = array('user', 'config', 'pdh', 'pfh', 'time', 'env', 'tpl');
+    public static $shortcuts = array('user', 'config', 'pdh', 'pfh', 'time', 'env', 'tpl');
 
     /**
      * RSS Feed object
@@ -339,5 +339,5 @@ if (!class_exists("ShoutboxClass"))
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_ShoutboxClass', ShoutboxClass::$dependencies);
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ShoutboxClass', ShoutboxClass::$shortcuts);
 ?>

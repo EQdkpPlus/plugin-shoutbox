@@ -32,10 +32,10 @@ class shoutbox extends plugin_generic
    * __dependencies
    * Get module dependencies
    */
-  public static function __dependencies()
+  public static function __shortcuts()
   {
-    $dependencies = array('user', 'config', 'pdc', 'pfh');
-    return array_merge(parent::$dependencies, $dependencies);
+    $shortcuts = array('user', 'config', 'pdc', 'pfh');
+    return array_merge(parent::$shortcuts, $shortcuts);
   }
 
   public $version    = '0.3.3';
@@ -193,6 +193,6 @@ class shoutbox extends plugin_generic
 
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_shoutbox', shoutbox::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_shoutbox', shoutbox::__shortcuts());
 
 ?>

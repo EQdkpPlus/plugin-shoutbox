@@ -33,10 +33,10 @@ class ShoutboxArchive extends page_generic
    * __dependencies
    * Get module dependencies
    */
-  public static function __dependencies()
+  public static function __shortcuts()
   {
-    $dependencies = array('pm', 'user', 'core', 'in', 'pdh', 'time', 'tpl');
-    return array_merge(parent::$dependencies, $dependencies);
+    $shortcuts = array('pm', 'user', 'core', 'in', 'pdh', 'time', 'tpl');
+    return array_merge(parent::$shortcuts, $shortcuts);
   }
 
   /**
@@ -199,7 +199,7 @@ class ShoutboxArchive extends page_generic
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_ShoutboxArchive', ShoutboxArchive::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ShoutboxArchive', ShoutboxArchive::__shortcuts());
 register('ShoutboxArchive');
 
 ?>

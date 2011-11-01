@@ -32,9 +32,9 @@ if (!class_exists('update_shoutbox_030'))
 	 * __dependencies
 	 * Get module dependencies
 	 */
-	public static function __dependencies()
+	public static function __shortcuts()
 	{
-		$dependencies = array('db', 'config');
+		$shortcuts = array('db', 'config');
 		return array_merge(parent::__dependencies(), $dependencies);
 	}
 
@@ -112,5 +112,5 @@ if (!class_exists('update_shoutbox_030'))
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_update_shoutbox_030', update_shoutbox_030::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_update_shoutbox_030', update_shoutbox_030::__shortcuts());
 ?>

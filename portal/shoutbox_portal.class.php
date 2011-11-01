@@ -30,10 +30,10 @@ class shoutbox_portal extends portal_generic
    * __dependencies
    * Get module dependencies
    */
-  public static function __dependencies()
+  public static function __shortcuts()
   {
-    $dependencies = array('pm', 'user', 'pdh');
-    return array_merge(parent::$dependencies, $dependencies);
+    $shortcuts = array('pm', 'user', 'pdh');
+    return array_merge(parent::$shortcuts, $shortcuts);
   }
 
   /**
@@ -184,5 +184,5 @@ class shoutbox_portal extends portal_generic
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_shoutbox_portal', shoutbox_portal::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_shoutbox_portal', shoutbox_portal::__shortcuts());
 ?>

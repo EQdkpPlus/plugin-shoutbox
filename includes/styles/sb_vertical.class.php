@@ -37,10 +37,10 @@ if (!class_exists("sb_vertical"))
      * __dependencies
      * Get module dependencies
      */
-    public static function __dependencies()
+    public static function __shortcuts()
     {
-      $dependencies = array('user', 'config', 'pdh', 'html');
-      return array_merge(parent::$dependencies, $dependencies);
+      $shortcuts = array('user', 'config', 'pdh', 'html');
+      return array_merge(parent::$shortcuts, $shortcuts);
     }
 
     /**
@@ -325,5 +325,5 @@ if (!class_exists("sb_vertical"))
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_sb_vertical', sb_vertical::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sb_vertical', sb_vertical::__shortcuts());
 ?>

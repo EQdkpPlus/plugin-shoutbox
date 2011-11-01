@@ -34,10 +34,10 @@ class ShoutboxSettings extends page_generic
    * __dependencies
    * Get module dependencies
    */
-  public static function __dependencies()
+  public static function __shortcuts()
   {
-    $dependencies = array('pm', 'user', 'config', 'core', 'in', 'jquery', 'html', 'tpl');
-    return array_merge(parent::$dependencies, $dependencies);
+    $shortcuts = array('pm', 'user', 'config', 'core', 'in', 'jquery', 'html', 'tpl');
+    return array_merge(parent::$shortcuts, $shortcuts);
   }
 
   /**
@@ -131,7 +131,7 @@ class ShoutboxSettings extends page_generic
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_ShoutboxSettings', ShoutboxSettings::__dependencies());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ShoutboxSettings', ShoutboxSettings::__shortcuts());
 registry::register('ShoutboxSettings');
 
 ?>
