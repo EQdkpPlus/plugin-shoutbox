@@ -35,7 +35,7 @@ if (!class_exists('update_shoutbox_030'))
 	public static function __shortcuts()
 	{
 		$shortcuts = array('db', 'config');
-		return array_merge(parent::__dependencies(), $dependencies);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
     public $author      = 'Aderyn';
