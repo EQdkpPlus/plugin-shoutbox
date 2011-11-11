@@ -138,7 +138,7 @@ if (!class_exists("sb_style_base"))
                     }
                   });
 
-                  $('textarea[name=sb_text]').live('keyup blur', function() {
+                  $(document).on('keyup blur', 'textarea[name=sb_text]', function(){
                     var maxlength = ".$max_text_length.";
                     var value = $(this).val();
 
