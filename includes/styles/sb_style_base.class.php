@@ -126,7 +126,7 @@ if (!class_exists("sb_style_base"))
       $autoreload = $autoreload * 1000; // to ms
 
       // set maxlength
-      $max_text_length = ($this->config->get('sb_max_text_length') && is_int($this->config->get('sb_max_text_length'))) ? intval($this->config->get('sb_max_text_length')) : 160;
+      $max_text_length = ($this->config->get('sb_max_text_length') && is_numeric($this->config->get('sb_max_text_length'))) ? intval($this->config->get('sb_max_text_length')) : 160;
 
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',
