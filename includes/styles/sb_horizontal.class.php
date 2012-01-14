@@ -111,7 +111,7 @@ if (!class_exists("sb_horizontal"))
           // User [x]
 
           $htmlOut .= '<tr>
-                         <td style="width: 15%;">';
+                         <td style="width: 15%; min-width: 110px;">';
 
           // if admin or own entry, ouput delete link
           if ($this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
