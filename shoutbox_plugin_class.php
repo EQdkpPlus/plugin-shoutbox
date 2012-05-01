@@ -62,7 +62,7 @@ class shoutbox extends plugin_generic
       'author'            => $this->copyright,
       'description'       => $this->user->lang('sb_short_desc'),
       'long_description'  => $this->user->lang('sb_long_desc'),
-      'homepage'          => 'http://www.eqdkp-plus.com/',
+      'homepage'          => EQDKP_PROJECT_URL,
       'manuallink'        => false,
       'plus_version'      => '0.7',
       'build'             => $this->build,
