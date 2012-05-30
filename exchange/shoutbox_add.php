@@ -49,7 +49,7 @@ if (!class_exists('exchange_shoutbox_add'))
     function post_shoutbox_add($params, $body)
     {
       // be sure user is logged in
-      if ($this->user->data['user_id'] != ANONYMOUS)
+      if ($this->user->is_signedin())
       {
         // parse xml request
         $xml = simplexml_load_string($body);

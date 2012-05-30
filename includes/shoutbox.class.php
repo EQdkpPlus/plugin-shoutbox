@@ -105,7 +105,7 @@ if (!class_exists("ShoutboxClass"))
     public function insertShoutboxEntry($usermember_id, $text)
     {
       // is user allowed to add a shoutbox entry?
-      if ($this->user->data['user_id'] != ANONYMOUS && $this->user->check_auth('u_shoutbox_add', false))
+      if ($this->user->is_signedin() && $this->user->check_auth('u_shoutbox_add', false))
       {
         // insert
         $shoutbox_id = $this->pdh->put('shoutbox', 'add', array($usermember_id, $text));
@@ -133,7 +133,7 @@ if (!class_exists("ShoutboxClass"))
     public function deleteShoutboxEntry($shoutbox_id)
     {
       // is user owner of the shoutbox entry or is admin?
-      if (($this->user->data['user_id'] != ANONYMOUS && $this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id))) ||
+      if (($this->user->is_signedin() && $this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id))) ||
           ($this->user->check_auth('a_shoutbox_delete', false)))
       {
         $result = $this->pdh->put('shoutbox', 'delete', array($shoutbox_id));
@@ -159,7 +159,7 @@ if (!class_exists("ShoutboxClass"))
     public function deleteAllEntries()
     {
       // is user allowed to delete?
-      if ($this->user->data['user_id'] != ANONYMOUS && $this->user->check_auth('a_shoutbox_delete', false))
+      if ($this->user->is_signedin() && $this->user->check_auth('a_shoutbox_delete', false))
       {
         // get all shoutbox ids
         $shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');

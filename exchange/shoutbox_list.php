@@ -52,7 +52,7 @@ if (!class_exists('exchange_shoutbox_list'))
       $response = array('entries' => array());
 
       // be sure user is logged in
-      if ($this->user->data['user_id'] != ANONYMOUS)
+      if ($this->user->is_signedin())
       {
         // get the number of shoutbox entries to return
         $max_count = (isset($params['get']['number']) && intval($params['get']['number']) > 0) ? intval($params['get']['number']) : 10;

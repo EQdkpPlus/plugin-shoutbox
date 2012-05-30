@@ -69,7 +69,7 @@ if (!class_exists("sb_vertical"))
       $htmlOut .= '</div>';
 
       // archive link? (User must be logged in to see archive link)
-      if ($this->config->get('sb_show_archive') && $this->user->data['user_id'] != ANONYMOUS)
+      if ($this->config->get('sb_show_archive') && $this->user->is_signedin())
       {
         $htmlOut .= $this->getArchiveLink();
       }
