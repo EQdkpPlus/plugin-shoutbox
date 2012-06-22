@@ -51,7 +51,7 @@ else
 {
   $error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
               <tr>
-                <td><div class="center">'.registry::register('user')->lang('sb_plugin_not_installed').'</div></td>
+                <td><div class="center">'.registry::fetch('user')->lang('sb_plugin_not_installed').'</div></td>
               </tr>
             </table>';
   echo $error;

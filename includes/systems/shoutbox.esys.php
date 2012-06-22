@@ -28,7 +28,7 @@ $systems_shoutbox = array(
       'table_main_sub' => '%shoutbox_id%',
       'table_sort_dir' => 'desc',
       'page_ref' => 'manage.php',
-      'show_select_boxes' => registry::register('user')->check_auth('a_shoutbox_delete', false),
+      'show_select_boxes' => registry::fetch('user')->check_auth('a_shoutbox_delete', false),
       'table_presets' => array(
         array('name' => 'sbdate', 'sort' => true,  'th_add' => 'align="center" width="120px"', 'td_add' => 'align="center" nowrap="nowrap"'),
         array('name' => 'sbname', 'sort' => true,  'th_add' => 'align="center" width="20%"',   'td_add' => 'nowrap="nowrap"'),
