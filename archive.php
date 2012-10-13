@@ -49,7 +49,7 @@ class ShoutboxArchive extends page_generic
       message_die($this->user->lang('sb_plugin_not_installed'));
 
     $handler = array(
-      'sb_delete' => array('process' => 'delete', 'session_key' => true, 'check' => 'a_shoutbox_delete'),
+      'sb_delete' => array('process' => 'delete', 'csrf' => true, 'check' => 'a_shoutbox_delete'),
     );
     parent::__construct('u_shoutbox_', $handler);
 
@@ -113,7 +113,7 @@ class ShoutboxArchive extends page_generic
         $this->tpl->assign_block_vars('year_row.month_row', array(
           'MONTH'     => $this->time->date('F', $this->time->mktime(0, 0, 0, $month, 1, $year)),
           'COUNT'     => count($ids),
-          'LINK_VIEW' => $this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'&session_key='.$this->SKEY.'&amp;year='.$year.'&amp;month='.$month
+          'LINK_VIEW' => $this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'&amp;year='.$year.'&amp;month='.$month
         ));
       }
     }

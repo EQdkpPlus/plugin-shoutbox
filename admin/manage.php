@@ -50,7 +50,7 @@ class ShoutboxManage extends page_generic
       message_die($this->user->lang('sb_plugin_not_installed'));
 
     $handler = array(
-      'sb_delete' => array('process' => 'delete', 'session_key' => true, 'check' => 'a_shoutbox_delete'),
+      'sb_delete' => array('process' => 'delete', 'csrf' => true, 'check' => 'a_shoutbox_delete'),
     );
     parent::__construct('a_shoutbox_', $handler);
 
@@ -120,7 +120,7 @@ class ShoutboxManage extends page_generic
         $this->tpl->assign_block_vars('year_row.month_row', array(
           'MONTH'     => $this->time->date('F', $this->time->mktime(0, 0, 0, $month, 1, $year)),
           'COUNT'     => count($ids),
-          'LINK_VIEW' => $this->root_path.'plugins/shoutbox/admin/manage.php'.$this->SID.'&session_key='.$this->SKEY.'&amp;year='.$year.'&amp;month='.$month,
+          'LINK_VIEW' => $this->root_path.'plugins/shoutbox/admin/manage.php'.$this->SID.'&amp;year='.$year.'&amp;month='.$month,
         ));
       }
     }
@@ -170,7 +170,7 @@ class ShoutboxManage extends page_generic
     $limit = 50;
     $end = min($start + $limit, $total_entries);
     // pagination
-    $pagination = generate_pagination('manage.php'.$this->SID.'&session_key='.$this->SKEY.$url_suffix, $total_entries, $limit, $start);
+    $pagination = generate_pagination('manage.php'.$this->SID.$url_suffix, $total_entries, $limit, $start);
 
 
     // -- display entries -----------------------------------------------------

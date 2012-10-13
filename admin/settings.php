@@ -50,7 +50,7 @@ class ShoutboxSettings extends page_generic
       message_die($this->user->lang('sb_plugin_not_installed'));
 
     $handler = array(
-      'sb_save' => array('process' => 'save', 'session_key' => true, 'check' => 'a_shoutbox_'),
+      'sb_save' => array('process' => 'save', 'csrf' => true, 'check' => 'a_shoutbox_'),
     );
     parent::__construct('a_shoutbox_', $handler);
 
