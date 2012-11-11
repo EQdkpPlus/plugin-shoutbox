@@ -34,7 +34,7 @@ class shoutbox extends plugin_generic
    */
   public static function __shortcuts()
   {
-    $shortcuts = array('user', 'config', 'pdc', 'pfh');
+    $shortcuts = array('user', 'config', 'pdc', 'pfh', 'pgh');
     return array_merge(parent::$shortcuts, $shortcuts);
   }
 
@@ -95,7 +95,7 @@ class shoutbox extends plugin_generic
     $this->add_exchange_module('shoutbox', true, 'shoutbox.xml');
 
     // -- Hooks -------------------------------------------
-    $this->add_hook('search', 'hook_search');
+    $this->add_hook('search', 'shoutbox_search_hook', 'search');
   }
 
   /**
@@ -168,27 +168,6 @@ class shoutbox extends plugin_generic
     ));
 
     return $admin_menu;
-  }
-
-  /**
-    * hook_search
-    * Do the hook 'search'
-    *
-    * @return array
-    */
-  public function hook_search()
-  {
-    // build search array
-    $search = array(
-      'shoutbox' => array(
-        'category'    => $this->user->lang('shoutbox'),
-        'module'      => 'shoutbox',
-        'method'      => 'search',
-        'permissions' => array('u_'),
-      ),
-    );
-
-    return $search;
   }
 
 }
