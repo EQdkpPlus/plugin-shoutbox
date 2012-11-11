@@ -54,5 +54,7 @@ if (!class_exists('shoutbox_search_hook'))
 	}
   }
 }
-  
+if(version_compare(PHP_VERSION, '5.3.0', '<')) {
+	registry::add_const('short_shoutbox_search_hook', shoutbox_search_hook::$shortcuts);
+}
 ?>
