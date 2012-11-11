@@ -5,15 +5,15 @@
  * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2008
- * Date:        $Date: 2012-05-30 23:41:49 +0200 (Mi, 30. Mai 2012) $
+ * Date:        $Date$
  * -----------------------------------------------------------------------
- * @author      $Author: wallenium $
+ * @author      $Author$
  * @copyright   2008-2011 Aderyn
  * @link        http://eqdkp-plus.com
  * @package     shoutbox
- * @version     $Rev: 11795 $
+ * @version     $Rev$
  *
- * $Id: shoutbox_list.php 11795 2012-05-30 21:41:49Z wallenium $
+ * $Id$
  */
 
 if (!defined('EQDKP_INC'))
