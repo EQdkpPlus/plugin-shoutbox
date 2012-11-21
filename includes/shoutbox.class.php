@@ -229,6 +229,9 @@ if (!class_exists("ShoutboxClass"))
     {
       // get shoutbox ids to display
       $shoutbox_ids = $this->getShoutboxOutEntries();
+	  
+	  //Clean Root Path
+	  $rpath = clean_rootpath($rpath);
 
       // empty output
       $htmlOut = '';
