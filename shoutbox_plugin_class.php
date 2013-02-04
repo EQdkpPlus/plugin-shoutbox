@@ -77,7 +77,7 @@ class shoutbox extends plugin_generic
     // ('a'/'u', Permission-Name, Enable? 'Y'/'N', Language string, array of user-group-ids that should have this permission)
     // Groups: 2 = Super-Admin, 3 = Admin, 4 = Member
     $this->add_permission('a', 'delete', 'N', $this->user->lang('delete'), array(2,3));
-	$this->add_permission('u', 'view',    'Y', $this->user->lang('view'),    array(2,3,4));
+	$this->add_permission('u', 'view',    'Y', $this->user->lang('view'),    array(1,2,3,4));
     $this->add_permission('u', 'add',    'Y', $this->user->lang('add'),    array(2,3,4));
 
     // -- Menu --------------------------------------------
