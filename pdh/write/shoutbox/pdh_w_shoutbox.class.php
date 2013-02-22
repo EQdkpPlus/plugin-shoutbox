@@ -141,11 +141,35 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     private function cleanupText($text)
     {
-      // wrap words (do own handling cause of bbcodes)
+      // auto create url bbcode for URLs - by GodMod
+	  $text = $this->autolink($text);
+	  
+	  // wrap words (do own handling cause of bbcodes)
       $cleanup_text = $this->shoutbox_wordwrap($text, $this->wordwrap, "\n", true);
 
       return trim($cleanup_text);
     }
+	
+	 /**
+     * autolink
+     * Converts an URL to appropriate BB-Code
+     *
+     * @param  string   $str Text to insert
+     *
+     * @returns string
+     */
+	private function autolink($str) {
+		$str = ' ' . $str;
+		$str = preg_replace(
+		  '`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
+		  '$1[url="$2"]$2[/url]',
+		  $str
+		);
+		$str = substr($str, 1);
+		$str = preg_replace('`url=\"www`','url="http://www',$str);
+		// fügt http:// hinzu, wenn nicht vorhanden
+		return trim($str);
+	}
 
     /**
      * shoutbox_wordwrap
