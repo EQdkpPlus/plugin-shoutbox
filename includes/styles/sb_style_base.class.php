@@ -73,17 +73,14 @@ if (!class_exists("sb_style_base"))
      *
      * @return  string
      */
-    public function getContent($rpath='')
+    public function getContent()
     {
-      // root path
-      $root_path = ($rpath != '') ? $rpath : $this->root_path;
-
       // the delete form
-      $htmlOut = '<form id="del_shoutbox" name="del_shoutbox" action="'.$this->root_path.'plugins/shoutbox/shoutbox.php" method="post">
+      $htmlOut = '<form id="del_shoutbox" name="del_shoutbox" action="'.$this->server_path.'plugins/shoutbox/shoutbox.php" method="post">
                   </form>';
 
       // layout content
-      $htmlOut .= $this->layoutContent($root_path);
+      $htmlOut .= $this->layoutContent();
 
       return $htmlOut;
     }
@@ -100,11 +97,9 @@ if (!class_exists("sb_style_base"))
      * layoutContent
      * layout the content only of the shoutbox
      *
-     * @param  string  $root_path  root path
-     *
      * @return  string
      */
-    protected abstract function layoutContent($root_path);
+    protected abstract function layoutContent();
 
     /**
      * jCodeOrientation
@@ -131,14 +126,14 @@ if (!class_exists("sb_style_base"))
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',
                     beforeSubmit:  function(formData, jqForm, options) {
-                      showShoutboxRequest('".$this->root_path."', '".$this->user->lang('sb_save_wait')."');
+                      showShoutboxRequest('".$this->user->lang('sb_save_wait')."');
                     },
                     success: function() {
-                      showShoutboxFinished('".$this->root_path."', '".$this->user->lang('sb_submit_text')."', '".$this->user->lang('sb_reload')."');
+                      showShoutboxFinished('".$this->user->lang('sb_submit_text')."', '".$this->user->lang('sb_reload')."');
                     }
                   });
 
-                  $(document).on('keyup blur', 'textarea[name=sb_text]', function(){
+                  $(document).on('keyup blur', 'textarea[name=sb_text]', function(e){
                     var maxlength = ".$max_text_length.";
                     var value = $(this).val();
 
@@ -147,12 +142,21 @@ if (!class_exists("sb_style_base"))
                     {
                       $(this).val(value.slice(0, maxlength));
                     }
+                    		                  		
+                    while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css(\"borderTopWidth\")) + parseFloat($(this).css(\"borderBottomWidth\"))) {
+        				$(this).height($(this).height()+5);
+    				};
+                    		
+                    if (e.which == 13) {
+					    $('form#Shoutbox').submit();
+					    return false;
+					}
                   });
                  ";
       if ($autoreload > 0)
       {
         $jscode .= "setInterval(function() {
-                      shoutboxAutoReload('".$this->root_path."', '".$this->SID."', '".$this->user->lang('sb_reload')."', '".$this->jCodeOrientation()."');
+                      shoutboxAutoReload('".$this->user->lang('sb_reload')."', '".$this->jCodeOrientation()."');
                     }, ".$autoreload.");";
       }
 
@@ -162,5 +166,4 @@ if (!class_exists("sb_style_base"))
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sb_style_base', sb_style_base::$shortcuts);
 ?>

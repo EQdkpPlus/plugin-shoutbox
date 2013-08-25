@@ -22,11 +22,11 @@
   * @param  root  string  root directory of eqdkp
   * @param  text  string  text to display for "Saving..."
   */
-function showShoutboxRequest(root, text) {
+function showShoutboxRequest(text) {
   // disable input field, hide reload icon and display "Saving..." text
   $('textarea[name=sb_text]').attr('disabled', 'disabled');
   $('#shoutbox_reload_button').html('');
-  $('#shoutbox_button').html('<img src="'+root+'images/global/loading.gif" alt="Save"/>'+text);
+  $('#shoutbox_button').html('<i class="icon-spinner icon-spin"></i>'+text);
 }
 
 /**
@@ -37,36 +37,38 @@ function showShoutboxRequest(root, text) {
   * @param  textSubmit  string  text to display on "Send" button
   * @param  textReload  string  text to display als alt of reload image
   */
-function showShoutboxFinished(root, textSubmit, textReload) {
+function showShoutboxFinished(textSubmit, textReload, showSubmitButton) {
   // clear input field, enable input, show reload and set "Saving..." text back to send button
-  $('textarea[name=sb_text]').val('');
+  $('textarea[name=sb_text]').val('').css("height", "");
   $('textarea[name=sb_text]').removeAttr('disabled');
-  $('#shoutbox_button').html('<input type="submit" class="liteoption bi_ok" name="sb_submit" value="'+textSubmit+'"/>');
-  $('#shoutbox_reload_button').html('<img src="'+root+'plugins/shoutbox/images/reload.png" alt="'+textReload+'" title="'+textReload+'"/>');
+  if (showSubmitButton) {
+	  $('#shoutbox_button').html('<input type="submit" class="liteoption bi_ok" name="sb_submit" value="'+textSubmit+'"/>');
+  } else {
+	  $('#shoutbox_button').html('');
+  }
+  $('#shoutbox_reload_button').html('<i class="icon-refresh icon-large" title="'+textReload+'"></i>');
 }
 
 /**
   * reloadShoutboxRequest2
   * show reloading icon
   *
-  * @param  root        string  root directory of eqdkp
   */
-function reloadShoutboxRequest(root) {
+function reloadShoutboxRequest() {
   // disable submit button and set loading image
   $('input[name=sb_submit]').attr('disabled', 'disabled');
-  $('#shoutbox_reload_button').html('<img src="'+root+'images/global/loading.gif" alt="Load"/>');
+  $('#shoutbox_reload_button').html('<i class="icon-spinner icon-spin icon-large"></i>');
 }
 
 /**
   * reloadShoutboxFinished
   * finished reload
   *
-  * @param  root        string  root directory of eqdkp
   * @param  textReload  string  text to display als alt of reload image
   */
-function reloadShoutboxFinished(root, textReload) {
+function reloadShoutboxFinished(textReload) {
   // enable submit button and reset reload image
-  $('#shoutbox_reload_button').html('<img src="'+root+'plugins/shoutbox/images/reload.png" alt="'+textReload+'" title="'+textReload+'"/>');
+  $('#shoutbox_reload_button').html('<i class="icon-refresh icon-large"></i>');
   $('input[name=sb_submit]').removeAttr('disabled');
 }
 
@@ -74,35 +76,32 @@ function reloadShoutboxFinished(root, textReload) {
   * deleteShoutboxRequest
   * Delete a shoutbox entry
   *
-  * @param  root        string  root directory of eqdkp
   * @param  id          int     id of delete button
   * @param  textDelete  string  text to display als alt of delete image
   */
-function deleteShoutboxRequest(root, id, textDelete) {
-  $('#shoutbox_delete_button_'+id).html('<img src="'+root+'images/global/loading.gif" alt="'+textDelete+'"/>');
+function deleteShoutboxRequest(id, textDelete) {
+  $('#shoutbox_delete_button_'+id).html('<i class="icon-spinner icon-spin"></i>');
 }
 
 /**
   * shoutboxAutoReload
   * auto reload the shoutbox
   *
-  * @param  root         string  root directory of eqdkp
-  * @param  sid          string  SID
   * @param  textReload   string  text to display als alt of reload image
   * @param  orientation  string  orientation of shoutbox
   */
-function shoutboxAutoReload(root, sid, textReload, orientation)
+function shoutboxAutoReload(textReload, orientation)
 {
   // get the content of the shoutbox
   $('#reload_shoutbox').ajaxSubmit(
   {
     target: '#htmlShoutboxTable',
-    url: root+'plugins/shoutbox/shoutbox.php'+sid+'&sb_root='+escape(root)+'&sb_orientation='+orientation,
+    url: mmocms_root_path+'plugins/shoutbox/shoutbox.php'+mmocms_sid+'&sb_orientation='+orientation,
     beforeSubmit: function(formData, jqForm, options) {
-      reloadShoutboxRequest(root);
+      reloadShoutboxRequest();
     },
     success: function() {
-      reloadShoutboxFinished(root, textReload);
+      reloadShoutboxFinished(textReload);
     }
   });
 }

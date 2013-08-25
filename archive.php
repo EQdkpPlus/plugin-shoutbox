@@ -127,20 +127,6 @@ class ShoutboxArchive extends page_generic
       $shoutbox_out = $date_array[$this->in->get('year')][$this->in->get('month')];
       $page_title   = $this->time->date('F', $this->time->mktime(0, 0, 0, $this->in->get('month'), 1, $this->in->get('year'))).' '.$this->in->get('year');
     }
-    // -- search? -------------------------------------------------------------
-    else if ($this->in->exists('search') && strlen($this->in->exists('search')))
-    {
-      // loop through all the shoutbox entries and try to find in either username or in text
-      foreach ($shoutbox_ids as $shoutbox_id)
-      {
-        $text   = $this->pdh->get('shoutbox', 'text',           array($shoutbox_id));
-        $member = $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
-        $search = $this->in->get('search');
-        if (strpos($text, $search) !== false || strpos($member, $search) !== false)
-          $shoutbox_out[] = $shoutbox_id;
-        $page_title = $this->user->lang('search').': '.sanitize($this->in->get('search'));
-      }
-    }
     // -- id? -----------------------------------------------------------------
     else if ($this->in->exists('id'))
     {
@@ -168,9 +154,11 @@ class ShoutboxArchive extends page_generic
       $this->tpl->assign_block_vars('shoutbox_row', array(
         'ID'      => $shoutbox_id,
         'NAME'    => $this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)),
+      	'USERAVATAR' => $this->pdh->geth('shoutbox', 'useravatar', array($shoutbox_id)),
         'DATE'    => $this->time->date($this->user->style['date'], $shoutbox_date),
         'TIME'    => $this->time->date($this->user->style['time'], $shoutbox_date),
-        'MESSAGE' => $this->pdh->geth('shoutbox', 'text', array($shoutbox_id))
+        'MESSAGE' => $this->pdh->geth('shoutbox', 'text', array($shoutbox_id)),
+      	'S_AVATAR' => ($this->pdh->geth('shoutbox', 'useravatar', array($shoutbox_id)) !== false),
       ));
     }
     // -- Template ----------------------------------------------------------------

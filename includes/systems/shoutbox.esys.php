@@ -29,15 +29,12 @@ $systems_shoutbox = array(
       'table_sort_dir' => 'desc',
       'page_ref' => 'manage.php',
       'show_select_boxes' => registry::fetch('user')->check_auth('a_shoutbox_delete', false),
+      'selectboxes_checkall'	=> true,
       'table_presets' => array(
         array('name' => 'sbdate', 'sort' => true,  'th_add' => 'align="center" width="120px"', 'td_add' => 'align="center" nowrap="nowrap"'),
         array('name' => 'sbname', 'sort' => true,  'th_add' => 'align="center" width="20%"',   'td_add' => 'nowrap="nowrap"'),
         array('name' => 'sbtext', 'sort' => false, 'th_add' => 'align="center"',               'td_add' => '')
       ),
-      'super_row' => array(
-        array('colspan' => '1', 'align' => 'center', 'text' => '<input type="checkbox" name="sb_delete_all" id="sb_delete_all"/>'),
-        array('colspan' => '3', 'align' => 'left',   'text' => '')
-      )
     ),
   )
 );

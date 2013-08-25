@@ -237,6 +237,14 @@ if (!class_exists('pdh_r_shoutbox'))
         return $this->pdh->get('member', 'name', array($this->get_usermemberid($shoutbox_id), false, false));
       }
     }
+	
+	public function get_useravatar($shoutbox_id){
+	  if ($this->config->get('sb_use_users', 'shoutbox'))
+      {
+        return $this->pdh->geth('user', 'avatarimglink', array($this->get_usermemberid($shoutbox_id)));
+      }
+	  return false;
+	}
 
     /**
      * get_html_usermembername
@@ -250,7 +258,7 @@ if (!class_exists('pdh_r_shoutbox'))
     {
       if ($this->config->get('sb_use_users', 'shoutbox'))
       {
-        return $this->pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id)));
+        return $this->pdh->geth('user', 'name', array($this->get_usermemberid($shoutbox_id), '', '', true));
       }
       else
       {
@@ -287,10 +295,10 @@ if (!class_exists('pdh_r_shoutbox'))
      *
      * @returns string
      */
-    public function get_html_text($shoutbox_id, $rpath='')
+    public function get_html_text($shoutbox_id)
     {
       // root path
-      $root_path = ($rpath != '') ? $rpath : $this->root_path;
+      $root_path = $this->server_path;
       // smilie path
       $smilie_path = $root_path.$this->smiley_path;
 
@@ -391,7 +399,7 @@ if (!class_exists('pdh_r_shoutbox'))
             $searchResults[] = array(
               'id'   => $this->get_html_date($shoutbox_id, true).'<br/>'.$this->get_html_usermembername($shoutbox_id),
               'name' => $this->get_html_text($shoutbox_id),
-              'link' => $this->root_path.'plugins/shoutbox/archive.php'.$this->SID.'&amp;id='.$shoutbox_id,
+              'link' => $this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'&amp;id='.$shoutbox_id,
             );
           }
         }
@@ -403,5 +411,4 @@ if (!class_exists('pdh_r_shoutbox'))
   } //end class
 } //end if class not exists
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_shoutbox', pdh_r_shoutbox::__shortcuts());
 ?>

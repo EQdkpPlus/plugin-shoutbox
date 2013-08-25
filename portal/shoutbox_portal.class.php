@@ -32,7 +32,7 @@ class shoutbox_portal extends portal_generic
    */
   public static function __shortcuts()
   {
-    $shortcuts = array('pm', 'user', 'pdh');
+    $shortcuts = array('pm', 'user', 'pdh', 'tpl');
     return array_merge(parent::$shortcuts, $shortcuts);
   }
 
@@ -63,11 +63,6 @@ class shoutbox_portal extends portal_generic
       'language'  => 'sb_output_count_limit',
       'property'  => 'text',
       'size'      => '3',
-    ),
-    'pk_shoutbox_show_date'           => array(
-        'name'      => 'sb_show_date',
-        'language'  => 'sb_show_date',
-        'property'  => 'checkbox',
     ),
     'pk_shoutbox_show_archive'        => array(
         'name'      => 'sb_show_archive',
@@ -130,39 +125,19 @@ class shoutbox_portal extends portal_generic
       $requirementscheck = $shoutbox->checkRequirements();
       if ($requirementscheck !== true)
       {
-        $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-                     <tr>
-                       <td><div class="center">'.$requirementscheck.'</div></td>
-                     </tr>
-                   </table>';
+        $output = $requirementscheck;
       }
 	  //do permission check
       elseif (!$this->user->check_auth('u_shoutbox_view', false)){
-		 $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-                     <tr>
-                       <td><div class="center">'.$this->user->lang('sb_no_view_permission').'</div></td>
-                     </tr>
-                   </table>';
+		 $output = $this->user->lang('sb_no_view_permission');
 	  }	
 	  else 
       {
-        // default position is none
-        $position = '';
-
-        // get the Shoutbox Portal ID
-        $portal_ids = $this->pdh->get('portal', 'id_list', array(array('plugin' => 'shoutbox')));
-        if (is_array($portal_ids) && count($portal_ids) > 0)
-        {
-          // get the position of the shoutbox portal module
-          $position = $this->pdh->get('portal', 'position', array(array_pop($portal_ids)));
-        }
-
         // output depending on position
         $orientation = '';
-        switch ($position)
+        switch ($this->position)
         {
-        case 'left1':
-        case 'left2':
+        case 'left':
         case 'right':
           $orientation = 'vertical';
           break;
@@ -176,21 +151,67 @@ class shoutbox_portal extends portal_generic
         }
 
         // return the output for module
-        $output = $shoutbox->showShoutbox($orientation);
+        $output = $shoutbox->showShoutbox($orientation);	
+				
+		$this->tpl->add_css(
+		".sb_vertical .sb_text_margin {
+			margin-left: 38px;
+		}
+				
+		.sb_horizontal .sb_content_container
+		{
+			padding: 2px 5px 2px 5px;
+			background: #FFFFFF;
+			border: #ccc solid 1px;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+			position: relative;
+		}
+				
+		.sb_with_avatar.sb_content_container {
+      		margin-left: 60px;
+      	}
+
+		.sb_horizontal .sb_with_avatar.sb_content_container:after
+		{
+			content: \"\";
+			position: absolute;
+			top: 10px;
+			left: -15px;
+			border-style: solid;
+			border-width: 11px 15px 11px 0;
+			border-color: transparent #FFFFFF;
+			display: block;
+			width: 0;
+			z-index: 1;
+		}
+		
+		.sb_horizontal .sb_with_avatar.sb_content_container:before
+		{
+			content: \"\";
+			position: absolute;
+			top: 10px;
+			left: -16px;
+			border-style: solid;
+			border-width: 11px 15px 11px 0;
+			border-color: transparent #ccc;
+			display: block;
+			width: 0;
+			z-index: 0;
+		}
+				
+		"
+		);
       }
     }
     else
     {
-      $output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-                   <tr>
-                     <td><div class="center">'.$this->user->lang('sb_plugin_not_installed').'</div></td>
-                   </tr>
-                 </table>';
+      $output = $this->user->lang('sb_plugin_not_installed');
     }
 
     return $output;
   }
 }
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_shoutbox_portal', shoutbox_portal::__shortcuts());
 ?>

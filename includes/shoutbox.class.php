@@ -229,13 +229,10 @@ if (!class_exists("ShoutboxClass"))
      *
      * @returns  string
      */
-    public function getContent($orientation, $rpath='')
+    public function getContent($orientation)
     {
       // get shoutbox ids to display
       $shoutbox_ids = $this->getShoutboxOutEntries();
-	  
-	  //Clean Root Path
-	  $rpath = clean_rootpath($rpath);
 
       // empty output
       $htmlOut = '';
@@ -251,7 +248,7 @@ if (!class_exists("ShoutboxClass"))
 
       // get content
       if ($shoutbox_style)
-        $htmlOut .= $shoutbox_style->getContent($rpath);
+        $htmlOut .= $shoutbox_style->getContent();
 
       return $htmlOut;
     }
@@ -328,7 +325,7 @@ if (!class_exists("ShoutboxClass"))
         // create RSS feed item
         foreach ($shoutbox_ids as $shoutbox_id)
         {
-          $rssitem = registry::register('feeditems');
+          $rssitem = registry::register('feeditems', array(), $shoutbox_id);
           $rssitem->title       = $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id));
           $rssitem->description = $this->pdh->geth('shoutbox', 'text', array($shoutbox_id));
           $rssitem->link        = $this->rssFeed->link;
@@ -345,6 +342,4 @@ if (!class_exists("ShoutboxClass"))
 
   }
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ShoutboxClass', ShoutboxClass::$shortcuts);
 ?>

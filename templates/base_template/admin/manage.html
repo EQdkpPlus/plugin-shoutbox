@@ -1,34 +1,17 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_shoutbox}: {L_sb_manage_archive} {SB_PAGE_TITLE}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
 
-<script type="text/javascript">
-  function onShoutboxArchiveSearchFocus(input)
-  {
-    if (input.value == '{L_search}...')
-      input.value = '';
-  }
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_sb_manage_archive} {SB_PAGE_TITLE}</h1>
+</div>
 
-  function onShoutboxArchiveSearchBlur(input)
-  {
-    if (input.value == '')
-      input.value = '{L_search}...';
-  }
-</script>
-
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-    <th>
-      <div style="float:left">
-        <a href="{ACTION}">{L_shoutbox} {L_sb_manage_archive}</a> {SB_PAGE_TITLE}
-      </div>
-      <div style="float:right">
-        <form action="{ACTION}" method="post">
-          <input type="text" class="input search" value="{L_search}..." name="search" onfocus="onShoutboxArchiveSearchFocus(this);" onblur="onShoutboxArchiveSearchBlur(this);" />
-          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_search}" />
-        </form>
-      </div>
-    </th>
-  </tr>
-  <tr>
-    <td>
+<div>
       <table width="100%" border="0" cellspacing="1" cellpadding="2">
         <tr>
           <td width="150" valign="top">
@@ -55,32 +38,20 @@
           <td>
             <form method="post" action="{ACTION}" id="sb_table">
               <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-                <!-- IF PAGINATION -->
-                <tr class="row2">
-                  <td class="center" colspan="5">{PAGINATION}</td>
-                </tr>
-                <!-- ENDIF PAGINATION -->
                 {SB_TABLE}
-                <tr>
-                  <th colspan="5">
-                    <input name="start" type="hidden" value="{START}" />
-                    <input type="submit" name="sb_delete" value="{L_delete}" class="mainoption bi_delete" />
-                    <input type="reset" name="sb_reset" value="{L_reset}" class="liteoption bi_reset" />
-                  </th>
-                </tr>
-                <!-- IF PAGINATION -->
-                <tr class="row2">
-                  <td class="center" colspan="5">{PAGINATION}</td>
-                </tr>
-                <!-- ENDIF PAGINATION -->
               </table>
             </form>
           </td>
         </tr>
       </table>
-    </td>
-  </tr>
-</table>
+      <div class="center pagination_wrapper">
+		{PAGINATION}
+		</div>
+		<div class="contentFooter">
+			<input name="start" type="hidden" value="{START}" />
+			<button type="submit" name="sb_delete"><i class="icon-remove"></i>{L_delete}</button>
+		</div>
+</div>
 <br/>
 
 <!-- INCLUDE about_footer.html -->

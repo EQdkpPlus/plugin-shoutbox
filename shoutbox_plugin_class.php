@@ -81,7 +81,7 @@ class shoutbox extends plugin_generic
     $this->add_permission('u', 'add',    'Y', $this->user->lang('add'),    array(2,3,4));
 
     // -- Menu --------------------------------------------
-    $this->add_menu('admin_menu', $this->gen_admin_menu());
+    $this->add_menu('admin', $this->gen_admin_menu());
 
     // -- Portal Module -----------------------------------
     $this->add_portal_module('shoutbox');
@@ -93,7 +93,7 @@ class shoutbox extends plugin_generic
     // -- Exchange Modules --------------------------------
     $this->add_exchange_module('shoutbox_add');
     $this->add_exchange_module('shoutbox_list');
-    //$this->add_exchange_module('shoutbox', true, 'shoutbox.xml');
+
 
     // -- Hooks -------------------------------------------
     $this->add_hook('search', 'shoutbox_search_hook', 'search');
@@ -139,9 +139,6 @@ class shoutbox extends plugin_generic
   {
     // clear cache
     $this->pdc->del('pdh_shoutbox_table');
-
-    // clear RSS feed
-    $this->pfh->Delete($this->pfh->FilePath('shoutbox.xml', 'shoutbox'));
   }
 
   /**
@@ -172,7 +169,5 @@ class shoutbox extends plugin_generic
   }
 
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_shoutbox', shoutbox::__shortcuts());
 
 ?>
