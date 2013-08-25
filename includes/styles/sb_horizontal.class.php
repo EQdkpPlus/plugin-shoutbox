@@ -255,7 +255,7 @@ if (!class_exists("sb_horizontal"))
       {
         // show name as text and user id as hidden value
         $username = $this->pdh->get('user', 'name', array($this->user->data['user_id']));
-        $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$this->user->data['user_id'].'"/>'.$username.':';
+        $outHtml .= '<input type="hidden" name="sb_usermember_id" value="'.$this->user->data['user_id'].'"/>';
       }
       else
       {
