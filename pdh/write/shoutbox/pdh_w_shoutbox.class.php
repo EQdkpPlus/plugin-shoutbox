@@ -145,7 +145,8 @@ if (!class_exists('pdh_w_shoutbox'))
 	  $text = $this->autolink($text);
 	  
 	  // wrap words (do own handling cause of bbcodes)
-      $cleanup_text = $this->shoutbox_wordwrap($text, $this->wordwrap, "\n", true);
+      //$cleanup_text = $this->shoutbox_wordwrap($text, $this->wordwrap, "\n", true);
+      $cleanup_text = $text;
 
       return trim($cleanup_text);
     }

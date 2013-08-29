@@ -158,6 +158,11 @@ class shoutbox_portal extends portal_generic
 			margin-left: 38px;
 		}
 				
+		.sb_vertical p {
+      		max-width: ".(($this->user->style['column_left_width']) ? ($style['column_left_width']-20) : '180px').";
+			word-wrap:break-word;
+      	}
+				
 		.sb_horizontal .sb_content_container
 		{
 			padding: 2px 5px 2px 5px;
