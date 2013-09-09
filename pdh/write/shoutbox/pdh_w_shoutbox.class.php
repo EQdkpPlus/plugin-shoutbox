@@ -34,7 +34,7 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public static function __shortcuts()
     {
-      $shortcuts = array('db', 'pdh', 'time');
+      $shortcuts = array('db2', 'pdh', 'time');
       return array_merge(parent::$shortcuts, $shortcuts);
     }
 
@@ -71,17 +71,19 @@ if (!class_exists('pdh_w_shoutbox'))
       // add to database
       $sql_data = array(
         'user_or_member_id' => $usermember_id,
-        'shoutbox_date'     => $this->db->escape($this->time->time),
-        'shoutbox_text'     => $this->db->escape($text)
+        'shoutbox_date'     => $this->time->time,
+        'shoutbox_text'     => $text
       );
-      $result = $this->db->query('INSERT INTO `__shoutbox` :params', $sql_data);
-      if (!$result)
+      
+      $objQuery = $this->db2->prepare('INSERT INTO `__shoutbox` :p')->set($sql_data)->execute();
+
+      if (!$objQuery)
         return false;
 
       // do hooks
       $this->pdh->enqueue_hook('shoutbox_update');
 
-      return $this->db->insert_id();
+      return $objQuery->insertId;
     }
 
     /**
@@ -95,9 +97,8 @@ if (!class_exists('pdh_w_shoutbox'))
     public function delete($shoutbox_id)
     {
       // delete from db
-      $sql = 'DELETE FROM `__shoutbox` WHERE shoutbox_id='.$this->db->escape($shoutbox_id);
-      $result = $this->db->query($sql);
-      if (!$result)
+      $objQuery = $this->db2->prepare('DELETE FROM `__shoutbox` WHERE shoutbox_id=?')->execute($shoutbox_id);
+      if (!$objQuery)
         return false;
 
       // do hooks
@@ -117,12 +118,11 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function set_user($shoutbox_id, $user_id)
     {
-      // update in db
-      $sql = 'UPDATE `__shoutbox`
-              SET `user_or_member_id`='.$this->db->escape($user_id).'
-              WHERE shoutbox_id='.$this->db->escape($shoutbox_id);
-      $result = $this->db->query($sql);
-      if (!$result)
+    	$objQuery = $this->db2->prepare('UPDATE `__shoutbox`
+              SET `user_or_member_id`=?
+              WHERE shoutbox_id=?')->execute($user_id, $shoutbox_id);
+
+      if (!$objQuery)
         return false;
 
       // do hooks

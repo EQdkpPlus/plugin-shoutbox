@@ -34,7 +34,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public static function __shortcuts()
     {
-      $shortcuts = array('pdc', 'db', 'pdh', 'config', 'bbcode', 'time');
+      $shortcuts = array('pdc', 'db2', 'pdh', 'config', 'bbcode', 'time');
       return array_merge(parent::$shortcuts, $shortcuts);
     }
 
@@ -110,14 +110,15 @@ if (!class_exists('pdh_r_shoutbox'))
                 shoutbox_text
               FROM `__shoutbox`
               ORDER BY shoutbox_date DESC;';
-      $result = $this->db->query($sql);
-      if ($result)
+      $objQuery = $this->db2->query($sql);
+
+      if ($objQuery)
       {
         // get DST correction value
         $correction = date('I') * 3600;
 
         // add row by row to local copy
-        while (($row = $this->db->fetch_record($result)))
+        while ($row = $objQuery->fetchAssoc())
         {
           $this->data[$row['shoutbox_id']] = array(
             'user_member_id' => $row['user_or_member_id'],
@@ -125,7 +126,6 @@ if (!class_exists('pdh_r_shoutbox'))
             'text'           => $row['shoutbox_text']
           );
         }
-        $this->db->free_result($result);
       }
 
       // add data to cache
