@@ -34,7 +34,7 @@ if (!class_exists('update_shoutbox_030'))
 	 */
 	public static function __shortcuts()
 	{
-		$shortcuts = array('db2', 'config');
+		$shortcuts = array('db', 'config');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
@@ -89,7 +89,7 @@ if (!class_exists('update_shoutbox_030'))
 
       // copy all settings from shoutbox config table to core config
       $sql = 'SELECT config_name, config_value FROM `__shoutbox_config`;';
-      $objQuery = $this->db2->query($sql);
+      $objQuery = $this->db->query($sql);
       
       if ($objQuery)
       {
@@ -104,7 +104,7 @@ if (!class_exists('update_shoutbox_030'))
 
       // delete old config table
       $sql = 'DROP TABLE `__shoutbox_config`;';
-      $this->db2->query($sql);
+      $this->db->query($sql);
 
       return true;
     }

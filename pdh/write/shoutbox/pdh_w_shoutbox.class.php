@@ -34,7 +34,7 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public static function __shortcuts()
     {
-      $shortcuts = array('db2', 'pdh', 'time');
+      $shortcuts = array('db', 'pdh', 'time');
       return array_merge(parent::$shortcuts, $shortcuts);
     }
 
@@ -75,7 +75,7 @@ if (!class_exists('pdh_w_shoutbox'))
         'shoutbox_text'     => $text
       );
       
-      $objQuery = $this->db2->prepare('INSERT INTO `__shoutbox` :p')->set($sql_data)->execute();
+      $objQuery = $this->db->prepare('INSERT INTO `__shoutbox` :p')->set($sql_data)->execute();
 
       if (!$objQuery)
         return false;
@@ -97,7 +97,7 @@ if (!class_exists('pdh_w_shoutbox'))
     public function delete($shoutbox_id)
     {
       // delete from db
-      $objQuery = $this->db2->prepare('DELETE FROM `__shoutbox` WHERE shoutbox_id=?')->execute($shoutbox_id);
+      $objQuery = $this->db->prepare('DELETE FROM `__shoutbox` WHERE shoutbox_id=?')->execute($shoutbox_id);
       if (!$objQuery)
         return false;
 
@@ -118,7 +118,7 @@ if (!class_exists('pdh_w_shoutbox'))
      */
     public function set_user($shoutbox_id, $user_id)
     {
-    	$objQuery = $this->db2->prepare('UPDATE `__shoutbox`
+    	$objQuery = $this->db->prepare('UPDATE `__shoutbox`
               SET `user_or_member_id`=?
               WHERE shoutbox_id=?')->execute($user_id, $shoutbox_id);
 

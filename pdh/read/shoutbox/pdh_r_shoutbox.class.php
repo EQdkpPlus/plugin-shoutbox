@@ -34,7 +34,7 @@ if (!class_exists('pdh_r_shoutbox'))
      */
     public static function __shortcuts()
     {
-      $shortcuts = array('pdc', 'db2', 'pdh', 'config', 'bbcode', 'time');
+      $shortcuts = array('pdc', 'db', 'pdh', 'config', 'bbcode', 'time');
       return array_merge(parent::$shortcuts, $shortcuts);
     }
 
@@ -110,7 +110,7 @@ if (!class_exists('pdh_r_shoutbox'))
                 shoutbox_text
               FROM `__shoutbox`
               ORDER BY shoutbox_date DESC;';
-      $objQuery = $this->db2->query($sql);
+      $objQuery = $this->db->query($sql);
 
       if ($objQuery)
       {
