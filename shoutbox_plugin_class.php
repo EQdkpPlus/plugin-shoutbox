@@ -57,7 +57,7 @@ class shoutbox extends plugin_generic
       'path'              => 'shoutbox',
       'contact'           => 'Aderyn@gmx.net',
       'template_path'     => 'plugins/shoutbox/templates/',
-      'icon'              => $this->root_path.'plugins/shoutbox/images/adminmenu/shoutbox.png',
+      'icon'              => 'icon-comments',
       'version'           => $this->version,
       'author'            => $this->copyright,
       'description'       => $this->user->lang('sb_short_desc'),
@@ -149,18 +149,18 @@ class shoutbox extends plugin_generic
   {
     $admin_menu = array (array(
         'name' => $this->user->lang('shoutbox'),
-        'icon' => './../../plugins/shoutbox/images/adminmenu/shoutbox.png',
+        'icon' => 'icon-comments',
         1 => array (
           'link'  => 'plugins/shoutbox/admin/settings.php'.$this->SID,
           'text'  => $this->user->lang('settings'),
           'check' => 'a_shoutbox_',
-          'icon'  => 'manage_settings.png'
+          'icon'  => 'icon-wrench'
         ),
         2 => array (
           'link'  => 'plugins/shoutbox/admin/manage.php'.$this->SID,
           'text'  => $this->user->lang('sb_manage_archive'),
           'check' => 'a_shoutbox_delete',
-          'icon'  => './../glyphs/archive.png'
+          'icon'  => 'icon-archive'
         )
 
     ));
