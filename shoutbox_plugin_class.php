@@ -57,7 +57,7 @@ class shoutbox extends plugin_generic
       'path'              => 'shoutbox',
       'contact'           => 'Aderyn@gmx.net',
       'template_path'     => 'plugins/shoutbox/templates/',
-      'icon'              => 'icon-comments',
+      'icon'              => 'icon-comment',
       'version'           => $this->version,
       'author'            => $this->copyright,
       'description'       => $this->user->lang('sb_short_desc'),
