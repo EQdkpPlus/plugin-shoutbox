@@ -58,7 +58,7 @@ if (!class_exists("sb_vertical"))
       $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
 
       // is input on top (and user can add entries) append form first
-      if ($form_location == 'top' && $this->user->check_auth('u_shoutbox_add', false))
+      if ($form_location == 'top' && $this->user->check_auth('u_shoutbox_add', false) && $this->user->is_signedin())
       {
         $htmlOut .= $this->getForm();
       }

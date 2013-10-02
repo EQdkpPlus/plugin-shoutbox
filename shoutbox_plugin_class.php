@@ -149,7 +149,7 @@ class shoutbox extends plugin_generic
   {
     $admin_menu = array (array(
         'name' => $this->user->lang('shoutbox'),
-        'icon' => 'icon-comments',
+        'icon' => 'icon-comment',
         1 => array (
           'link'  => 'plugins/shoutbox/admin/settings.php'.$this->SID,
           'text'  => $this->user->lang('settings'),

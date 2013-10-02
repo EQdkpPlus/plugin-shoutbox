@@ -34,7 +34,7 @@ if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED))
   $sb_orientation   = $in->get('sb_orientation');
 
   // -- Insert? ---------------------------------------------
-  if ($sb_text && $sb_member_id != -1)
+  if ($sb_text && $sb_usermember_id != -1)
   {
     $shoutbox->insertShoutboxEntry($sb_usermember_id, $sb_text);
   }
