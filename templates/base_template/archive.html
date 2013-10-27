@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li class="current"><a>{L_shoutbox}: {L_sb_shoutbox_archive} {S_PAGE_TITLE}</a></li>
 	</ul>
 	<div class="clear"></div>
@@ -52,7 +52,7 @@
 	                      <!-- IF S_YEAR --><input type="hidden" name="year" value="{S_YEAR}" /><!-- ENDIF S_YEAR -->
 	                      <!-- IF S_MONTH --><input type="hidden" name="month" value="{S_MONTH}" /><!-- ENDIF S_MONTH -->
 	                      <input type="hidden" name="delete_id" value="{shoutbox_row.ID}" />
-	                      <i class="icon-remove-sign icon-large icon-grey hand" title="{L_delete}" onclick="$(this).parent().find('.sb_delete_btn').click();"></i>
+	                      <i class="fa fa-times-circle fa-lg icon-grey hand" title="{L_delete}" onclick="$(this).parent().find('.sb_delete_btn').click();"></i>
 	                      <input type="submit" name="sb_delete" value="{L_delete}" class="sb_delete_btn" style="display:none;"/>
 	                    </span>
 						{CSRF_TOKEN}

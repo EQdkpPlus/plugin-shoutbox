@@ -140,7 +140,7 @@ if (!class_exists("sb_horizontal"))
                              }
                            }); ">
                            <span id="shoutbox_delete_button_'.$shoutbox_id.'">
-							<i class="icon-remove-sign icon-large icon-grey" title="'.$this->user->lang('delete').'"></i>
+							<i class="fa fa-times-circle fa-lg icon-grey" title="'.$this->user->lang('delete').'"></i>
                            </span>
                          </span>';
 		   }
@@ -213,7 +213,7 @@ if (!class_exists("sb_horizontal"))
                              reloadShoutboxFinished(\''.$this->user->lang('sb_reload').'\');
                            }
                          });">
-                         <span id="shoutbox_reload_button"><i class="icon-refresh icon-large" title="'.$this->user->lang('sb_reload').'"></i>
+                         <span id="shoutbox_reload_button"><i class="fa fa-refresh fa-lg" title="'.$this->user->lang('sb_reload').'"></i>
                          </span>
                        </span>		
                 	</div>
@@ -293,7 +293,7 @@ if (!class_exists("sb_horizontal"))
     private function getArchiveLink()
     {
       $htmlOut = '<div class="center">
-      			<button type="button" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'"><i class="icon-folder-open"></i>'.$this->user->lang('sb_archive').'</button>
+      			<button type="button" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'"><i class="fa fa-folder-open"></i>'.$this->user->lang('sb_archive').'</button>
               </div>';
 
       return $htmlOut;

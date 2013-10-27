@@ -26,7 +26,7 @@ function showShoutboxRequest(text) {
   // disable input field, hide reload icon and display "Saving..." text
   $('textarea[name=sb_text]').attr('disabled', 'disabled');
   $('#shoutbox_reload_button').html('');
-  $('#shoutbox_button').html('<i class="icon-spinner icon-spin"></i>'+text);
+  $('#shoutbox_button').html('<i class="fa fa-spinner fa-spin"></i>'+text);
 }
 
 /**
@@ -46,7 +46,7 @@ function showShoutboxFinished(textSubmit, textReload, showSubmitButton) {
   } else {
 	  $('#shoutbox_button').html('');
   }
-  $('#shoutbox_reload_button').html('<i class="icon-refresh icon-large" title="'+textReload+'"></i>');
+  $('#shoutbox_reload_button').html('<i class="fa fa-refresh fa-lg" title="'+textReload+'"></i>');
 }
 
 /**
@@ -57,7 +57,7 @@ function showShoutboxFinished(textSubmit, textReload, showSubmitButton) {
 function reloadShoutboxRequest() {
   // disable submit button and set loading image
   $('input[name=sb_submit]').attr('disabled', 'disabled');
-  $('#shoutbox_reload_button').html('<i class="icon-spinner icon-spin icon-large"></i>');
+  $('#shoutbox_reload_button').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
 }
 
 /**
@@ -68,7 +68,7 @@ function reloadShoutboxRequest() {
   */
 function reloadShoutboxFinished(textReload) {
   // enable submit button and reset reload image
-  $('#shoutbox_reload_button').html('<i class="icon-refresh icon-large"></i>');
+  $('#shoutbox_reload_button').html('<i class="fa fa-refresh fa-lg"></i>');
   $('input[name=sb_submit]').removeAttr('disabled');
 }
 
@@ -80,7 +80,7 @@ function reloadShoutboxFinished(textReload) {
   * @param  textDelete  string  text to display als alt of delete image
   */
 function deleteShoutboxRequest(id, textDelete) {
-  $('#shoutbox_delete_button_'+id).html('<i class="icon-spinner icon-spin"></i>');
+  $('#shoutbox_delete_button_'+id).html('<i class="fa fa-spinner fa-spin"></i>');
 }
 
 /**
