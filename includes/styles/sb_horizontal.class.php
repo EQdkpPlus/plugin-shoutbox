@@ -269,7 +269,7 @@ if (!class_exists("sb_horizontal"))
           if ($membercount > 1)
           {
             // show dropdown box
-            $outHtml .= $this->html->DropDown('sb_usermember_id', $members, $this->pdh->get('user', 'mainchar', array($this->user->id)));
+			$outHtml .= new hdropdown('sb_usermember_id', array('options' => $members, 'value' => $this->pdh->get('user', 'mainchar', array($this->user->id))));
           }
           // if only one member, show just member
           else if ($membercount == 1)

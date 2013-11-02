@@ -113,7 +113,7 @@ class ShoutboxSettings extends page_generic
     $this->jquery->Dialog('AboutShoutbox', $this->user->lang('sb_about_header'), array('url'=>'../about.php', 'width'=>'400', 'height'=>'250'));
     $this->tpl->assign_vars(array (
       // form
-      'F_USE_USERS'       => $this->html->CheckBox('sb_use_users', '', $this->config->get('sb_use_users', 'shoutbox')),
+	  'F_USE_USERS'       => new hcheckbox('sb_use_users', array('checked' => $this->config->get('sb_use_users', 'shoutbox'))),
 
       // credits
       'SB_INFO_IMG'       => '../images/credits/info.png',
