@@ -29,8 +29,11 @@ if (!class_exists("sb_style_base"))
 {
   abstract class sb_style_base extends gen_class
   {
-    /* List of dependencies */
-    public static $shortcuts = array('user', 'config', 'tpl');
+	
+	/**
+	 * Portal-Module ID of the shoutbox
+	 */
+	protected $module_id = 0;
 
     /**
      * Output Shoutbox ids to display
@@ -42,8 +45,10 @@ if (!class_exists("sb_style_base"))
      *
      * @param  integer  $output_limit  Number of shoutbox id's to display
      */
-    public function __construct($shoutbox_ids=array())
+    public function __construct($module_id, $shoutbox_ids=array())
     {
+	  $this->module_id = $module_id;
+	  
       if (is_array($shoutbox_ids))
       {
         $this->shoutbox_ids = $shoutbox_ids;
@@ -116,12 +121,13 @@ if (!class_exists("sb_style_base"))
     private function shoutboxJCode()
     {
       // set autoreload (0 = disable)
-      $autoreload = ($this->config->get('sb_autoreload') != '') ? intval($this->config->get('sb_autoreload')) : 0;
+      $autoreload = ($this->config->get('autoreload', 'pmod_'.$this->module_id) != '') ? intval($this->config->get('autoreload', 'pmod_'.$this->module_id)) : 0;
       $autoreload = ($autoreload < 600 ? $autoreload : 0);
       $autoreload = $autoreload * 1000; // to ms
 
       // set maxlength
-      $max_text_length = ($this->config->get('sb_max_text_length') && is_numeric($this->config->get('sb_max_text_length'))) ? intval($this->config->get('sb_max_text_length')) : 160;
+	  $max_text_length = $this->config->get('max_text_length', 'pmod_'.$this->module_id);
+      $max_text_length = (is_numeric($max_text_length)) ? intval($max_text_length) : 160;
 
       $jscode  = "$('#Shoutbox').ajaxForm({
                     target: '#htmlShoutboxTable',

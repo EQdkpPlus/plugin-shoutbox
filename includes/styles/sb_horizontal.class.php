@@ -33,15 +33,6 @@ if (!class_exists("sb_horizontal"))
 {
   class sb_horizontal extends sb_style_base
   {
-    /**
-     * __dependencies
-     * Get module dependencies
-     */
-    public static function __shortcuts()
-    {
-      $shortcuts = array('user', 'config', 'pdh', 'html');
-      return array_merge(parent::$shortcuts, $shortcuts);
-    }
 
     /**
      * layoutShoutbox
@@ -55,7 +46,7 @@ if (!class_exists("sb_horizontal"))
       $htmlOut = '';
 
       // get location of form
-      $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
+      $form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
 
       // is input on top (and user can add entries) append form first
       if ($form_location == 'top' && $this->user->check_auth('u_shoutbox_add', false) && $this->user->is_signedin())
@@ -94,7 +85,7 @@ if (!class_exists("sb_horizontal"))
     protected function layoutContent()
     {
       // get location of form
-      $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
+      $form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
 
       // empty output
       $htmlOut = '';
@@ -184,7 +175,7 @@ if (!class_exists("sb_horizontal"))
     {
 
       // get location and max text length
-      $form_location = ($this->config->get('sb_input_box_location') != '') ? $this->config->get('sb_input_box_location') : 'top';
+      $form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
 
       // only display form if user has members assigned to or if user modus is selected
       $members = $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));

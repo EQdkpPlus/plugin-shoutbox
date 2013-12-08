@@ -26,79 +26,61 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox_portal extends portal_generic
 {
-  /**
-   * __dependencies
-   * Get module dependencies
-   */
-  public static function __shortcuts()
-  {
-    $shortcuts = array('pm', 'user', 'pdh', 'tpl');
-    return array_merge(parent::$shortcuts, $shortcuts);
-  }
 
   /**
    * Portal path
    */
-  protected $path = 'shoutbox';
+  protected static $path = 'shoutbox';
   /**
    * Portal data
    */
-  protected $data = array(
+  protected static $data = array(
     'name'        => 'Shoutbox Module',
     'version'     => '0.3.3',
     'author'      => 'Aderyn',
     'contact'     => 'Aderyn@gmx.net',
     'description' => 'Display a shoutbox',
+	'lang_prefix' => 'sb_'
   );
   /**
    * Positions this Module may appear
    */
-  protected $positions = array('left1', 'left2', 'right', 'middle', 'bottom');
+  protected static $positions = array('left1', 'left2', 'right', 'middle', 'bottom');
   /**
    * Settings
    */
   protected $settings = array(
-    'pk_shoutbox_output_count_limit'  => array(
-      'name'      => 'sb_output_count_limit',
-      'language'  => 'sb_output_count_limit',
-      'property'  => 'text',
-      'size'      => '3',
+    'output_count_limit'  => array(
+		'type'	=> 'text',
+		'size'  => '3',
     ),
-    'pk_shoutbox_show_archive'        => array(
-        'name'      => 'sb_show_archive',
-        'language'  => 'sb_show_archive',
-        'property'  => 'checkbox',
+    'show_archive'        => array(
+        'type'  => 'radio',
     ),
-    'pk_shoutbox_max_text_length'  => array(
-      'name'      => 'sb_max_text_length',
-      'language'  => 'sb_max_text_length',
-      'property'  => 'text',
-      'size'      => '3',
+    'max_text_length'  => array(
+		'type'	=> 'text',
+		'size'  => '3',
     ),
-    'pk_shoutbox_input_box_location'  => array(
-        'name'      => 'sb_input_box_location',
-        'language'  => 'sb_input_box_location',
-        'property'  => 'dropdown',
+    'input_box_location'  => array(
+        'type'  	=> 'dropdown',
+		'tolang'	=> true,
         'options'   => array(
               'top'    => 'sb_location_top',
               'bottom' => 'sb_location_bottom'
         ),
     ),
-    'pk_shoutbox_autoreload'          => array(
-        'name'      => 'sb_autoreload',
-        'language'  => 'sb_autoreload',
-        'property'  => 'text',
-        'size'      => '3',
-        'help'      => 'sb_autoreload_help',
+    'autoreload' => array(
+        'type'	=> 'text',
+        'size'	=> '3',
     ),
   );
   /**
    * Installation
    */
-  protected $install = array(
-    'autoenable'      => '1',
-    'defaultposition' => 'left2',
-    'defaultnumber'   => '1',
+  protected static $install = array(
+	'autoenable'      => '1',
+	'defaultposition' => 'left2',
+	'defaultnumber'   => '1',
   );
 
   /**
@@ -119,7 +101,7 @@ class shoutbox_portal extends portal_generic
         include_once($this->root_path.'plugins/shoutbox/includes/shoutbox.class.php');
 
       // create shoutbox
-      $shoutbox = registry::register('ShoutboxClass');
+      $shoutbox = registry::register('ShoutboxClass', array($this->id));
 
       // do requirements check
       $requirementscheck = $shoutbox->checkRequirements();

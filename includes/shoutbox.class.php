@@ -49,12 +49,23 @@ if (!class_exists("ShoutboxClass"))
      * Output limit (number of entries to display)
      */
     private $output_limit;
+	
+	/**
+	 * Portal-Module ID of the shoutbox
+	 */
+	private $module_id = 0;
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($module_id=0)
     {
+	  $this->module_id = $module_id;
+	  if($this->module_id < 1) {
+		$ids = $this->pdh->get('portal', 'id_list', array('path', 'shoutbox'));
+		$this->module_id = $ids[0];
+	  }
+	  
       require_once($this->root_path.'core/feed.class.php');
       $this->rssFeed = registry::register('Feed');
       $this->rssFeed->title          = $this->user->lang('shoutbox');
@@ -201,7 +212,7 @@ if (!class_exists("ShoutboxClass"))
       {
         include_once($layout_file);
         $class_name = 'sb_'.$orientation;
-        $shoutbox_style = registry::register($class_name, array($shoutbox_ids));
+        $shoutbox_style = registry::register($class_name, array($this->module_id, $shoutbox_ids));
       }
 
       // show shoutbox
@@ -243,7 +254,7 @@ if (!class_exists("ShoutboxClass"))
       {
         include_once($layout_file);
         $class_name = 'sb_'.$orientation;
-        $shoutbox_style = registry::register($class_name, array($shoutbox_ids));
+        $shoutbox_style = registry::register($class_name, array($this->module_id, $shoutbox_ids));
       }
 
       // get content
