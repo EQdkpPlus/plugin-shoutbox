@@ -75,10 +75,12 @@ if (!class_exists('exchange_shoutbox_list'))
           // build entry array
           foreach ($shoutbox_ids as $shoutbox_id)
           {
-            $response['entries']['entry:'.$shoutbox_id] = array(
+          	$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->pdh->get('shoutbox', 'userid', array($shoutbox_id))));
+          	$response['entries']['entry:'.$shoutbox_id] = array(
               'id'        => $shoutbox_id,
               'member_id' => $this->pdh->get('shoutbox', 'memberid', array($shoutbox_id)),
               'user_id'   => $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)),
+              'user_avatar' => $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
               'name'      => $this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id)),
               'text'      => $this->pdh->geth('shoutbox', 'text', array($shoutbox_id, $root)),
               'date'      => $this->time->date('Y-m-d H:i', $this->pdh->get('shoutbox', 'date', array($shoutbox_id))),
