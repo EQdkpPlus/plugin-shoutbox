@@ -116,7 +116,6 @@ class ShoutboxSettings extends page_generic
 	  'F_USE_USERS'       => new hradio('sb_use_users', array('value' => $this->config->get('sb_use_users', 'shoutbox'))),
 
       // credits
-      'SB_INFO_IMG'       => '../images/credits/info.png',
       'L_CREDITS'         => $this->user->lang('sb_credits_part1').$this->pm->get_data('shoutbox', 'version').$this->user->lang('sb_credits_part2'),
     ));
 

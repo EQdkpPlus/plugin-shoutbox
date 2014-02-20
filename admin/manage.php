@@ -193,7 +193,6 @@ class ShoutboxManage extends page_generic
       'PAGINATION'        => $pagination,
 
       // credits
-      'SB_INFO_IMG'       => '../images/credits/info.png',
       'L_CREDITS'         => $this->user->lang('sb_credits_part1').$this->pm->get_data('shoutbox', 'version').$this->user->lang('sb_credits_part2'),
     ));
 
