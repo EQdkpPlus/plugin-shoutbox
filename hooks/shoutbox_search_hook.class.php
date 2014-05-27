@@ -29,8 +29,6 @@ if (!class_exists('shoutbox_search_hook'))
 {
   class shoutbox_search_hook extends gen_class
   {
-    /* List of dependencies */
-    public static $shortcuts = array('user');
 
 	/**
     * hook_search
@@ -53,8 +51,5 @@ if (!class_exists('shoutbox_search_hook'))
 		return $search;
 	}
   }
-}
-if(version_compare(PHP_VERSION, '5.3.0', '<')) {
-	registry::add_const('short_shoutbox_search_hook', shoutbox_search_hook::$shortcuts);
 }
 ?>

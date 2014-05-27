@@ -28,15 +28,6 @@ if (!class_exists('pdh_w_shoutbox'))
 {
   class pdh_w_shoutbox extends pdh_w_generic
   {
-    /**
-     * __dependencies
-     * Get module dependencies
-     */
-    public static function __shortcuts()
-    {
-      $shortcuts = array('db', 'pdh', 'time');
-      return array_merge(parent::$shortcuts, $shortcuts);
-    }
 
     /*
      * Number of chars to wrap after
@@ -236,6 +227,4 @@ if (!class_exists('pdh_w_shoutbox'))
 
   } //end class
 } //end if class not exists
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_shoutbox', pdh_w_shoutbox::__shortcuts());
 ?>

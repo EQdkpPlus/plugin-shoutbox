@@ -30,7 +30,7 @@ if (!class_exists('exchange_shoutbox_add'))
   class exchange_shoutbox_add extends gen_class
   {
     /* List of dependencies */
-    public static $shortcuts = array('user', 'config', 'pdh', 'pex'=>'plus_exchange');
+    public static $shortcuts = array('pex'=>'plus_exchange');
 
     /**
      * Additional options
@@ -99,6 +99,4 @@ if (!class_exists('exchange_shoutbox_add'))
 
   }
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_shoutbox_add', exchange_shoutbox_add::$shortcuts);
 ?>

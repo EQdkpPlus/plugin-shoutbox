@@ -29,8 +29,6 @@ if (!class_exists("ShoutboxClass"))
 {
   class ShoutboxClass extends gen_class
   {
-    /* List of dependencies */
-    public static $shortcuts = array('user', 'config', 'pdh', 'pfh', 'time', 'env', 'tpl');
 
     /**
      * RSS Feed object
@@ -42,7 +40,7 @@ if (!class_exists("ShoutboxClass"))
      */
     private $reqVersions = array(
         'php'   => '5.0.0',
-        'eqdkp' => '0.7.0.1'
+        'eqdkp' => '2.0'
     );
 
     /**

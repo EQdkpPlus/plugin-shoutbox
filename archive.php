@@ -29,15 +29,6 @@ include_once('includes/common.php');
   +--------------------------------------------------------------------------*/
 class ShoutboxArchive extends page_generic
 {
-  /**
-   * __dependencies
-   * Get module dependencies
-   */
-  public static function __shortcuts()
-  {
-    $shortcuts = array('pm', 'user', 'core', 'in', 'pdh', 'time', 'tpl');
-    return array_merge(parent::$shortcuts, $shortcuts);
-  }
 
   /**
    * Constructor
@@ -184,8 +175,6 @@ class ShoutboxArchive extends page_generic
     ));
   }
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ShoutboxArchive', ShoutboxArchive::__shortcuts());
 register('ShoutboxArchive');
 
 ?>

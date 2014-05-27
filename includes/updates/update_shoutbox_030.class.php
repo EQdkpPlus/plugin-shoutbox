@@ -28,15 +28,6 @@ if (!class_exists('update_shoutbox_030'))
 {
   class update_shoutbox_030 extends sql_update_task
   {
-    /**
-	 * __dependencies
-	 * Get module dependencies
-	 */
-	public static function __shortcuts()
-	{
-		$shortcuts = array('db', 'config');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
 
     public $author      = 'Aderyn';
     public $version     = '0.3.0';    // new version
@@ -111,6 +102,4 @@ if (!class_exists('update_shoutbox_030'))
 
   }
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_update_shoutbox_030', update_shoutbox_030::__shortcuts());
 ?>

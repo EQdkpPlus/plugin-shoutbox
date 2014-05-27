@@ -28,15 +28,6 @@ if (!defined('EQDKP_INC'))
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic
 {
-  /**
-   * __dependencies
-   * Get module dependencies
-   */
-  public static function __shortcuts()
-  {
-    $shortcuts = array('user', 'config', 'pdc', 'pfh', 'pdh', 'tpl');
-    return array_merge(parent::$shortcuts, $shortcuts);
-  }
 
   public $version    = '0.3.4';
   public $build      = '11404';
