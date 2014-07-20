@@ -48,21 +48,18 @@ if (!class_exists('update_shoutbox_031'))
           'update_shoutbox_031' => 'Shoutbox 0.3.1 Update Package',
 		  'update_function'     => 'Set new user or character setting',
           // SQL
-           1 => 'Insert new user or character setting',
            2 => 'Change to user or character field',
         ),
         'german' => array(
           'update_shoutbox_031' => 'Shoutbox 0.3.1 Update Paket',
 		  'update_function'     => 'Setze neue Benutzer oder Charakter Einstellung',
           // SQL
-           1 => 'Füge neuen Benutzer oder Charakter Einstellung hinzu',
            2 => 'Ändere in Benutzer oder Charakter Eintrag',
         ),
       );
 
       // init SQL querys
       $this->sqls = array(
-         1 => 'INSERT INTO `__backup_cnf` (config_name, config_value, config_plugin) VALUES(\'sb_use_users\', \'0\', \'shoutbox\');',
          2 => 'ALTER TABLE `__shoutbox` CHANGE `member_id` `user_or_member_id` SMALLINT(5) NOT NULL DEFAULT \'-1\';',
       );
     }
