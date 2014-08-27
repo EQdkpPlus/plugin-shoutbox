@@ -33,6 +33,8 @@ class shoutbox extends plugin_generic
   public $build      = '11404';
   public $copyright  = 'Aderyn';
   public $vstatus    = 'Beta';
+  
+  protected static $apiLevel = 20;
 
   /**
     * Constructor
