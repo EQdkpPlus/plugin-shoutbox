@@ -42,6 +42,9 @@ class shoutbox_portal extends portal_generic
     'description' => 'Display a shoutbox',
 	'lang_prefix' => 'sb_'
   );
+  
+  protected static $apiLevel = 20;
+  
   /**
    * Positions this Module may appear
    */
