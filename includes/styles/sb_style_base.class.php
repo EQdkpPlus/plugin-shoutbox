@@ -139,7 +139,7 @@ if (!class_exists("sb_style_base"))
                     }
                   });
 
-                  $(document).on('keyup blur', 'textarea[name=sb_text]', function(e){
+                  $(document).on('keypress', 'textarea[name=sb_text]', function(e){
                     var maxlength = ".$max_text_length.";
                     var value = $(this).val();
 
@@ -153,7 +153,8 @@ if (!class_exists("sb_style_base"))
         				$(this).height($(this).height()+5);
     				};
                     		
-                    if (e.which == 13) {
+                    if (e.which == 13 && !e.shiftKey) {
+                    	e.preventDefault();
 					    $('form#Shoutbox').submit();
 					    return false;
 					}
