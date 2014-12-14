@@ -1,19 +1,22 @@
 <?php
-/*
- * Project:     EQdkp Shoutbox
- * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:       2008
- * Date:        $Date: 2008-11-09 18:05:54 +0100 (So, 09 Nov 2008) $
- * -----------------------------------------------------------------------
- * @author      $Author: osr-corgan $
- * @copyright   2008-2011 Aderyn
- * @link        http://eqdkp-plus.com
- * @package     shoutbox
- * @version     $Rev: 3069 $
+/*	Project:	EQdkp-Plus
+ *	Package:	Shoutbox Plugin
+ *	Link:		http://eqdkp-plus.eu
  *
- * $Id: archive.php 3069 2008-11-09 17:05:54Z osr-corgan $
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // EQdkp required files/vars
@@ -25,31 +28,28 @@ include_once('includes/common.php');
 
 
 // -- Plugin installed? -------------------------------------------------------
-if (!register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED))
-{
-  message_die(register('user')->lang('sb_plugin_not_installed'));
+if (!register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED)){
+	message_die(register('user')->lang('sb_plugin_not_installed'));
 }
 
 
 // -- Get content -------------------------------------------------------------
 $content =register('ShoutboxClass')->showShoutbox();
 
-
 // -- Template ----------------------------------------------------------------
 register('template')->assign_vars(array (
-  // Form
-  'CONTENT' => $content
+	// Form
+	'CONTENT' => $content
 ));
 
 
 // -- EQDKP -------------------------------------------------------------------
 register('core')->set_vars(array (
-  'page_title'    => register('user')->lang('shoutbox'),
-  'template_path' => register('plugin_manager')->get_data('shoutbox', 'template_path'),
-  'template_file' => 'show.html',
-  'header_format' => 'simple',
-  'display'       => true
-  )
-);
+	'page_title'	=> register('user')->lang('shoutbox'),
+	'template_path'	=> register('plugin_manager')->get_data('shoutbox', 'template_path'),
+	'template_file'	=> 'show.html',
+	'header_format'	=> 'simple',
+	'display'		=> true
+));
 
 ?>

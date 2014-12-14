@@ -17,26 +17,25 @@
 	</div>
 </div>
 <form name="sb_settings" action="{ACTION}" method="post">
-  <fieldset class="settings">
-    <legend>{L_sb_header_general}</legend>
-    <div id="sb_settings_general">
-      <dl>
-        <dt>
-          <label>{L_sb_use_users}</label><br/>
-          <span>{L_sb_use_users_help}</span>
-        </dt>
-        <dd>
-          <label>{F_USE_USERS}</label>
-        </dd>
-      </dl>
-    </div>
-    <br />
-	<div class="center">
-	  <button type="submit" name="sb_save" class="mainoption"><i class="fa fa-check"></i>{L_save}</button>
-	  <button type="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
-    </div> 
-  </fieldset>
-{CSRF_TOKEN}
+	<fieldset class="settings">
+		<legend>{L_sb_header_general}</legend>
+		<div id="sb_settings_general">
+			<dl>
+				<dt>
+					<label>{L_sb_use_users}</label><br/>
+					<span>{L_sb_use_users_help}</span>
+				</dt>
+				<dd>
+					<label>{F_USE_USERS}</label>
+				</dd>
+			</dl>
+		</div>
+		<br />
+		<div class="center">
+			<button type="submit" name="sb_save" class="mainoption"><i class="fa fa-check"></i>{L_save}</button>
+			<button type="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
+		</div> 
+	</fieldset>
+	{CSRF_TOKEN}
 </form>
 <br />
-<!-- INCLUDE about_footer.html -->

@@ -1,30 +1,31 @@
 <?php
-/*
- * Project:     EQdkp Shoutbox
- * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:       2008
- * Date:        $Date: 2011-09-02 10:09:49 +0200 (Fr, 02. Sep 2011) $
- * -----------------------------------------------------------------------
- * @author      $Author: Aderyn $
- * @copyright   2008-2011 Aderyn
- * @link        http://eqdkp-plus.com
- * @package     shoutbox
- * @version     $Rev: 11183 $
+/*	Project:	EQdkp-Plus
+ *	Package:	Shoutbox Plugin
+ *	Link:		http://eqdkp-plus.eu
  *
- * $Id: common.php 11183 2011-09-02 08:09:49Z Aderyn $
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('EQDKP_INC'))
-{
-  header('HTTP/1.0 404 Not Found');exit;
+if (!defined('EQDKP_INC')){
+	header('HTTP/1.0 404 Not Found');exit;
 }
 
 // -- Pluskernel common.php ---------------------------------------------------
-if (!isset($eqdkp_root_path))
-{
-  $eqdkp_root_path = './';
+if (!isset($eqdkp_root_path)){
+	$eqdkp_root_path = './';
 }
 include_once($eqdkp_root_path.'common.php');
 
@@ -35,13 +36,10 @@ $shoutbox = registry::register('ShoutboxClass');
 
 
 // -- Check requirements ------------------------------------------------------
-if (is_object($shoutbox))
-{
-  $sb_req_check = $shoutbox->checkRequirements();
-  if ($sb_req_check !== true)
-  {
-    message_die($sb_req_check);
-  }
+if (is_object($shoutbox)){
+	$sb_req_check = $shoutbox->checkRequirements();
+	if ($sb_req_check !== true){
+		message_die($sb_req_check);
+	}
 }
-
 ?>
