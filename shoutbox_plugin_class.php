@@ -55,7 +55,6 @@ class shoutbox extends plugin_generic{
 			'description'		=> $this->user->lang('sb_short_desc'),
 			'long_description'	=> $this->user->lang('sb_long_desc'),
 			'homepage'			=> EQDKP_PROJECT_URL,
-			'manuallink'		=>	,
 			'plus_version'		=> '1.0',
 			'build'				=> $this->build,
 		));
