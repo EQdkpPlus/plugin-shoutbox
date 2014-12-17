@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	Shoutbox Plugin
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,21 +18,26 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if (!defined('EQDKP_INC')){
-	header('HTTP/1.0 404 Not Found'); exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'date'				=> 'Date',
-	'usermembername'	=> 'Name',
-	'text'				=> 'Text'
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: plugins/shoutbox/pdh/read/shoutbox/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'sbdate'	=> 'Date',
-	'sbname'	=> 'Name',
-	'sbtext'	=> 'Text'
-);
+$module_lang = array(
+	"date" => 'Date',
+	"usermembername" => 'Name',
+	"text" => 'Text',
+	);
+	$preset_lang = array(
+	"sbdate" => 'Date',
+	"sbname" => 'Name',
+	"sbtext" => 'Text',
+	);
+	
 
 ?>
