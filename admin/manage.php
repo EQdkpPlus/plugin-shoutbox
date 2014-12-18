@@ -127,7 +127,7 @@ class ShoutboxManage extends page_generic {
 				if (strpos($text, $search) !== false || strpos($name, $search) !== false)
 					$shoutbox_out[] = $shoutbox_id;
 				$url_suffix	= '&amp;search='.sanitize($this->in->get('search'));
-				$page_<title>manage</title>= $this->user->lang('search').': '.sanitize($this->in->get('search'));
+				$page_title= $this->user->lang('search').': '.sanitize($this->in->get('search'));
 			}
 		}
 		// -- last month ----------------------------------------------------------
