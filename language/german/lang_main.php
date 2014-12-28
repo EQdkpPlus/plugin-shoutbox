@@ -61,7 +61,7 @@ $lang = array(
 	'sb_header_general'					=> 'Allgemeine Shoutbox Einstellungen',
 
 	// Portal Modules
-	'sb_output_count_limit'				=> 'Maximale Anzahl an Shoutbox Einträgen.',
+	'sb_f_output_count_limit'			=> 'Maximale Anzahl an Shoutbox Einträgen.',
 	'sb_show_date'						=> 'Zusätzlich das Datum anzeigen?',
 	'sb_f_show_archive'					=> 'Archiv anzeigen?',
 	'sb_f_max_text_length'				=> 'Maximal erlaubte Textlänge eines Eintrags',
