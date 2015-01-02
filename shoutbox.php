@@ -26,6 +26,7 @@ include_once('./includes/common.php');
 
 // Be sure plugin is installed
 if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED)){
+	header('content-type: text/html; charset=UTF-8');
 	$in = registry::register('input');
 
 	// get post/get values
@@ -47,6 +48,7 @@ if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED)){
 	// -- Output ----------------------------------------------
 	echo $shoutbox->getContent($sb_orientation, urldecode($sb_root), true);
 }else{
+	header('content-type: text/html; charset=UTF-8');
 	$error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
 		<tr>
 			<td><div class="center">'.registry::fetch('user')->lang('sb_plugin_not_installed').'</div></td>
