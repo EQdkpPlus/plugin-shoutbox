@@ -87,7 +87,7 @@ if (!class_exists("sb_horizontal")){
 			if (is_array($this->shoutbox_ids) && count($this->shoutbox_ids) > 0){
 				$this->tpl->add_css("");
 				// output table header
-				$htmlOut .= '<table width="100%" class="colorswitch hoverrows sb_horizontal">';
+				$htmlOut .= '<table class="table fullwidth colorswitch hoverrows sb_horizontal">';
 
 				// output
 				foreach ($this->shoutbox_ids as $shoutbox_id){

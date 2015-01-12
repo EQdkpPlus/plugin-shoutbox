@@ -11,11 +11,11 @@
 	<h1 class="contentTitle">{L_sb_manage_archive} {SB_PAGE_TITLE}</h1>
 </div>
 
-<div>
-      <table width="100%" border="0" cellspacing="1" cellpadding="2">
-        <tr>
-          <td width="150" valign="top">
-            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
+
+<div class="grid">
+	<div class="onerow">
+		<div class="col2">
+			<table class="table fullwidth forumline colorswitch">
               <!-- BEGIN year_row -->
               <tr>
                 <th class="center">{year_row.YEAR}</th>
@@ -34,22 +34,21 @@
               <!-- END month_row -->
               <!-- END year_row -->
             </table>
-          </td>
-          <td>
-            <form method="post" action="{ACTION}" id="sb_table">
-              <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		</div>
+		<div class="col10 last">
+			 <form method="post" action="{ACTION}" id="sb_table">
+              <table class="table fullwidth colorswitch">
                 {SB_TABLE}
               </table>
             </form>
-          </td>
-        </tr>
-      </table>
-      <div class="center pagination_wrapper">
-		{PAGINATION}
 		</div>
-		<div class="contentFooter">
-			<input name="start" type="hidden" value="{START}" />
-			<button type="submit" name="sb_delete"><i class="fa fa-times"></i>{L_delete}</button>
-		</div>
+	</div>
 </div>
-<br/>
+
+<div class="center pagination_wrapper">
+	{PAGINATION}
+</div>
+<div class="contentFooter">
+	<input name="start" type="hidden" value="{START}" />
+	<button type="submit" name="sb_delete"><i class="fa fa-times"></i>{L_delete}</button>
+</div>

@@ -49,7 +49,7 @@ if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED)){
 	echo $shoutbox->getContent($sb_orientation, urldecode($sb_root), true);
 }else{
 	header('content-type: text/html; charset=UTF-8');
-	$error = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
+	$error = '<table class="table fullwidth  colorswitch">
 		<tr>
 			<td><div class="center">'.registry::fetch('user')->lang('sb_plugin_not_installed').'</div></td>
 		</tr>

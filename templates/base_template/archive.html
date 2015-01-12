@@ -10,11 +10,10 @@
 	<h1 class="contentTitle">{L_sb_shoutbox_archive} {S_PAGE_TITLE}</h1>
 </div>
 
-<div>
-      <table width="100%" border="0" cellspacing="1" cellpadding="2">
-        <tr>
-          <td width="150" valign="top">
-            <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline colorswitch">
+<div class="grid">
+	<div class="onerow">
+		<div class="col2">
+			  <table class="table fullwidth forumline colorswitch">
               <!-- BEGIN year_row -->
               <tr>
                 <th class="center">{year_row.YEAR}</th>
@@ -33,10 +32,10 @@
               <!-- END month_row -->
               <!-- END year_row -->
             </table>
-          </td>
-          <td valign="top">
-            <!-- IF S_COUNT gt 0 -->
-            <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		</div>
+		<div class="col10 last">
+			 <!-- IF S_COUNT gt 0 -->
+            <table class="table fullwidth colorswitch">
               <!-- BEGIN shoutbox_row -->
               <tr>
                 <td class="sb_horizontal">
@@ -66,14 +65,12 @@
               <!-- END shoutbox_row -->
             </table>
             <!-- ELSE -->
-            <table width="100%" border="0" cellspacing="1" cellpadding="2">
+            <table class="table fullwidth">
               <tr><th>&nbsp;</th></tr>
               <tr><td class="row1">{L_sb_no_entries}</td></tr>
               <tr><th>&nbsp;</th></tr>
             </table>
             <!-- ENDIF S_COUNT -->
-          </td>
-        </tr>
-      </table>
+		</div>
+	</div>
 </div>
-<br/>

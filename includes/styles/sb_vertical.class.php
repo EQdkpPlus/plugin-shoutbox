@@ -88,7 +88,7 @@ if (!class_exists("sb_vertical")){
 			if (is_array($this->shoutbox_ids) && count($this->shoutbox_ids) > 0){
 
 				// output table header
-				$htmlOut .= '<table width="100%" class="colorswitch hoverrows sb_vertical">';
+				$htmlOut .= '<table class="table fullwidth colorswitch hoverrows sb_vertical">';
 
 
 				// output
