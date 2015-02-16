@@ -106,6 +106,8 @@ class shoutbox extends plugin_generic{
 		// insert configuration
 		if (is_array($config_vars))
 			$this->config->set($config_vars, '', 'shoutbox');
+		
+		$this->pdc->del_prefix('pdh_shoutbox_table');
 	}
 
 	/**
@@ -118,6 +120,8 @@ class shoutbox extends plugin_generic{
 
 		for ($i = 1; $i <= count($shoutboxSQL['uninstall']); $i++)
 			$this->add_sql(SQL_UNINSTALL, $shoutboxSQL['uninstall'][$i]);
+		
+		$this->pdc->del_prefix('pdh_shoutbox_table');
 	}
 
 	/**
