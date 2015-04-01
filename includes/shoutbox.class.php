@@ -73,7 +73,7 @@ if (!class_exists("ShoutboxClass")){
 			$this->rssFeed->language		= 'de-DE';
 
 			// get output limit
-			$this->output_limit = ($this->config->get('sb_output_count_limit') > 0 ? $this->config->get('sb_output_count_limit') : 10);
+			$this->output_limit = ($this->config->get('output_count_limit', 'pmod_'.$this->module_id) > 0 ? $this->config->get('output_count_limit', 'pmod_'.$this->module_id) : 10);
 		}
 
 		/**
