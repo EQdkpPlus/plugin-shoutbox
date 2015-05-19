@@ -147,13 +147,16 @@ if (!class_exists('pdh_w_shoutbox')){
 		*/
 		private function autolink($str) {
 			$str = ' ' . $str;
+			
 			$str = preg_replace(
-				'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
-				'$1[url="$2"]$2[/url]',
+				"/\[url\s*+=\s*+([^]\s]++)]([^[]++)\[\/url]|((((http|https|ftp):\/\/|www.)\S++))/im",
+				'[url=$1$3]$2$4[/url]',
 				$str
 			);
+
 			$str = substr($str, 1);
 			$str = preg_replace('`url=\"www`','url="http://www',$str);
+			$str = preg_replace('`url=www`','url=http://www',$str);
 			// fügt http:// hinzu, wenn nicht vorhanden
 			return trim($str);
 		}
