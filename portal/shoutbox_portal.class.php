@@ -134,13 +134,25 @@ class shoutbox_portal extends portal_generic{
 				// return the output for module
 				$output = $shoutbox->showShoutbox($orientation);
 				
+				//Calculate Max Width
+				if($this->user->style['column_left_width'] != ""){
+					if(strpos($this->user->style['column_left_width'], 'px') !== false){
+						$max_width = (intval($this->user->style['column_left_width']) - 30).'px';
+					} else {
+						$max_width = (intval($this->user->style['column_left_width']) - 3).'%';
+					}
+					
+				} else {
+					$max_width = "180px";	
+				}
+				
 				$this->tpl->add_css(
 				".sb_vertical .sb_text_margin {
 					margin-left: 38px;
 				}
 
 				.sb_vertical p {
-					max-width: ".(($this->user->style['column_left_width']) ? ($style['column_left_width']-20) : '180px').";
+					max-width: ".$max_width.";
 					word-wrap:break-word;
 				}
 
