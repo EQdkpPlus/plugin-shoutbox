@@ -139,7 +139,7 @@ class shoutbox_portal extends portal_generic{
 					if(strpos($this->user->style['column_left_width'], 'px') !== false){
 						$max_width = (intval($this->user->style['column_left_width']) - 30).'px';
 					} else {
-						$max_width = (intval($this->user->style['column_left_width']) - 3).'%';
+						$max_width = '97%';
 					}
 					
 				} else {
