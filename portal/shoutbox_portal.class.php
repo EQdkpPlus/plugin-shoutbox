@@ -140,7 +140,7 @@ class shoutbox_portal extends portal_generic{
 				}
 
 				.sb_vertical p {
-					max-width: ".(($this->user->style['column_left_width']) ? ($style['column_left_width']-20) : '180px').";
+					max-width: ".($this->user->style['column_left_width']-30).'px'.";
 					word-wrap:break-word;
 				}
 
