@@ -59,7 +59,7 @@ if (!class_exists("ShoutboxClass")){
 		public function __construct($module_id=0){
 			$this->module_id = $module_id;
 			if($this->module_id < 1) {
-				$ids = $this->pdh->get('portal', 'id_list', array('path', 'shoutbox'));
+				$ids = $this->pdh->get('portal', 'id_list', array(array('path' => 'shoutbox')));
 				$this->module_id = $ids[0];
 			}
 
