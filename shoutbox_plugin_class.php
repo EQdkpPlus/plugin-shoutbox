@@ -29,8 +29,7 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic{
 
-	public $version		= '0.4.4';
-	public $build		= '11404';
+	public $version		= '0.4.5';
 	public $copyright	= 'Aderyn';
 	public $vstatus		= 'Beta';
 
@@ -56,11 +55,10 @@ class shoutbox extends plugin_generic{
 			'long_description'	=> $this->user->lang('sb_long_desc'),
 			'homepage'			=> EQDKP_PROJECT_URL,
 			'plus_version'		=> '1.0',
-			'build'				=> $this->build,
 		));
 
 		$this->add_dependency(array(
-			'plus_version'		=> '0.7'
+			'plus_version'		=> '1.0'
 		));
 
 		// -- Register our permissions ------------------------
