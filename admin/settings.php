@@ -97,7 +97,7 @@ class ShoutboxSettings extends page_generic{
 		// -- Template ------------------------------------------------------------
 		$this->tpl->assign_vars(array (
 			// form
-			'F_USE_USERS'	=> new hradio('sb_use_users', array('value' => $this->config->get('sb_use_users', 'shoutbox'))),
+			'F_USE_USERS'	=> (new hradio('sb_use_users', array('value' => $this->config->get('sb_use_users', 'shoutbox'))))->output(),
 		));
 
 		// -- EQDKP ---------------------------------------------------------------
