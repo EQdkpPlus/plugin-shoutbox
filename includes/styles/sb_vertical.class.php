@@ -182,11 +182,11 @@ if (!class_exists("sb_vertical")){
 						});">
 						<span id="shoutbox_reload_button"><i class="fa fa-refresh fa-lg" title="'.$this->user->lang('sb_reload').'"></i>
 						</span>
-						</span>	
+						</span>
 						</div>
 						<div class="center">
 							<textarea class="input" name="sb_text" style="width: 90%;" rows="1" cols="1"></textarea>
-						</div>	
+						</div>
 						<div class="center">
 							<input type="hidden" name="sb_orientation" value="vertical"/>
 							<span id="shoutbox_button"></span>
@@ -225,7 +225,7 @@ if (!class_exists("sb_vertical")){
 					// if more than 1 member, show dropdown box
 					if ($membercount > 1){
 						// show dropdown box
-						$outHtml .= new hdropdown('sb_usermember_id', array('options' => $members, 'value' => $this->pdh->get('user', 'mainchar', array($this->user->id))));
+						$outHtml .= (new hdropdown('sb_usermember_id', array('options' => $members, 'value' => $this->pdh->get('user', 'mainchar', array($this->user->id)))))->output();
 					}
 					// if only one member, show just member
 					else if ($membercount == 1){

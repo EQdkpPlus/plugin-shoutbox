@@ -188,7 +188,7 @@ if (!class_exists("sb_horizontal")){
 						</div>
 						<div class="center">
 							<textarea class="input" name="sb_text" style="width: 96%;" rows="1" cols="1"></textarea>
-						</div>	
+						</div>
 						<div class="center">
 							<input type="hidden" name="sb_orientation" value="horizontal"/>
 							<span id="shoutbox_button"></span>
@@ -227,7 +227,7 @@ if (!class_exists("sb_horizontal")){
 					// if more than 1 member, show dropdown box
 					if ($membercount > 1){
 						// show dropdown box
-						$outHtml .= new hdropdown('sb_usermember_id', array('options' => $members, 'value' => $this->pdh->get('user', 'mainchar', array($this->user->id))));
+						$outHtml .= (new hdropdown('sb_usermember_id', array('options' => $members, 'value' => $this->pdh->get('user', 'mainchar', array($this->user->id)))))->output();
 					}
 					// if only one member, show just member
 					else if ($membercount == 1){
