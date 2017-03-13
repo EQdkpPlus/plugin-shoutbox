@@ -29,8 +29,8 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic{
 
-	public $version		= '0.4.5';
-	public $copyright	= 'Aderyn';
+	public $version		= '0.4.6';
+	public $copyright	= 'Aderyn; GodMod';
 	public $vstatus		= 'Beta';
 
 	protected static $apiLevel = 23;
@@ -46,19 +46,19 @@ class shoutbox extends plugin_generic{
 			'name'				=> 'Shoutbox',
 			'code'				=> 'shoutbox',
 			'path'				=> 'shoutbox',
-			'contact'			=> 'Aderyn@gmx.net',
-			'template_path'		=> 'plugins/shoutbox/templates/',
+			'contact'			=> '',
+			'template_path'			=> 'plugins/shoutbox/templates/',
 			'icon'				=> 'fa-bullhorn',
 			'version'			=> $this->version,
 			'author'			=> $this->copyright,
-			'description'		=> $this->user->lang('sb_short_desc'),
-			'long_description'	=> $this->user->lang('sb_long_desc'),
+			'description'			=> $this->user->lang('sb_short_desc'),
+			'long_description'		=> $this->user->lang('sb_long_desc'),
 			'homepage'			=> EQDKP_PROJECT_URL,
-			'plus_version'		=> '1.0',
+			'plus_version'			=> '2.3',
 		));
 
 		$this->add_dependency(array(
-			'plus_version'		=> '1.0'
+			'plus_version'		=> '2.3'
 		));
 
 		// -- Register our permissions ------------------------
