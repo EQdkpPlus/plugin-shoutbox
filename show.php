@@ -49,6 +49,9 @@ register('core')->set_vars(array (
 	'template_path'	=> register('plugin_manager')->get_data('shoutbox', 'template_path'),
 	'template_file'	=> 'show.html',
 	'header_format'	=> 'simple',
+		'page_path'			=> [
+				['title'=>register('user')->lang('shoutbox'), 'url'=>' '],
+		],
 	'display'		=> true
 ));
 
