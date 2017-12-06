@@ -41,17 +41,16 @@ if (!class_exists('exchange_shoutbox_add')){
 		* POST Request to add shoutbox entry
 		*
 		* @param   array   $params   Parameters array
-		* @param   string  $body     XML body of request
+		* @param   string  $body     body-array of request
 		*
 		* @returns array
 		*/
-		function post_shoutbox_add($params, $body){
+		function post_shoutbox_add($params, $arrBody){
 			// be sure user is logged in
 			if ($this->user->is_signedin()){
-				// parse xml request
-				$xml		= simplexml_load_string($body);
-				$member_id	= ($xml && $xml->charid) ? intval($xml->charid) : intval($this->pdh->get('user', 'mainchar', array($this->user->data['user_id'])));
-				$text		= ($xml && $xml->text)   ? trim($xml->text) : '';
+				// parse request
+				$member_id	= (isset($arrBody['charid'])) ? intval($arrBody['charid']) : intval($this->pdh->get('user', 'mainchar', array($this->user->data['user_id'])));
+				$text		= (isset($arrBody['text']))   ? trim($arrBody['text']) : '';
 
 				// check if member id is valid for this user
 				$valid_members = $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));

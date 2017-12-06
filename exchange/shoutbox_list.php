@@ -42,11 +42,11 @@ if (!class_exists('exchange_shoutbox_list')){
 		* GET Request for shoutbox entries
 		*
 		* @param   array   $params   Parameters array
-		* @param   string  $body     XML body of request
+		* @param   string  $body     body-array of request
 		*
 		* @returns array
 		*/
-		public function get_shoutbox_list($params, $body){
+		public function get_shoutbox_list($params, $arrBody){
 			// set response
 			$response = array('entries' => array());
 
