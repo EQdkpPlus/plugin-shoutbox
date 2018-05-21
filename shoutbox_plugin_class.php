@@ -29,7 +29,7 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic{
 
-	public $version		= '0.4.7';
+	public $version		= '0.4.8';
 	public $copyright	= 'Aderyn; GodMod';
 	public $vstatus		= 'Beta';
 
@@ -86,6 +86,7 @@ class shoutbox extends plugin_generic{
 
 		// -- Hooks -------------------------------------------
 		$this->add_hook('search', 'shoutbox_search_hook', 'search');
+		$this->add_hook('user_delete', 'shoutbox_user_delete_hook', 'user_delete');
 	}
 
 	/**
