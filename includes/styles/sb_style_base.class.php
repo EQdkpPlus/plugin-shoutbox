@@ -143,9 +143,8 @@ if (!class_exists("sb_style_base")){
 								$(this).val(value.slice(0, maxlength));
 							}
 
-							while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css(\"borderTopWidth\")) + parseFloat($(this).css(\"borderBottomWidth\"))) {
-								$(this).height($(this).height()+5);
-							};
+							if (this.clientHeight < this.scrollHeight) { this.style.height = this.scrollHeight + 'px'; }
+
 							if (e.which == 13 && !e.shiftKey) {
 								e.preventDefault();
 								$('form#Shoutbox').submit();
