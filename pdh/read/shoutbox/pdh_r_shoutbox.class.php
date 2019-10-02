@@ -261,13 +261,13 @@ if (!class_exists('pdh_r_shoutbox')){
 			// get text
 			$text = $this->get_text($shoutbox_id);
 
-			// wrap around with <p>
-			$text = '<p>'.trim($text).'</p>';
-
 			// bbcodes
 			$this->bbcode->SetSmiliePath($smilie_path);
 			$text = $this->bbcode->toHTML($text, true);
 			$text = $this->bbcode->MyEmoticons($text);
+			
+			// wrap around with <p>
+			$text = '<p>'.trim($text).'</p>';
 
 			// for some unknown reasons, after the BBCode actions, we get some \n, but <br/> are already inserted.
 			// so just remove the \n's from the text
