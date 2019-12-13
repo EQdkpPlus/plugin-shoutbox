@@ -267,7 +267,7 @@ if (!class_exists("sb_vertical")){
 		* @return  string
 		*/
 		private function getArchiveLink(){
-			$html = '<i class="fa fa-folder-open hand" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'" title="'.$this->user->lang('sb_archive').'"></i>';
+			$html = '<i class="fa fa-history hand" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'" title="'.$this->user->lang('sb_archive').'"></i>';
 
 			return $html;
 		}

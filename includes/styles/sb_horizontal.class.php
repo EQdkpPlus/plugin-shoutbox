@@ -280,7 +280,7 @@ if (!class_exists("sb_horizontal")){
 		* @return  string
 		*/
 		private function getArchiveLink(){
-			$html = '<i class="fa fa-folder-open hand floatRight" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'" title="'.$this->user->lang('sb_archive').'" style="margin-left: 5px;"></i>';
+			$html = '<i class="fa fa-history hand floatRight" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'" title="'.$this->user->lang('sb_archive').'" style="margin-left: 5px;"></i>';
 			
 			return $html;
 		}

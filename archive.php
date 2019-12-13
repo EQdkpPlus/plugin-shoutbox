@@ -159,12 +159,11 @@ class ShoutboxArchive extends page_generic{
 
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array (
-			'page_title'		=> $this->user->lang('sb_shoutbox_archive').' '.$page_title,
+			'page_title'		=> $this->user->lang('sb_shoutbox_archive').' - '.$page_title,
 			'template_path'		=> $this->pm->get_data('shoutbox', 'template_path'),
 			'template_file'		=> 'archive.html',
 				'page_path'			=> [
-						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
-						['title'=>$this->user->lang('shoutbox').': '.$this->user->lang('sb_shoutbox_archive').' '.$page_title, 'url'=>' '],
+						['title'=> $this->user->lang('sb_shoutbox_archive').' - '.$page_title, 'url'=>' '],
 				],
 			'display'			=> true
 		));
