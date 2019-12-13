@@ -54,24 +54,13 @@ class shoutbox_portal extends portal_generic{
 	* Settings
 	*/
 	protected $settings = array(
-		'output_count_limit'	=> array(
-			'type'		=> 'text',
-			'size'		=> '3',
-		),
 		'show_archive'	=> array(
 			'type'		=> 'radio',
 		),
 		'max_text_length'	=> array(
 			'type'		=> 'text',
 			'size'		=> '3',
-		),
-		'input_box_location'  => array(
-			'type'		=> 'dropdown',
-			'tolang'	=> true,
-			'options'	=> array(
-				'top'		=> 'sb_location_top',
-				'bottom'	=> 'sb_location_bottom'
-			),
+			'default'	=> 160,
 		),
 		'autoreload' => array(
 			'type'	=> 'text',
@@ -166,8 +155,39 @@ class shoutbox_portal extends portal_generic{
 					position: relative;
 				}
 
+				.sb_text {
+					margin-top: 5px;
+					padding-bottom: 3px;
+				}
+
+				.sb_entry_container {
+					margin-top: 5px;
+				} 
+
 				.sb_with_avatar.sb_content_container {
 					margin-left: 60px;
+				}
+
+				.sb {
+					max-height: 200px;
+					overflow-y: auto;
+					display: block;
+					padding-right: 10px;
+				}
+
+				.sb_vertical {
+					max-height: 230px;
+				}
+
+				.sb_vertical .sb_text {
+					clear: both;
+					padding-top: 5px;
+					border-bottom: 1px solid ".$this->user->style['table_border_color']."; 
+				}
+
+
+				.sb_vertical .user-avatar-small, .sb_vertical .user-avatar-small, .sb_vertical .user-avatar.small {
+					max-height: 26px;
 				}
 
 				.sb_horizontal .sb_with_avatar.sb_content_container:after{

@@ -47,6 +47,9 @@ function showShoutboxFinished(textSubmit, textReload, showSubmitButton) {
 	  $('#shoutbox_button').html('');
   }
   $('#shoutbox_reload_button').html('<i class="fa fa-refresh fa-lg" title="'+textReload+'"></i>');
+  
+  $('.sb').scrollTop($('.sb')[0].scrollHeight);
+  shoutboxInfiniteScroll();
 }
 
 /**
@@ -70,6 +73,9 @@ function reloadShoutboxFinished(textReload) {
   // enable submit button and reset reload image
   $('#shoutbox_reload_button').html('<i class="fa fa-refresh fa-lg"></i>');
   $('input[name=sb_submit]').removeAttr('disabled');
+  
+  $('.sb').scrollTop($('.sb')[0].scrollHeight);
+  shoutboxInfiniteScroll();
 }
 
 /**
@@ -104,4 +110,53 @@ function shoutboxAutoReload(textReload, orientation)
       reloadShoutboxFinished(textReload);
     }
   });
+}
+
+function shoutboxInfiniteScroll(){
+	$('.sb').scroll(function(){
+		if($('.sb')[0].scrollTop < 5){
+			shoutboxLoadMorePosts();
+		}
+	})
+}
+
+var shoutboxIsLoadingMore = false;
+
+function shoutboxLoadMorePosts(){
+	var count = $('.sb').data('count');
+	if(count == 'max') return;
+	
+	var orientation = $('.sb').data('orientation');
+	
+	shoutboxIsLoadingMore = true;
+	$.ajax({
+		  type: "GET",
+		  url: mmocms_root_path+'plugins/shoutbox/shoutbox.php'+mmocms_sid+'&sb_orientation='+orientation+'&more=1&count='+count,
+		  
+		  success: function(data){
+			  if(data == ""){
+				  $('.sb').data('count', 'max');
+				  return;
+			  }
+			  
+			  if(shoutboxIsLoadingMore){
+				  var old_height = $('.sb')[0].scrollHeight;  //store document height before modifications
+				  var old_scroll = $('.sb')[0].scrollTop; //remember the scroll position
+				  
+				  console.log($('.sb')[0].scrollHeight  );
+				  
+				  $('.sb').prepend(data);
+				  $('.sb').data('count', count+20);
+				  console.log($('.sb')[0].scrollHeight  );
+
+				  $('.sb').scrollTop(old_scroll + $('.sb')[0].scrollHeight - old_height);
+				  
+				  shoutboxIsLoadingMore = false;
+			  }
+			  
+			  //Add data into the form
+			  
+			  //Set count attribute
+		  },
+		});
 }

@@ -44,7 +44,7 @@ if (!class_exists("sb_horizontal")){
 			$htmlOut = '';
 
 			// get location of form
-			$form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
+			$form_location = 'bottom';
 
 			// is input on top (and user can add entries) append form first
 			if ($form_location == 'top' && $this->user->check_auth('u_shoutbox_add', false) && $this->user->is_signedin()){
@@ -55,11 +55,6 @@ if (!class_exists("sb_horizontal")){
 			$htmlOut .= '<div id="htmlShoutboxTable">';
 			$htmlOut .= $this->getContent();
 			$htmlOut .= '</div>';
-
-			// archive link? (User must be logged in to see archive link)
-			if ($this->config->get('sb_show_archive') && $this->user->is_signedin()){
-				$htmlOut .= $this->getArchiveLink();
-			}
 
 			// is input below (and user can add entries) append form
 			if ($form_location == 'bottom' && $this->user->check_auth('u_shoutbox_add', false)){
@@ -78,64 +73,95 @@ if (!class_exists("sb_horizontal")){
 		*/
 		protected function layoutContent(){
 			// get location of form
-			$form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
+			$form_location = 'bottom';
 
 			// empty output
 			$htmlOut = '';
-
+			
+			
 			// display
 			if (is_array($this->shoutbox_ids) && count($this->shoutbox_ids) > 0){
 				$this->tpl->add_css("");
 				// output table header
-				$htmlOut .= '<table class="table fullwidth colorswitch hoverrows sb_horizontal">';
+				$htmlOut .= '<div class="sb sb_horizontal" data-count="0" data-orientation="horizontal">';
+				
+				if($form_location != 'top'){
+					$this->shoutbox_ids = array_reverse($this->shoutbox_ids);
+				}
 
-				// output
-				foreach ($this->shoutbox_ids as $shoutbox_id){
+				$htmlOut .= $this->layoutPosts();
 
-					$htmlOut .= '<tr>
-						<td>';
+				// output table footer
+				$htmlOut .= '</div>';
+			}else{
+				$htmlOut .= $this->user->lang('sb_no_entries');
+			}
 			
-					$htmlOut .= '<div class="sb_entry">';
 			
-					// output date as well as User and text
-					$useravatar = $this->pdh->geth('shoutbox', 'useravatar', array($shoutbox_id));
-					if ($useravatar) $htmlOut .= '<div class="user-avatar-small user-avatar-border floatLeft" title="'.$this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id)).'">'.$useravatar.'</div>';
-					$htmlOut .= '<div class="sb_content_container'.(($useravatar) ? ' sb_with_avatar' : '').'"><div class="sb_date small">'.$this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).', '. $this->pdh->geth('shoutbox', 'date', array($shoutbox_id, true));
+			$this->tpl->add_js('
+			$(\'.sb\').scrollTop($(\'.sb\')[0].scrollHeight);
 
-					// if admin or own entry, ouput delete link
-					if ($this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
-					$this->user->check_auth('a_shoutbox_delete', false)){
+			shoutboxInfiniteScroll();
 
-						// Java Script for delete
-						$htmlOut .= '<span class="small bold floatRight hand sb_delete_btn" onclick="$(\'#del_shoutbox\').ajaxSubmit(
-						{
+			function del_shoutbox_entry(postid){
+				$(\'#del_shoutbox\').ajaxSubmit({
 							target: \'#htmlShoutboxTable\',
-							url:\''.$this->server_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'&amp;sb_delete='.$shoutbox_id.'&amp;sb_orientation=horizontal\',
+							url:\''.$this->server_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'&sb_delete=\'+postid+\'&sb_orientation=horizontal\',
 							beforeSubmit: function(formData, jqForm, options) {
-								deleteShoutboxRequest( '.$shoutbox_id.', \''.$this->user->lang('delete').'\');
-							}
-							}); ">
+								deleteShoutboxRequest( postid, \''.$this->user->lang('delete').'\');
+							},
+							 success: function() {
+						      	$(\'.sb\').scrollTop($(\'.sb\')[0].scrollHeight);
+								shoutboxInfiniteScroll();
+						    }
+				});
+
+			}
+');
+			
+			
+			return $htmlOut;
+		}
+
+		
+		protected function layoutPosts(){
+			$htmlOut = "";
+			
+			// output
+			foreach ($this->shoutbox_ids as $shoutbox_id){
+				
+				$htmlOut .= '<div class="sb_entry_container">';
+				
+				$htmlOut .= '<div class="sb_entry">';
+				
+				// output date as well as User and text
+				$useravatar = $this->pdh->geth('shoutbox', 'useravatar', array($shoutbox_id));
+				if ($useravatar) $htmlOut .= '<div class="user-avatar-small user-avatar-border floatLeft" title="'.$this->pdh->get('shoutbox', 'usermembername', array($shoutbox_id)).'">'.$useravatar.'</div>';
+				$htmlOut .= '<div class="sb_content_container'.(($useravatar) ? ' sb_with_avatar' : '').'"><div class="sb_date small">'.$this->pdh->geth('shoutbox', 'usermembername', array($shoutbox_id)).', '. $this->pdh->geth('shoutbox', 'date', array($shoutbox_id, true));
+				
+				// if admin or own entry, ouput delete link
+				if ($this->user->data['user_id'] == $this->pdh->get('shoutbox', 'userid', array($shoutbox_id)) ||
+						$this->user->check_auth('a_shoutbox_delete', false)){
+							
+							// Java Script for delete
+							$htmlOut .= '<span class="small bold floatRight hand sb_delete_btn" onclick="del_shoutbox_entry('.$shoutbox_id.')">
 							<span id="shoutbox_delete_button_'.$shoutbox_id.'">
 							<i class="fa fa-times-circle fa-lg icon-grey" title="'.$this->user->lang('delete').'"></i>
 							</span>
 							</span>';
-					}
-
-					$htmlOut .= '</div><div class="sb_text'.(($useravatar) ? ' sb_text_margin' : '').' ">'. $this->pdh->geth('shoutbox', 'text', array($shoutbox_id)).'</div></div>';
-					$htmlOut .= '</div><div class="clear"></div>';
-
-					$htmlOut .= '  </td>
-							</tr>';
 				}
-
-				// output table footer
-				$htmlOut .= '</table>';
-			}else{
-				$htmlOut .= $this->user->lang('sb_no_entries');
+				
+				$htmlOut .= '</div><div class="sb_text'.(($useravatar) ? ' sb_text_margin' : '').' ">'. $this->pdh->geth('shoutbox', 'text', array($shoutbox_id)).'</div></div>';
+				$htmlOut .= '</div><div class="clear"></div>';
+				
+				$htmlOut .= '  </div>';
 			}
+			
 			return $htmlOut;
 		}
-
+		
+		
+		
 		/**
 		* jCodeOrientation
 		* get the orientation for the JCode output
@@ -155,7 +181,7 @@ if (!class_exists("sb_horizontal")){
 		private function getForm(){
 
 			// get location and max text length
-			$form_location = ($this->config->get('input_box_location', 'pmod_'.$this->module_id) != '') ? $this->config->get('input_box_location', 'pmod_'.$this->module_id) : 'top';
+			$form_location = 'bottom';
 
 			// only display form if user has members assigned to or if user modus is selected
 			$members = $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));
@@ -170,7 +196,14 @@ if (!class_exists("sb_horizontal")){
 				$out .= '<form id="reload_shoutbox" name="reload_shoutbox" action="'.$this->server_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'" method="post">
 					</form>
 					<form id="Shoutbox" name="Shoutbox" action="'.$this->server_path.'plugins/shoutbox/shoutbox.php'.$this->SID.'" method="post">
-					<div>'.$this->getFormName().'
+					<div>'.$this->getFormName();
+				
+				// archive link? (User must be logged in to see archive link)
+				if ($this->config->get('show_archive', 'pmod_'.$this->module_id) && $this->user->is_signedin()){
+					$out .= $this->getArchiveLink();
+				}
+				
+				$out .=	'
 					<span class="small bold hand floatRight" onclick="$(\'#reload_shoutbox\').ajaxSubmit(
 						{
 							target: \'#htmlShoutboxTable\',
@@ -187,7 +220,7 @@ if (!class_exists("sb_horizontal")){
 						</span>
 						</div>
 						<div class="center">
-							<textarea class="input" name="sb_text" style="width: 96%;" rows="1" cols="1"></textarea>
+							<textarea class="input" name="sb_text" style="width: 96%;" rows="1" cols="1" placeholder="'.$this->user->lang('sb_write_post').'"></textarea>
 						</div>
 						<div class="center">
 							<input type="hidden" name="sb_orientation" value="horizontal"/>
@@ -247,11 +280,9 @@ if (!class_exists("sb_horizontal")){
 		* @return  string
 		*/
 		private function getArchiveLink(){
-			$htmlOut = '<div class="center">
-				<button type="button" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'"><i class="fa fa-folder-open"></i>'.$this->user->lang('sb_archive').'</button>
-			</div>';
-
-			return $htmlOut;
+			$html = '<i class="fa fa-folder-open hand floatRight" onclick="window.location.href=\''.$this->server_path.'plugins/shoutbox/archive.php'.$this->SID.'\'" title="'.$this->user->lang('sb_archive').'" style="margin-left: 5px;"></i>';
+			
+			return $html;
 		}
 	}
 }

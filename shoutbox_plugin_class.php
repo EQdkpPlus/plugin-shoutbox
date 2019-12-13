@@ -29,9 +29,9 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 class shoutbox extends plugin_generic{
 
-	public $version		= '0.4.10';
+	public $version		= '1.0.0';
 	public $copyright	= 'Aderyn; GodMod';
-	public $vstatus		= 'Beta';
+	public $vstatus		= 'Stable';
 
 	protected static $apiLevel = 23;
 

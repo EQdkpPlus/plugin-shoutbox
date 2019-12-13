@@ -44,9 +44,15 @@ if (registry::register('plugin_manager')->check('shoutbox', PLUGIN_INSTALLED)){
 	else if ($sb_delete){
 		$shoutbox->deleteShoutboxEntry($sb_delete);
 	}
+	// Load more posts
+	if($in->get('more', 0)){
+		$intCount = $in->get('count', 0);
+		echo $shoutbox->loadMore($sb_orientation, $intCount);
+		exit;
+	}
 
 	// -- Output ----------------------------------------------
-	echo $shoutbox->getContent($sb_orientation, urldecode($sb_root), true);
+	echo $shoutbox->getContent($sb_orientation);
 }else{
 	header('content-type: text/html; charset=UTF-8');
 	$error = '<table class="table fullwidth  colorswitch">

@@ -85,6 +85,13 @@ if (!class_exists("sb_style_base")){
 
 			return $htmlOut;
 		}
+		
+		public function getPosts(){
+			// layout content
+			$htmlOut = $this->layoutPosts();
+			
+			return $htmlOut;
+		}
 
 		/**
 		* layoutShoutbox
@@ -101,6 +108,8 @@ if (!class_exists("sb_style_base")){
 		* @return  string
 		*/
 		protected abstract function layoutContent();
+		
+		protected abstract function layoutPosts();
 
 		/**
 		* jCodeOrientation

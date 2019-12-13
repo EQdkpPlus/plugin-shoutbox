@@ -73,7 +73,7 @@ if (!class_exists("ShoutboxClass")){
 			$this->rssFeed->language		= 'de-DE';
 
 			// get output limit
-			$this->output_limit = ($this->config->get('output_count_limit', 'pmod_'.$this->module_id) > 0 ? $this->config->get('output_count_limit', 'pmod_'.$this->module_id) : 10);
+			$this->output_limit = 20;
 		}
 
 		/**
@@ -241,6 +241,32 @@ if (!class_exists("ShoutboxClass")){
 				$htmlOut .= $shoutbox_style->getContent();
 
 			return $htmlOut;
+		}
+		
+		public function loadMore($orientation, $intCount){
+			// get shoutbox ids to display
+			$shoutbox_ids = $this->pdh->get('shoutbox', 'id_list');
+			if (is_array($shoutbox_ids)){
+				$shoutbox_ids = $this->pdh->limit($shoutbox_ids, $intCount+20, 20);
+				$shoutbox_ids = array_reverse($shoutbox_ids);
+			}
+			
+			// empty output
+			$htmlOut = '';
+			
+			// get the layout
+			$layout_file = $this->root_path.'plugins/shoutbox/includes/styles/sb_'.$orientation.'.class.php';
+			if (file_exists($layout_file)){
+				include_once($layout_file);
+				$class_name = 'sb_'.$orientation;
+				$shoutbox_style = registry::register($class_name, array($this->module_id, $shoutbox_ids));
+			}
+			
+			// get content
+			if ($shoutbox_style)
+				$htmlOut .= $shoutbox_style->getPosts();
+				
+				return $htmlOut;
 		}
 
 		/**

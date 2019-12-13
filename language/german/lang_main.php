@@ -81,6 +81,8 @@ $lang = array(
 	// Exchange
 	'sb_missing_char_id'				=> 'Es wurde keine gültige Charakter ID angegeben',
 	'sb_missing_text'					=> 'Es wurde kein Text angegeben',
+	
+	'sb_write_post'						=> 'Nachricht schreiben',	
 );
 
 ?>

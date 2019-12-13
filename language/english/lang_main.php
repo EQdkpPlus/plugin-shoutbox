@@ -69,7 +69,7 @@ $lang = array(
 	"sb_shoutbox_archive" => 'Shoutbox Archive',
 	"sb_missing_char_id" => 'Invalid Member ID entered',
 	"sb_missing_text" => 'Missing text to insert',
-	
+	'sb_write_post'	=> 'Write message',	
 );
 
 ?>
