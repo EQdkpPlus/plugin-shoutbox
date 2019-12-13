@@ -57,9 +57,12 @@ class shoutbox_portal extends portal_generic{
 		'show_archive'	=> array(
 			'type'		=> 'radio',
 		),
+		'box_height'	=> array(
+			'type'		=> 'spinner',
+			'default'	=> 250,
+		),
 		'max_text_length'	=> array(
-			'type'		=> 'text',
-			'size'		=> '3',
+			'type'		=> 'spinner',
 			'default'	=> 160,
 		),
 		'autoreload' => array(
@@ -123,27 +126,14 @@ class shoutbox_portal extends portal_generic{
 				// return the output for module
 				$output = $shoutbox->showShoutbox($orientation);
 				
-				//Calculate Max Width
-				if($this->user->style['column_left_width'] != ""){
-					if(strpos($this->user->style['column_left_width'], 'px') !== false){
-						$max_width = (intval($this->user->style['column_left_width']) - 30).'px';
-					} else {
-						$max_width = '97%';
-					}
-					
-				} else {
-					$max_width = "180px";	
-				}
+				
+				$intHeight = ($this->config('box_height')) ? $this->config('box_height') : 250;
 				
 				$this->tpl->add_css(
 				".sb_vertical .sb_text_margin {
 					margin-left: 38px;
 				}
 
-				.sb_vertical p {
-					max-width: ".$max_width.";
-					word-wrap:break-word;
-				}
 
 				.sb_horizontal .sb_content_container{
 					padding: 2px 5px 2px 5px;
@@ -158,7 +148,7 @@ class shoutbox_portal extends portal_generic{
 				.sb_text {
 					margin-top: 5px;
 					padding-bottom: 3px;
-					word-break: break-all;
+					word-break: break-word;
 				}
 
 				.sb_entry_container {
@@ -170,14 +160,10 @@ class shoutbox_portal extends portal_generic{
 				}
 
 				.sb {
-					max-height: 200px;
+					max-height: ".$intHeight."px;
 					overflow-y: auto;
 					display: block;
 					padding-right: 10px;
-				}
-
-				.sb_vertical {
-					max-height: 230px;
 				}
 
 				.sb_vertical .sb_text {

@@ -77,6 +77,7 @@ $lang = array(
 	'sb_no_entries'						=> 'Keine Einträge',
 	'sb_archive'						=> 'Archiv',
 	'sb_shoutbox_archive'				=> 'Shoutbox Archiv',
+	'sb_f_box_height'					=> 'Höhe des Portalmoduls',
 
 	// Exchange
 	'sb_missing_char_id'				=> 'Es wurde keine gültige Charakter ID angegeben',
