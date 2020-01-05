@@ -95,7 +95,9 @@ if (!class_exists("sb_vertical")){
 				$htmlOut .= '</div>';
 				
 				$this->tpl->add_js('
-			$(\'.sb\').scrollTop($(\'.sb\')[0].scrollHeight);
+			if($(\'.sb\')[0] != undefined){
+				$(\'.sb\').scrollTop($(\'.sb\')[0].scrollHeight);
+			}
 						
 			shoutboxInfiniteScroll();
 						
