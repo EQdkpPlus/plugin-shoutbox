@@ -148,7 +148,15 @@ class shoutbox_portal extends portal_generic{
 				.sb_text {
 					margin-top: 5px;
 					padding-bottom: 3px;
-					word-break: break-word;
+					word-break: normal;
+    				overflow-wrap: anywhere;
+					word-wrap: break-all;
+				}
+
+				@supports (-ms-ime-align:auto) {
+				    .sb_text {
+				        word-break: break-all;
+				    }
 				}
 
 				.sb_entry_container {

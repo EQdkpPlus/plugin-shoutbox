@@ -148,9 +148,16 @@ if (!class_exists('pdh_w_shoutbox')){
 		private function autolink($str) {
 			$str = ' ' . $str;
 			
-			$str = preg_replace(
+			$str = preg_replace_callback(
 				"/\[url\s*+=\s*+([^]\s]++)]([^[]++)\[\/url]|((((http|https|ftp):\/\/|www.)\S++))/im",
-				'[url=$1$3]$2$4[/url]',
+					function ($matches) {
+						$url = $matches[0];
+						$text = $matches[0];
+						if(mb_strlen($text) > 60){
+							$text = mb_substr($text, 0, 30) .'...' . mb_substr($text, -25);
+						}
+						return '[url='.$url.']'.$text.'[/url]';
+					},
 				$str
 			);
 
