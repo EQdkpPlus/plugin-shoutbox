@@ -2,7 +2,7 @@
 	<h1 class="contentTitle">{L_sb_manage_archive} {SB_PAGE_TITLE}</h1>
 </div>
 
-
+ <form method="post" action="{ACTION}" id="sb_table">
 <div class="grid">
 	<div class="onerow">
 		<div class="col2">
@@ -27,11 +27,9 @@
             </table>
 		</div>
 		<div class="col10 last">
-			 <form method="post" action="{ACTION}" id="sb_table">
               <table class="table fullwidth colorswitch">
                 {SB_TABLE}
               </table>
-            </form>
 		</div>
 	</div>
 </div>
@@ -42,4 +40,6 @@
 <div class="contentFooter">
 	<input name="start" type="hidden" value="{START}" />
 	<button type="submit" name="sb_delete"><i class="fa fa-times"></i>{L_delete}</button>
+	{CSRF_TOKEN}
 </div>
+</form>
