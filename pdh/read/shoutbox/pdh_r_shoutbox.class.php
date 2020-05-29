@@ -263,8 +263,11 @@ if (!class_exists('pdh_r_shoutbox')){
 
 			// bbcodes
 			$this->bbcode->SetSmiliePath($smilie_path);
+			
 			$text = $this->bbcode->toHTML($text, true);
 			$text = $this->bbcode->MyEmoticons($text);
+			
+			$text =  register('myemojione')->shortcodeToImage($text);
 			
 			// wrap around with <p>
 			$text = '<p>'.trim($text).'</p>';

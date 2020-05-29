@@ -56,6 +56,8 @@ if (!class_exists('pdh_w_shoutbox')){
 		public function add($usermember_id, $text){
 			// cleanup text
 			$text = $this->cleanupText($text);
+			
+			$text = register('myemojione')->textToShortcode($text);
 
 			// add to database
 			$sql_data = array(
