@@ -130,6 +130,7 @@ if (!class_exists('pdh_w_shoutbox')){
 		*/
 		private function cleanupText($text){
 			// auto create url bbcode for URLs - by GodMod
+			
 			$text = $this->autolink($text);
 
 			// wrap words (do own handling cause of bbcodes)
@@ -149,23 +150,50 @@ if (!class_exists('pdh_w_shoutbox')){
 		*/
 		private function autolink($str) {
 			$str = ' ' . $str;
-			
 			$str = preg_replace_callback(
-				"/\[url\s*+=\s*+([^]\s]++)]([^[]++)\[\/url]|((((http|https|ftp):\/\/|www.)\S++))/im",
+				"/\[url\s*+=\s*+([^]\s]++)]([^[]++)\[\/url]/im",
 					function ($matches) {
-						$url = $matches[0];
-						$text = $matches[0];
-						if(mb_strlen($text) > 60){
-							$text = mb_substr($text, 0, 30) .'...' . mb_substr($text, -25);
+						$url = strlen($matches[1]) ? $matches[1] : $matches[2];
+						$text = $matches[2];
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
 						}
 						return '[url='.$url.']'.$text.'[/url]';
 					},
 				$str
 			);
+			
+			$str = preg_replace_callback(
+					"/\[url]([^[]++)\[\/url]/im",
+					function ($matches) {
+						$url = $matches[1];
+						$text = $url;
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
+						}
+						return '[url='.$url.']'.$text.'[/url]';
+					},
+					$str
+					);
+			
+			//Normal 
+			$str = preg_replace_callback(
+					"/(^|[^=\]\"])((((http|https|ftp):\/\/|www.)\S++))/im",
+					function ($matches) {
+						$url = $matches[2];
+						$text = $url;
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
+						}
+						return $matches[1].'[url='.$url.']'.$text.'[/url]';
+					},
+					$str
+					);
 
 			$str = substr($str, 1);
 			$str = preg_replace('`url=\"www`','url="http://www',$str);
 			$str = preg_replace('`url=www`','url=http://www',$str);
+
 			// fügt http:// hinzu, wenn nicht vorhanden
 			return trim($str);
 		}
