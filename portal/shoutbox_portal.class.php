@@ -138,6 +138,7 @@ class shoutbox_portal extends portal_generic{
 				.sb_horizontal .sb_content_container{
 					padding: 2px 5px 2px 5px;
 					background: #FFFFFF;
+					color: #000;
 					border: #ccc solid 1px;
 					-webkit-border-radius: 4px;
 					-moz-border-radius: 4px;
